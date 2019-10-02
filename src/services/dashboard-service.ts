@@ -1,11 +1,11 @@
 import m, { ComponentTypes, RouteDefs } from 'mithril';
 import { AboutPage } from '../components/about/about-page';
 import { HelpPage } from '../components/about/help-page';
-import { EventForm } from '../components/edit/event-form';
-import { EventsList } from '../components/home/events-list';
+import { EditForm } from '../components/edit/edit-form';
+import { EventsList } from '../components/home/form-list';
 import { HomePage } from '../components/home/home-page';
 import { Layout } from '../components/layout';
-import { EventView } from '../components/show/event-view';
+import { FormView } from '../components/show/form-view';
 import { IDashboard } from '../models/dashboard';
 import { Auth, Login } from './login-service';
 
@@ -68,9 +68,9 @@ class DashboardService {
 export const dashboardSvc: DashboardService = new DashboardService(Layout, [
   {
     id: Dashboards.SEARCH,
-    title: 'HOME',
+    title: 'ZOEKEN',
     icon: 'home',
-    route: '/home',
+    route: '/zoeken',
     visible: true,
     component: EventsList,
   },
@@ -80,29 +80,29 @@ export const dashboardSvc: DashboardService = new DashboardService(Layout, [
     icon: 'description',
     route: '/read/:id',
     visible: false,
-    component: EventView,
+    component: FormView,
   },
   {
     id: Dashboards.EDIT,
-    title: 'EDIT',
+    title: 'BEWERKEN',
     icon: 'edit',
-    route: '/edit/:id',
+    route: '/bewerken/:id',
     visible: false,
-    component: EventForm,
+    component: EditForm,
   },
   {
     id: Dashboards.HELP,
     title: 'HELP',
     icon: 'info',
-    route: '/info',
+    route: '/help',
     visible: true,
     component: HelpPage,
   },
   {
     id: Dashboards.ABOUT,
-    title: 'ABOUT',
+    title: 'OVER DEZE WEBSITE',
     icon: 'help',
-    route: '/about',
+    route: '/over',
     visible: true,
     component: AboutPage,
   },
@@ -110,7 +110,7 @@ export const dashboardSvc: DashboardService = new DashboardService(Layout, [
     id: Dashboards.HOME,
     default: true,
     hasNavBar: false,
-    title: 'WELCOME',
+    title: 'HOME',
     route: '/',
     visible: false,
     component: HomePage,

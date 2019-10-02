@@ -2,7 +2,7 @@ import { messageBus } from '../services/message-bus-service';
 
 export const ChannelNames = {
   DEFAULT_CHANNEL: 'DEFAULT_CHANNEL',
-  LESSON: 'LESSON',
+  CARE: 'CARE',
 };
 
 export const TopicNames = {
@@ -19,4 +19,4 @@ export const TopicNames = {
   CMD: 'CMD',
 };
 
-export const lessonsChannel = messageBus.channel<{ cur: any; old?: any }>(ChannelNames.LESSON);
+export const lessonsChannel = messageBus.channel<{ cur: any; old?: any }>(ChannelNames.CARE);

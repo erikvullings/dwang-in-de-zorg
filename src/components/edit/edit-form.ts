@@ -2,12 +2,12 @@ import M from 'materialize-css';
 import m from 'mithril';
 import { Button, Chips, ModalPanel } from 'mithril-materialized';
 import { deepCopy, LayoutForm } from 'mithril-ui-form';
-import { IEvent } from '../../models';
-import { EventsSvc } from '../../services';
+import { ICareProvider } from '../../models';
+import { CareProvidersSvc } from '../../services';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
 import { Auth } from '../../services/login-service';
-import { llf } from '../../template/llf';
-import { capitalizeFirstLetter, deepEqual } from '../../utils';
+import { CareProviderForm } from '../../template/form';
+import { capitalizeFirstLetter, toQueryTarget } from '../../utils';
 import { CircularSpinner } from '../ui/preloader';
 
 const log = console.log;
@@ -20,13 +20,12 @@ const close = async (e?: UIEvent) => {
   }
 };
 
-export const EventForm = () => {
+export const EditForm = () => {
   const state = {
-    hasChanged: false,
-    event: {} as Partial<IEvent>,
+    cp: {} as Partial<ICareProvider>,
     loaded: false,
     isValid: false,
-    form: llf,
+    form: CareProviderForm,
     error: '',
     /** Relevant context for the Form, can be used with show/disabling */
     context: {
@@ -35,21 +34,21 @@ export const EventForm = () => {
   };
 
   const onsubmit = async () => {
-    state.hasChanged = false;
     log('submitting...');
-    if (state.event) {
-      const event = deepCopy(state.event);
+    const { cp } = state;
+    if (cp) {
+      // const event = deepCopy(state.event);
       // console.log(JSON.stringify(event.memberCountries, null, 2));
-      await EventsSvc.save(event);
-      state.event = event;
+      await CareProvidersSvc.save(toQueryTarget(cp));
+      state.cp = CareProvidersSvc.getCurrent();
     }
   };
 
   return {
     oninit: () => {
       return new Promise(async (resolve, reject) => {
-        const event = await EventsSvc.load(m.route.param('id')).catch(r => reject(r));
-        state.event = event ? deepCopy(event) : ({} as IEvent);
+        const event = await CareProvidersSvc.load(m.route.param('id')).catch(r => reject(r));
+        state.cp = event ? deepCopy(event) : ({} as ICareProvider);
         state.loaded = true;
         m.redraw();
         resolve();
@@ -57,15 +56,11 @@ export const EventForm = () => {
     },
 
     view: () => {
-      const { event, form, context, loaded } = state;
+      const { cp: event, form, context, loaded } = state;
       if (!loaded) {
         return m(CircularSpinner, { className: 'center-align', style: 'margin-top: 20%;' });
       }
       // log(event);
-      const hasChanged = state.hasChanged || !deepEqual(event, EventsSvc.getCurrent());
-      if (hasChanged) {
-        onsubmit();
-      }
       const sections = form
         .filter(c => c.type === 'section')
         .map(c => ({
@@ -85,7 +80,7 @@ export const EventForm = () => {
               },
             },
             [
-              m('h4.primary-text', { style: 'margin-left: 20px;' }, 'Content'),
+              m('h5.primary-text', { style: 'margin-left: 20px;' }, 'Registratieformulier'),
               ...sections.map(s =>
                 m(
                   'li',
@@ -98,7 +93,7 @@ export const EventForm = () => {
               ),
               m('.buttons', [
                 m(Button, {
-                  label: 'Show event',
+                  label: 'Toon registratie',
                   iconName: 'visibility',
                   className: 'right col s12',
                   onclick: () => dashboardSvc.switchTo(Dashboards.READ, { id: event.$loki }),
@@ -111,7 +106,7 @@ export const EventForm = () => {
                 // }),
                 m(Button, {
                   modalId: 'delete-event',
-                  label: 'Delete event',
+                  label: 'Verwijder registratie',
                   iconName: 'delete',
                   class: 'red col s12',
                 }),
@@ -141,11 +136,10 @@ export const EventForm = () => {
             key: section,
             form,
             obj: event,
-            onchange: () => {
+            onchange: async () => {
               // console.log(JSON.stringify(event, null, 2));
               // console.log(JSON.stringify(event.memberCountries, null, 2));
-              state.event = event;
-              state.hasChanged = true;
+              await onsubmit();
             },
             context,
             section,
@@ -153,14 +147,14 @@ export const EventForm = () => {
         ]),
         m(ModalPanel, {
           id: 'delete-event',
-          title: 'Delete event',
-          description: 'Do you really want to delete this event - there is no way back?',
+          title: 'Verwijder registratie',
+          description: 'Weet u zeker dat u deze registratie wilt verwijderen? U kunt dit niet ongedaan maken.',
           options: { opacity: 0.7 },
           buttons: [
             {
               label: 'Delete',
               onclick: async () => {
-                EventsSvc.delete(event.$loki);
+                CareProvidersSvc.delete(event.$loki);
                 close();
               },
             },

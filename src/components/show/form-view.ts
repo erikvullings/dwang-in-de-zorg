@@ -1,25 +1,25 @@
 import m, { FactoryComponent } from 'mithril';
 import { FlatButton, InputCheckbox } from 'mithril-materialized';
 import { deepCopy, labelResolver } from 'mithril-ui-form';
-import { IEvent } from '../../models';
-import { EventsSvc } from '../../services';
+import { ICareProvider } from '../../models';
+import { CareProvidersSvc } from '../../services';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
-import { FormattedEvent } from '../../services/format-event';
+import { DisplayForm } from '../../services/display-form';
 import { Auth } from '../../services/login-service';
-import { llf } from '../../template/llf';
+import { CareProviderForm } from '../../template/form';
 import { CircularSpinner } from '../ui/preloader';
 
-export const EventView: FactoryComponent = () => {
+export const FormView: FactoryComponent = () => {
   const state = {
-    event: {} as Partial<IEvent>,
+    event: {} as Partial<ICareProvider>,
     loaded: false,
-    resolveObj: labelResolver(llf),
+    resolveObj: labelResolver(CareProviderForm),
   };
   return {
     oninit: () => {
       return new Promise(async (resolve, reject) => {
-        const event = await EventsSvc.load(m.route.param('id')).catch(r => reject(r));
-        state.event = event ? deepCopy(event) : ({} as IEvent);
+        const event = await CareProvidersSvc.load(m.route.param('id')).catch(r => reject(r));
+        state.event = event ? deepCopy(event) : ({} as ICareProvider);
         state.loaded = true;
         resolve();
       });
@@ -27,7 +27,7 @@ export const EventView: FactoryComponent = () => {
     view: () => {
       const { event, loaded, resolveObj } = state;
       console.log(JSON.stringify(event, null, 2));
-      const resolved = resolveObj<IEvent>(event);
+      const resolved = resolveObj<ICareProvider>(event);
       console.log(JSON.stringify(resolved, null, 2));
       if (!loaded) {
         return m(CircularSpinner, { className: 'center-align', style: 'margin-top: 20%;' });
@@ -41,7 +41,7 @@ export const EventView: FactoryComponent = () => {
               m(
                 'li',
                 m(FlatButton, {
-                  label: 'Edit document',
+                  label: 'Bewerk zorgaanbieder',
                   iconName: 'edit',
                   className: 'right hide-on-small-only',
                   onclick: () => dashboardSvc.switchTo(Dashboards.EDIT, { id: event.$loki }),
@@ -54,14 +54,14 @@ export const EventView: FactoryComponent = () => {
                   checked: event.published,
                   onchange: async checked => {
                     event.published = checked;
-                    await EventsSvc.save(event);
+                    await CareProvidersSvc.save(event);
                   },
-                  label: 'Published',
+                  label: 'Publiceer uw wijzigingen',
                 })
               ),
             ])
           : undefined,
-        m(FormattedEvent, { event: resolved }),
+        m(DisplayForm, { careProvider: resolved }),
       ];
     },
   };

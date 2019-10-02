@@ -1,4 +1,6 @@
-import { IEvent } from '../models';
+import { ICareProvider } from '../models';
+import { IAddress } from '../models/address';
+import { ILocation } from '../models/location';
 
 /**
  * Create a GUID
@@ -75,60 +77,29 @@ export const nameAndDescriptionFilter = (filterValue?: string) => {
     return () => true;
   }
   const fv = filterValue.toLowerCase() as string;
-  return (content: { name?: string; desc?: string }) =>
-    !content.name ||
-    content.name.toLowerCase().indexOf(fv) >= 0 ||
-    (content.desc && content.desc.toLowerCase().indexOf(fv) >= 0);
+  return (content: { naam?: string; kvk?: number }) =>
+    !content.naam || content.naam.toLowerCase().indexOf(fv) >= 0 || (content.kvk && `${content.kvk}`.indexOf(fv) >= 0);
 };
 
 /**
  * Function to filter on a named type.
  * @param filterValue Filter text
  */
-export const typeFilter = (propName: keyof IEvent, filterValue?: Array<string | number>) => {
+export const typeFilter = (propName: keyof ICareProvider, filterValue?: Array<string | number>) => {
   if (!filterValue || filterValue.length === 0) {
     return () => true;
   }
   return filterValue instanceof Array
-    ? (c: Partial<IEvent>) =>
+    ? (c: Partial<ICareProvider>) =>
         c.hasOwnProperty(propName) &&
         (c[propName] instanceof Array
           ? filterValue.reduce((acc, fv) => acc || (c[propName] as Array<string | number>).indexOf(fv) >= 0, false)
           : filterValue.indexOf(c[propName] as string) >= 0)
-    : (c: Partial<IEvent>) =>
+    : (c: Partial<ICareProvider>) =>
         c.hasOwnProperty(propName) &&
         (c[propName] instanceof Array
           ? (c[propName] as Array<string | number>).indexOf(filterValue) >= 0
           : c[propName] === filterValue);
-};
-
-const getIncidentTypes = ({ initialIncident, otherIncidents }: Partial<IEvent>) => {
-  const incidents = [] as string[];
-  if (initialIncident) {
-    incidents.push(initialIncident);
-  }
-  if (otherIncidents) {
-    if (typeof otherIncidents === 'string') {
-      incidents.push(otherIncidents);
-    } else {
-      incidents.push(...otherIncidents);
-    }
-  }
-  return incidents;
-};
-
-/**
- * Function to filter on incident.
- * @param filterValue Filter text
- */
-export const incidentFilter = (filterValue?: string | string[]) => {
-  if (!filterValue || filterValue.length === 0) {
-    return () => true;
-  }
-  // console.log('Filtering incidents: ' + filterValue);
-  return filterValue instanceof Array
-    ? (c: Partial<IEvent>) => getIncidentTypes(c).reduce((acc, fv) => acc || filterValue.indexOf(fv) >= 0, false)
-    : (c: Partial<IEvent>) => getIncidentTypes(c).indexOf(filterValue) >= 0;
 };
 
 /**
@@ -177,4 +148,53 @@ export const formatOptional = (
   }
   const txt = `${prepend}${f.join(', ')}${append}`;
   return f.length === 0 ? '' : brackets ? ` (${txt})` : txt;
+};
+
+/** Print optional */
+export const p = (val: string | number | Date | undefined, output?: string) => (val ? output || val : '');
+
+/** Print a list: a, b and c */
+export const l = (val: undefined | string | string[]) => {
+  if (!val) {
+    return '';
+  }
+  if (val instanceof Array) {
+    if (val.length === 1) {
+      return val[0];
+    }
+    const [last, oneButLast, ...items] = val.reverse();
+    return [...items, `${oneButLast} en ${last}`].filter(Boolean).join(', ');
+  } else {
+    return val;
+  }
+};
+
+const stripSpaces = (s: string) => s.replace(/\s/g, '');
+
+/** Convert an address to something that is easy to query */
+const addressToQueryTarget = (a: Partial<IAddress>) => {
+  const { straat = '', huisnummer = 0, postcode = '', woonplaatsnaam = '' } = a;
+  return `${stripSpaces(straat).toLowerCase()}${huisnummer}${stripSpaces(postcode).toLowerCase()}${stripSpaces(
+    woonplaatsnaam
+  ).toLowerCase()}`;
+};
+
+/** Convert an care provider object to something that is easy to query */
+const careProviderToQueryTarget = (cp: Partial<ICareProvider>) => {
+  const { naam = '', kvk = 0 } = cp;
+  return `${stripSpaces(naam).toLowerCase()}${kvk}${addressToQueryTarget(cp)}`;
+};
+
+/** Convert an care provider object to something that is easy to query */
+const locationToQueryTarget = (loc: Partial<ILocation>) => {
+  const { locatienaam = '', vestigingsnummer = 0 } = loc;
+  return `${stripSpaces(locatienaam).toLowerCase()}${vestigingsnummer}${addressToQueryTarget(loc)}`;
+};
+
+export const toQueryTarget = (cp: Partial<ICareProvider>) => {
+  cp.target = careProviderToQueryTarget(cp);
+  if (cp.locaties && cp.locaties instanceof Array) {
+    cp.locaties.forEach(loc => loc.target = locationToQueryTarget(loc));
+  }
+  return cp;
 };

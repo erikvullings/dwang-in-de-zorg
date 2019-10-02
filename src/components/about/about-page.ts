@@ -1,10 +1,9 @@
 import m from 'mithril';
 import { SlimdownView } from 'mithril-ui-form';
-import driverLogo from '../../assets/driver-logo2.png';
 
 const md = `<h4 class="primary-text">About</h4>
 
-The Lessons Learned Library was developed by Dirk Stolk and Erik Vullings from [TNO](https://www.tno.nl) in 2019 as part of the DRIVER+ project. It is a practical implementation of the Lessons Learned Framework (LLF) that was developed in 2017, and includes a number of improvements based on experiences with the LLF demonstrator tool.
+The Dwang in de Zorg was developed by Dirk Stolk and Erik Vullings from [TNO](https://www.tno.nl) in 2019 as part of the DRIVER+ project. It is a practical implementation of the Lessons Learned Framework (LLF) that was developed in 2017, and includes a number of improvements based on experiences with the LLF demonstrator tool.
 
 The [DRIVER+](https://www.driver-project.eu) project has received funding from the European Union's 7th Framework Programme for Research, Technological Development and Demonstration under Grant Agreement (GA) N°#607798.`;
 
@@ -52,6 +51,6 @@ export const AboutPage = () => ({
     m('.row', [
       m(SlimdownView, { md: md2 }),
       m(SlimdownView, { md }),
-      m('.row', m('img', { src: driverLogo, width: 300, height: 151, style: 'display: block; margin: 0 auto;' })),
+      // m('.row', m('img', { src: driverLogo, width: 300, height: 151, style: 'display: block; margin: 0 auto;' })),
     ]),
 });

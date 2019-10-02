@@ -1,7 +1,7 @@
 import { KeycloakInstance } from 'keycloak-js';
 import m, { FactoryComponent } from 'mithril';
 import { EmailInput, FlatButton, Options, TextInput } from 'mithril-materialized';
-import { IEvent } from '../models';
+import { ICareProvider } from '../models';
 import { Roles } from '../models/roles';
 
 export const Auth = {
@@ -19,15 +19,15 @@ export const Auth = {
     return Auth.roles.indexOf(Roles.EDITOR) >= 0;
   },
   /** Can edit the document, but also change the persons that have access. */
-  isOwner(doc: Partial<IEvent>) {
+  isOwner(doc: Partial<ICareProvider>) {
     return Auth.authenticated && doc.owner === Auth.email;
   },
   /** Can edit the document, but also change the persons that have access. */
-  canCRUD(doc: Partial<IEvent>) {
+  canCRUD(doc: Partial<ICareProvider>) {
     return Auth.authenticated && (Auth.isAdmin() || this.isOwner(doc));
   },
   /** Can edit the document and publish it. */
-  canEdit(doc: Partial<IEvent>) {
+  canEdit(doc: Partial<ICareProvider>) {
     return (
       Auth.authenticated &&
       (Auth.canCRUD(doc) || Auth.isEditor() || (doc.canEdit instanceof Array && doc.canEdit.indexOf(Auth.email) >= 0))

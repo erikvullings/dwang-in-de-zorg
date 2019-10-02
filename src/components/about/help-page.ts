@@ -1,11 +1,10 @@
 import m from 'mithril';
 import { SlimdownView } from 'mithril-ui-form';
-import l3 from '../../assets/l3-schema.png';
 
-const md = `<h4 class="primary-text">Explanation of the Lessons Learned Library</h4>
+const md = `<h4 class="primary-text">Explanation of the Dwang in de Zorg</h4>
 <h5 class="primary-text">Objective</h5>
 
-The Lessons Learned Library (L3) aims to support organisations in editing, maintaining, consulting and sharing lessons within the domain of crisis management (CM) and disaster risk reduction (DRR) in Europe. Thereby, sharing of lessons is not strictly limited to one organisation. L3 is especially intended to share lessons across organisations, across sectors, and across countries with the ultimate goal to improve CM and DRR in Europe by learning from each other’s experiences.
+The Dwang in de Zorg (L3) aims to support organisations in editing, maintaining, consulting and sharing lessons within the domain of crisis management (CM) and disaster risk reduction (DRR) in Europe. Thereby, sharing of lessons is not strictly limited to one organisation. L3 is especially intended to share lessons across organisations, across sectors, and across countries with the ultimate goal to improve CM and DRR in Europe by learning from each other’s experiences.
 Lessons may be collected from various types of events: routine, every day operations, crisis situations, training and exercises, experiments and tests, but also from risk management studies or preventive activities. Learning lessons can be considered as a structured approach to produce and apply experience-based knowledge to develop and improve doctrines, organisations, training, equipment, leadership, personnel and facilities to achieve more effective, efficient and safe operations.
 
 In simple terms, a lesson is a set of answers to questions such as: What was the situation?, What was the impact?, What went well in emergency management and is worthwhile to implement?, or What went wrong and which improvements are needed? To this purpose, users can provide precious information and lessons from events by adding a new event to the repository. By filling out a limited number of forms collected data and experiences can be shared with other emergency management communities in Europe.
@@ -18,7 +17,7 @@ The main functionalities of the L3 are to add and edit crisis events and associa
 
 The L3 contains of a set of events and their associated lessons. As depicted in the adjacent figure, each event in the repository can contain 0, 1 or more lessons, while each lesson is linked to exactly one specific crisis management function. Please note that a certain function can be addressed by several lessons from one or more events.`;
 
-const md2 = `The **aim** of the DRIVER+ **Lessons Learned Library** is to support organisations in editing, maintaining, consulting and sharing lessons within the domain of crisis management. These lessons may be collected from all kinds of events, such as routine, every day operations, (near) incidents, crisis situations, but also from training/exercises or from experiments and tests (like e.g. DRIVER+ Trials).
+const md2 = `The **aim** of the DRIVER+ **Dwang in de Zorg** is to support organisations in editing, maintaining, consulting and sharing lessons within the domain of crisis management. These lessons may be collected from all kinds of events, such as routine, every day operations, (near) incidents, crisis situations, but also from training/exercises or from experiments and tests (like e.g. DRIVER+ Trials).
 
 A lesson consists of two sets of information. First of all, a description of the observation of positive or negative experiences concerning the applicable CM function during the event. This includes the performance of executing the CM function during the event, which is expressed in three criteria: the effectiveness of the CM function (quality), the efficiency of the CM function (cost aspects), and the risks to which responders have been exposed.
 
@@ -28,7 +27,7 @@ export const HelpPage = () => ({
   view: () =>
     m('.row', [
       m(SlimdownView, { md }),
-      m('img.responsive-img', { src: l3, style: 'margin: 0 auto; padding: 0 10px' }),
+      // m('img.responsive-img', { src: l3, style: 'margin: 0 auto; padding: 0 10px' }),
       m(SlimdownView, { md: md2 }),
     ]),
 });

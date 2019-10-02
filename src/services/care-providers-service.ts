@@ -1,19 +1,19 @@
 import m from 'mithril';
-import { IEvent } from '../models';
+import { ICareProvider } from '../models';
 import { ChannelNames } from '../models/channels';
 import { RestService } from './rest-service';
 
-class EventsService extends RestService<Partial<IEvent>> {
+class CareProvidersService extends RestService<Partial<ICareProvider>> {
   constructor() {
-    super('events', ChannelNames.LESSON);
+    super('zorgaanbieders', ChannelNames.CARE);
     this.loadList();
   }
 
-  public async loadList(): Promise<Array<Partial<IEvent>> | undefined> {
-    const filter = 'view?props=$loki,name,desc,memberCountries,cmFunctions,initialIncident,otherIncidents,eventType,lessons,owner,published,canEdit';
+  public async loadList(): Promise<Array<Partial<ICareProvider>> | undefined> {
+    const filter = 'view?props=$loki,naam,kvk,locaties,owner,published,canEdit';
     // http://localhost:3000/events/view?props=name,cmFunctions,incidentType,eventType
     try {
-      const result = await m.request<IEvent[]>({
+      const result = await m.request<ICareProvider[]>({
         method: 'GET',
         url: this.baseUrl + filter,
         withCredentials: this.withCredentials,
@@ -34,4 +34,4 @@ class EventsService extends RestService<Partial<IEvent>> {
   }
 }
 
-export const EventsSvc = new EventsService();
+export const CareProvidersSvc = new CareProvidersService();

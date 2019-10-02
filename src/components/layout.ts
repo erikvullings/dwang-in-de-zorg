@@ -1,6 +1,6 @@
 import m, { Vnode } from 'mithril';
 import { Icon } from 'mithril-materialized';
-import logo from '../assets/logo_white.svg';
+import logo from '../assets/locatieregister.svg';
 import { IDashboard } from '../models';
 import { dashboardSvc } from '../services/dashboard-service';
 
@@ -27,7 +27,7 @@ export const Layout = () => ({
                 m(
                   'h4.center.yellow.darken-3.hide-on-med-and-down',
                   { style: 'text-align: left; margin: 0;' },
-                  'Lessons Learned Library'
+                  'Locatieregister'
                 )
               ),
             ]),
