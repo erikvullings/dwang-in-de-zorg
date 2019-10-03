@@ -9,7 +9,7 @@
 .nav-wrapper,
 .statusbar,
 .nav-content {
-  background-color: #f9a825;
+  background-color: #01689B;
 }
 .input-field,
 .input-field > label,
@@ -92,6 +92,7 @@ a,
 /* print styles */
 @media print {
   html, body {
+    font-family: "RO Sans",Calibri,sans-serif;
     font-size: 14px;
   }
   body {
