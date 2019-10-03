@@ -1,8 +1,8 @@
 import m, { Attributes, FactoryComponent } from 'mithril';
 import { InputCheckbox } from 'mithril-materialized';
 import { ICareProvider } from '../models';
-import { IAddress } from '../models/address';
-import { ILocation } from '../models/location';
+import { IAddress } from '../models/vws/address';
+import { ILocation } from '../models/vws/location';
 import { p } from '../utils';
 
 export interface IFormattedEvent extends Attributes {
@@ -63,12 +63,27 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
   return {
     view: ({ attrs: { careProvider: cp } }) => {
       const { naam, kvk, rechtsvorm, locaties } = cp;
+      const activeLocations =
+        locaties && locaties.length > 0 ? locaties.reduce((acc, cur) => acc + (isLocationActive(cur) ? 1 : 0), 0) : 0;
 
       return m('.row', { key: cp.$loki }, [
         m('.row', m('h4.col.s12.primary-text', naam)),
-        m('.row', [m('span.col.s6', 'KvK nummer: ' + kvk), m('span.col.s6', 'Rechtsvorm: ' + rechtsvorm)]),
+        m('.row', [m('span.col.s6', 'KvK nummer: ' + kvk), m('span.col.s6', 'Rechtsvorm: ' + p(rechtsvorm))]),
         m(AddressView, { address: cp }),
-        m('.row', m('h5.col.s12', 'Locaties')),
+        m(
+          '.row',
+          m('.col.s12', [
+            m('h5', 'Locaties'),
+            locaties &&
+              locaties.length > 0 &&
+              m(
+                'p',
+                `${naam} heeft in totaal ${locaties.length} locatie${locaties.length === 1 ? '' : 's'}, waarvan ${
+                  activeLocations === 0 ? 'geen enkele actief' : `${activeLocations} actief`
+                }.`
+              ),
+          ])
+        ),
         locaties &&
           locaties.map((l, i) =>
             m('.row', [
@@ -82,19 +97,19 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
                 m(InputCheckbox, {
                   className: 'col s12 l4',
                   disabled: true,
-                  checked: l.isAccommodatie,
+                  checked: l.isEenAccommodatie,
                   label: 'Is een Accomodatie',
                 }),
                 m(InputCheckbox, {
                   className: 'col s12 l4',
                   disabled: true,
-                  checked: l.hasWzdCare,
+                  checked: l.isEenWzdLocatie,
                   label: 'Levert WZD zorg',
                 }),
                 m(InputCheckbox, {
                   className: 'col s12 l4',
                   disabled: true,
-                  checked: l.hasWvggzCare,
+                  checked: l.isEenWvggzLocatie,
                   label: 'Levert WVGGX zorg',
                 }),
               ]),

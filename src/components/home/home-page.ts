@@ -3,13 +3,15 @@ import { Button, Icon, Parallax } from 'mithril-materialized';
 import { SlimdownView } from 'mithril-ui-form';
 import background from '../../assets/background.jpg';
 import logo from '../../assets/locatieregister.svg';
+import vws from '../../assets/logo_minvws.svg';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
 
 export const HomePage = () => ({
   view: () => [
     m('.row', [
+      m('div', { style: 'margin: 0 0 0 48%' }, m(`img.img-repsonsive[src=${vws}]`)),
       m(
-        'nav.yellow.darken-3',
+        'nav',
         m('.nav-wrapper', [
           m(
             'a.brand-logo[href=#]',
@@ -17,8 +19,8 @@ export const HomePage = () => ({
             m(`img[width=48][height=48][src=${logo}]`, { style: 'margin-top: 5px; margin-left: -5px;' })
           ),
           m(
-            'h3.center.yellow.darken-3.hide-on-small-only',
-            { style: 'margin: 0 auto; padding: 10px 0;' },
+            'h3.center.hide-on-small-only',
+            { style: 'padding: 10px 0; margin: 0 auto;' },
             'Locatieregister'
           ),
         ]),
@@ -29,7 +31,7 @@ export const HomePage = () => ({
           },
           [
             m(Button, {
-              className: 'yellow darken-3 btn-large',
+              className: 'btn-large',
               label: 'START',
               onclick: () => dashboardSvc.switchTo(Dashboards.SEARCH),
             }),
@@ -88,7 +90,7 @@ Zorgaanbieders dienen hier alle locaties te registreren alwaar zij deze vorm van
       ),
     ]),
     m(
-      'footer.page-footer.yellow.darken-3',
+      'footer.page-footer',
       { style: 'height: 60px; padding: 5px 0;' },
       m(
         '.container.center-align',

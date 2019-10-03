@@ -1,6 +1,6 @@
 import { ICareProvider } from '../models';
-import { IAddress } from '../models/address';
-import { ILocation } from '../models/location';
+import { IAddress } from '../models/vws/address';
+import { ILocation } from '../models/vws/location';
 
 /**
  * Create a GUID

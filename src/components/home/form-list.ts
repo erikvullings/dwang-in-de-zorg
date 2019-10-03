@@ -6,7 +6,7 @@ import { Roles } from '../../models/roles';
 import { CareProvidersSvc } from '../../services/care-providers-service';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
 import { Auth } from '../../services/login-service';
-import { countries, incidentTypes } from '../../template/form';
+import { countries } from '../../template/form';
 import { nameAndDescriptionFilter as nameAndKvkFilter } from '../../utils';
 
 export const EventsList = () => {
@@ -99,16 +99,16 @@ export const EventsList = () => {
               //   onchange: f => (state.eventTypeFilter = f),
               //   className: 'col s12',
               // }),
-              m(Select, {
-                placeholder: 'Select one',
-                label: 'Incident',
-                checkedId: incidentTypeFilter,
-                options: incidentTypes,
-                iconName: 'flash_on',
-                multiple: true,
-                onchange: f => (state.incidentTypeFilter = f as string[]),
-                className: 'col s12',
-              }),
+              // m(Select, {
+              //   placeholder: 'Select one',
+              //   label: 'Incident',
+              //   checkedId: incidentTypeFilter,
+              //   options: incidentTypes,
+              //   iconName: 'flash_on',
+              //   multiple: true,
+              //   onchange: f => (state.incidentTypeFilter = f as string[]),
+              //   className: 'col s12',
+              // }),
               // m(Select, {
               //   placeholder: 'Select one',
               //   label: 'CM function',

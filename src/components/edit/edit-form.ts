@@ -117,7 +117,7 @@ export const EditForm = () => {
                     m(
                       '.col.s12',
                       m(Chips, {
-                        label: 'Who can change this document',
+                        label: 'Wijzigingen toegestaan van',
                         placeholder: '+email',
                         onchange: chips => {
                           event.canEdit = chips.map(({ tag }) => tag);
