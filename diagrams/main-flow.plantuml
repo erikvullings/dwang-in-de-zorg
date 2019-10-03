@@ -1,0 +1,51 @@
+@startuml Registreren van de eerste locatie
+actor Alice
+participant LR
+database DB
+boundary PDOK
+
+Alice -> LR: Alice gaat naar http://dwangindezorg.nl
+LR --> Alice: Toon intropagina
+note right: logo VWS, korte toelichting
+Alice -> LR: 'Registreren locatie'
+LR --> Alice: Toon zoekpagina
+Alice -> LR: Voer nummer/naam in
+note right: Waarop gaan we zoeken? KVK, naam, z-vestigingnummer?
+LR -> DB: Zoek op nummer/naam
+DB --> LR: Geen resultaat
+LR --> Alice: Geen resultaat
+Alice -> LR: 'Registreer nieuwe zorginstelling'
+note right: Eerst inloggen?
+LR --> Alice: Formulier voor zorginstelling
+note right: Excel (gele blok)
+Alice -> LR: Vult gegevens in
+LR -> PDOK: Postcode en huisnummer
+PDOK --> LR: Adresgegevens
+LR -> PDOK: Locatie op de kaart
+PDOK --> LR: Latitude/longitude
+Alice -> LR: Nieuwe locatie toevoegen
+LR --> Alice: Formulier voor nieuwe locatie
+note right: Excel (blauw+beige). Aantal patiënten gewenst?\nOf actief/non-actief zdd je niet iedere keer opnieuw moet aanmaken?
+LR -> DB: Save document
+@enduml
+
+@startuml Zoeken van locaties op naam
+actor Bob
+participant LR
+database DB
+
+Bob -> LR: Bob gaat naar http://dwangindezorg.nl
+LR --> Bob: Toon intropagina
+Bob -> LR: 'Zoeken van locaties'
+LR --> Bob: Toon zoekpagina
+Bob -> LR: Voer nummer/naam in
+note right: Waarop gaan we zoeken? KVK, naam, z-vestigingnummer?
+LR -> DB: Zoek op nummer/naam/gemeente
+DB --> LR: Resultaat
+LR --> Bob: Lijst met resultaten
+note right: Zorginstellingen of locaties?\nOok op de kaart?
+Bob -> LR: Save als CSV
+note right: Kolommen gescheiden met ; ipv ,
+LR --> Bob: CSV file
+@enduml
+
