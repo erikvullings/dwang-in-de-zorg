@@ -27,7 +27,15 @@ if (loginRequired === 'true') {
         Auth.setUsername((tokenParsed as any).name || '');
         Auth.setEmail((tokenParsed as any).email || '');
         if (tokenParsed.realm_access) {
-          Auth.setRoles(tokenParsed.realm_access.roles);
+          const roles = tokenParsed.realm_access.roles;
+          if (
+            tokenParsed.resource_access &&
+            tokenParsed.resource_access.locatieregister &&
+            tokenParsed.resource_access.locatieregister.roles
+          ) {
+            roles.push(...tokenParsed.resource_access.locatieregister.roles);
+          }
+          Auth.setRoles(roles);
         }
         console.log(tokenParsed);
       }
