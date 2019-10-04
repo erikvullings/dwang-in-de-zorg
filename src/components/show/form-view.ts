@@ -2,7 +2,7 @@ import m, { FactoryComponent } from 'mithril';
 import { FlatButton, InputCheckbox } from 'mithril-materialized';
 import { deepCopy, labelResolver } from 'mithril-ui-form';
 import { ICareProvider } from '../../models';
-import { CareProvidersSvc } from '../../services';
+import { careProvidersSvc } from '../../services';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
 import { DisplayForm } from '../../services/display-form';
 import { Auth } from '../../services/login-service';
@@ -18,7 +18,7 @@ export const FormView: FactoryComponent = () => {
   return {
     oninit: () => {
       return new Promise(async (resolve, reject) => {
-        const event = await CareProvidersSvc.load(m.route.param('id')).catch(r => reject(r));
+        const event = await careProvidersSvc.load(m.route.param('id')).catch(r => reject(r));
         state.event = event ? deepCopy(event) : ({} as ICareProvider);
         state.loaded = true;
         resolve();
@@ -54,7 +54,7 @@ export const FormView: FactoryComponent = () => {
                   checked: event.published,
                   onchange: async checked => {
                     event.published = checked;
-                    await CareProvidersSvc.save(event);
+                    await careProvidersSvc.save(event);
                   },
                   label: 'Publiceer uw wijzigingen',
                 })

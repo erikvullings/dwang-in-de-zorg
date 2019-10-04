@@ -79,7 +79,7 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
             m('.row', [
               m(
                 'h6.col.s12',
-                `${i + 1}. ${l.locatienaam}${l.vestigingsnummer ? ` (vestigingsnr. ${l.vestigingsnummer})` : ''}`
+                `${i + 1}. ${p(l.locatienaam)}${l.vestigingsnummer ? ` (vestigingsnr. ${l.vestigingsnummer})` : ''}`
               ),
               l.locatieomschrijving && m('p.col.s12', l.locatieomschrijving),
               m(AddressView, { address: l }),
@@ -100,7 +100,7 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
                   className: 'col s12 l4',
                   disabled: true,
                   checked: l.isEenWvggzLocatie,
-                  label: 'Levert WVGGX zorg',
+                  label: 'Levert WVGGZ zorg',
                 }),
               ]),
               m('.row', [

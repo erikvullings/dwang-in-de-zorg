@@ -133,9 +133,9 @@ const ActivityForm: Form = [
 /** Zorgvorm formulier */
 const CareForm: Form = [
   { type: 'md', value: '###### Welke type zorg wordt geleverd?' },
-  { id: 'zorgvorm', type: 'text', required: true, className: 'col s12' },
   { id: 'isAmbulantGeleverd', type: 'checkbox', className: 'col s12 m6', label: 'Is ambulant geleverd?' },
   { id: 'isKlinischGeleverd', type: 'checkbox', className: 'col s12 m6', label: 'Is klinisch geleverd?' },
+  { id: 'zorgvorm', type: 'text', required: true, className: 'col s12', show: ['isEenWvggzLocatie'] },
   ...ActivityForm,
 ];
 
@@ -165,7 +165,7 @@ const LocationForm: Form = [
   { id: 'locatieomschrijving', type: 'textarea' },
   { id: 'isEenAccommodatie', label: 'Is een accomodatie?', type: 'checkbox', className: 'col s6 m4' },
   { id: 'isEenWzdLocatie', label: 'Is een WZD locatie?', type: 'checkbox', className: 'col s6 m4' },
-  { id: 'isEenWvggzLocatie', label: 'Is een WGGGZ locatie?', type: 'checkbox', className: 'col s6 m4' },
+  { id: 'isEenWvggzLocatie', label: 'Is een WVGGGZ locatie?', type: 'checkbox', className: 'col s6 m4' },
   ...AddressForm,
   ...CareForm,
 ];

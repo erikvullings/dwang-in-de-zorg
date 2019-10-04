@@ -3,7 +3,7 @@ import m from 'mithril';
 import { Button, Chips, ModalPanel } from 'mithril-materialized';
 import { deepCopy, LayoutForm } from 'mithril-ui-form';
 import { ICareProvider } from '../../models';
-import { CareProvidersSvc } from '../../services';
+import { careProvidersSvc } from '../../services';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
 import { Auth } from '../../services/login-service';
 import { CareProviderForm } from '../../template/form';
@@ -39,15 +39,15 @@ export const EditForm = () => {
     if (cp) {
       // const event = deepCopy(state.event);
       // console.log(JSON.stringify(event.memberCountries, null, 2));
-      await CareProvidersSvc.save(toQueryTarget(cp));
-      state.cp = CareProvidersSvc.getCurrent();
+      await careProvidersSvc.save(toQueryTarget(cp));
+      state.cp = careProvidersSvc.getCurrent();
     }
   };
 
   return {
     oninit: () => {
       return new Promise(async (resolve, reject) => {
-        const event = await CareProvidersSvc.load(m.route.param('id')).catch(r => reject(r));
+        const event = await careProvidersSvc.load(m.route.param('id')).catch(r => reject(r));
         state.cp = event ? deepCopy(event) : ({} as ICareProvider);
         state.loaded = true;
         m.redraw();
@@ -154,7 +154,7 @@ export const EditForm = () => {
             {
               label: 'Delete',
               onclick: async () => {
-                CareProvidersSvc.delete(event.$loki);
+                careProvidersSvc.delete(event.$loki);
                 close();
               },
             },

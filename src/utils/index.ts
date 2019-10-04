@@ -169,7 +169,7 @@ export const l = (val: undefined | string | string[]) => {
   }
 };
 
-const stripSpaces = (s: string) => s.replace(/\s/g, '');
+export const stripSpaces = (s: string) => s.replace(/\s/g, '');
 
 /** Convert an address to something that is easy to query */
 const addressToQueryTarget = (a: Partial<IAddress>) => {
@@ -207,4 +207,14 @@ export const isLocationActive = (loc: ILocation) => {
   const s = new Date(loc.datumIngang).valueOf();
   const e = loc.datumEinde ? new Date(loc.datumEinde).valueOf() : Number.MAX_VALUE;
   return s <= d && d <= e;
+};
+
+export const debounce = (func: (...args: any) => void, timeout: number) => {
+  let timer: number;
+  return (...args: any) => {
+    clearTimeout(timer);
+    timer = window.setTimeout(() => {
+      func(...args);
+    }, timeout);
+  };
 };
