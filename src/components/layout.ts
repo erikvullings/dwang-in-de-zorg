@@ -42,9 +42,24 @@ export const Layout = () => ({
                 style: 'margin-left: 5px;',
               })
             ),
-            m(
-              'ul.right',
-              dashboardSvc
+            m('ul.right', [
+              m(
+                'li',
+                m(
+                  'form',
+                  m('.input-field', [
+                    m('input[id=search][type=search][required]', { oninput: (e: UIEvent) => {
+                      if (e.target) {
+                        const input = e.target as HTMLInputElement;
+                        console.log(input.value);
+                      }
+                    }}),
+                    m('label.label-icon[for=search]', m(Icon, { iconName: 'search' })),
+                    m(Icon, { iconName: 'close' }),
+                  ])
+                )
+              ),
+              ...dashboardSvc
                 .getList()
                 .filter(d => d.visible || isActive(d.route))
                 .map((d: IDashboard) =>
@@ -61,8 +76,8 @@ export const Layout = () => ({
                       )
                     )
                   )
-                )
-            ),
+                ),
+            ]),
           ])
         )
       ),
