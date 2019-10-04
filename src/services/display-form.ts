@@ -3,7 +3,7 @@ import { InputCheckbox } from 'mithril-materialized';
 import { ICareProvider } from '../models';
 import { IAddress } from '../models/vws/address';
 import { ILocation } from '../models/vws/location';
-import { p } from '../utils';
+import { isLocationActive, p } from '../utils';
 
 export interface IFormattedEvent extends Attributes {
   careProvider: ICareProvider;
@@ -38,16 +38,6 @@ const AddressView: FactoryComponent<{ address: IAddress }> = () => {
  * Display the form in a format that is useful for the end user.
  */
 export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
-  const isLocationActive = (l: ILocation) => {
-    const d = Date.now();
-    if (!l.datumIngang) {
-      return false;
-    }
-    const s = new Date(l.datumIngang).valueOf();
-    const e = l.datumEinde ? new Date(l.datumEinde).valueOf() : Number.MAX_VALUE;
-    return s <= d && d <= e;
-  };
-
   const formatDate = (d: string | Date) => new Date(d).toLocaleDateString();
 
   const locationActiveLabel = (l: ILocation) => {

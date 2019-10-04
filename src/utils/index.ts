@@ -198,3 +198,13 @@ export const toQueryTarget = (cp: Partial<ICareProvider>) => {
   }
   return cp;
 };
+
+export const isLocationActive = (loc: ILocation) => {
+  const d = Date.now();
+  if (!loc.datumIngang) {
+    return false;
+  }
+  const s = new Date(loc.datumIngang).valueOf();
+  const e = loc.datumEinde ? new Date(loc.datumEinde).valueOf() : Number.MAX_VALUE;
+  return s <= d && d <= e;
+};
