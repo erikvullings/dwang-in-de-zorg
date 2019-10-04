@@ -1,34 +1,42 @@
 import m from 'mithril';
-import { FlatButton, Icon, Select, TextInput } from 'mithril-materialized';
+import { FlatButton, Icon, TextInput } from 'mithril-materialized';
 import { ICareProvider } from '../../models';
 import { AppState } from '../../models/app-state';
 import { Roles } from '../../models/roles';
 import { CareProvidersSvc } from '../../services/care-providers-service';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
 import { Auth } from '../../services/login-service';
-import { countries } from '../../template/form';
-import { nameAndDescriptionFilter as nameAndKvkFilter } from '../../utils';
+import { isLocationActive, nameAndDescriptionFilter as nameAndKvkFilter } from '../../utils';
 
 export const EventsList = () => {
   const state = {
     filterValue: '',
-    countryFilter: [],
     eventTypeFilter: [],
     incidentTypeFilter: [],
     cmFunctionFilter: [],
   } as {
-    countryFilter: Array<string | number>;
     filterValue: string;
   };
 
   const sortByName: ((a: Partial<ICareProvider>, b: Partial<ICareProvider>) => number) | undefined = (a, b) =>
     (a.naam || '') > (b.naam || '') ? 1 : (a.naam || '') < (b.naam || '') ? -1 : 0;
 
+  const sortByUpdated: ((a: Partial<ICareProvider>, b: Partial<ICareProvider>) => number) | undefined = (a, b) =>
+    typeof a.meta === 'undefined' ||
+    typeof a.meta.updated === 'undefined' ||
+    typeof b.meta === 'undefined' ||
+    typeof b.meta.updated === 'undefined'
+      ? 0
+      : (a.meta.updated || '') > (b.meta.updated || '')
+      ? 1
+      : (a.meta.updated || '') < (b.meta.updated || '')
+      ? -1
+      : 0;
+
   return {
     oninit: () => CareProvidersSvc.loadList(),
     view: () => {
-      const { countryFilter } = state;
-      const events = (CareProvidersSvc.getList() || ([] as ICareProvider[])).sort(sortByName);
+      const events = (CareProvidersSvc.getList() || ([] as ICareProvider[])).sort(sortByName).sort(sortByUpdated);
       const query = nameAndKvkFilter(state.filterValue);
       const filteredCareProviders =
         events
@@ -43,7 +51,7 @@ export const EventsList = () => {
         // .filter(typeFilter('cmFunctions', cmFunctionFilter))
         // .filter(incidentFilter(incidentTypeFilter))
         [];
-      console.log(JSON.stringify(filteredCareProviders, null, 2));
+      // console.log(JSON.stringify(filteredCareProviders, null, 2));
       return m('.row', { style: 'margin-top: 1em;' }, [
         m(
           'ul#slide-out.sidenav.sidenav-fixed',
@@ -75,16 +83,16 @@ export const EventsList = () => {
               style: 'margin-right:100px',
               className: 'col s12',
             }),
-            m(Select, {
-              placeholder: 'Select one',
-              label: 'Country',
-              checkedId: countryFilter,
-              options: countries,
-              iconName: 'public',
-              multiple: true,
-              onchange: f => (state.countryFilter = f),
-              className: 'col s12',
-            }),
+            // m(Select, {
+            //   placeholder: 'Select one',
+            //   label: 'Country',
+            //   checkedId: countryFilter,
+            //   options: countries,
+            //   iconName: 'public',
+            //   multiple: true,
+            //   onchange: f => (state.countryFilter = f),
+            //   className: 'col s12',
+            // }),
             // m(Select, {
             //   placeholder: 'Select one',
             //   label: 'Event type',
@@ -123,7 +131,6 @@ export const EventsList = () => {
               style: 'margin: 1em;',
               onclick: () => {
                 state.filterValue = '';
-                state.countryFilter.length = 0;
               },
             }),
           ]
@@ -134,7 +141,7 @@ export const EventsList = () => {
             m('.col.s12.m6.xl4', [
               m(
                 '.card.hoverable',
-                m('.card-content', { style: 'height: 100px;' }, [
+                m('.card-content', { style: 'height: 150px;' }, [
                   m(
                     m.route.Link,
                     {
@@ -156,6 +163,12 @@ export const EventsList = () => {
                       className: 'white-text',
                       iconName: 'cloud_download',
                     })
+                  ),
+                  m(
+                    'span.badge',
+                    cp.locaties
+                      ? `${cp.locaties.reduce((acc, cur) => acc + (isLocationActive(cur) ? 1 : 0), 0)} actief`
+                      : ''
                   ),
                   m(
                     'span.badge',
