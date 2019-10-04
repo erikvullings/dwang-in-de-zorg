@@ -6,7 +6,6 @@ import { RestService } from './rest-service';
 class CareProvidersService extends RestService<Partial<ICareProvider>> {
   constructor() {
     super('zorgaanbieders', ChannelNames.CARE);
-    this.loadList();
   }
 
   public async loadList(): Promise<Array<Partial<ICareProvider>> | undefined> {
@@ -25,7 +24,7 @@ class CareProvidersService extends RestService<Partial<ICareProvider>> {
       return this.list;
     } catch (error) {
       if (this.useDevServer) {
-        throw Error(`No result found at ${this.baseUrl}\n${error}`);
+        console.warn(`No result found at ${this.baseUrl}\n${error}`);
       }
       this.useDevServer = true;
       this.baseUrl = this.createBaseUrl(true);
