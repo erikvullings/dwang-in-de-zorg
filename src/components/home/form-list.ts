@@ -18,9 +18,6 @@ export const EventsList = () => {
     cmFunctionFilter: [],
   } as {
     countryFilter: Array<string | number>;
-    eventTypeFilter: Array<string | number>;
-    incidentTypeFilter: string[];
-    cmFunctionFilter: Array<string | number>;
     filterValue: string;
   };
 
@@ -30,7 +27,7 @@ export const EventsList = () => {
   return {
     oninit: () => CareProvidersSvc.loadList(),
     view: () => {
-      const { countryFilter, incidentTypeFilter } = state;
+      const { countryFilter } = state;
       const events = (CareProvidersSvc.getList() || ([] as ICareProvider[])).sort(sortByName);
       const query = nameAndKvkFilter(state.filterValue);
       const filteredCareProviders =
@@ -39,7 +36,8 @@ export const EventsList = () => {
             ev =>
               ev.published || (Auth.authenticated && (Auth.roles.indexOf(Roles.ADMIN) >= 0 || ev.owner === Auth.email))
           )
-          .filter(query) ||
+          .filter(query)
+          .filter((_, i) => i < 24) ||
         // .filter(typeFilter('memberCountries', countryFilter))
         // .filter(typeFilter('eventType', eventTypeFilter))
         // .filter(typeFilter('cmFunctions', cmFunctionFilter))
@@ -48,96 +46,90 @@ export const EventsList = () => {
       console.log(JSON.stringify(filteredCareProviders, null, 2));
       return m('.row', { style: 'margin-top: 1em;' }, [
         m(
-          '.col.s12.l3',
-          m(
-            'ul#slide-out.sidenav.sidenav-fixed',
-            {
-              oncreate: ({ dom }) => {
-                M.Sidenav.init(dom);
-              },
+          'ul#slide-out.sidenav.sidenav-fixed',
+          {
+            oncreate: ({ dom }) => {
+              M.Sidenav.init(dom);
             },
-            [
-              Auth.authenticated
-                ? m(FlatButton, {
-                    label: 'Nieuwe zorgaanbieder',
-                    iconName: 'add',
-                    class: 'col s11 indigo darken-4 white-text',
-                    style: 'margin: 1em;',
-                    onclick: () => {
-                      CareProvidersSvc.new({ naam: 'Naam', owner: Auth.email, published: false });
-                      dashboardSvc.switchTo(Dashboards.EDIT, { id: -1 });
-                    },
-                  })
-                : undefined,
-              m('h4.primary-text', { style: 'margin-left: 0.5em;' }, 'Filter locaties'),
-              m(TextInput, {
-                label: 'Text filter',
-                id: 'filter',
-                placeholder: 'Part of title or description...',
-                iconName: 'filter_list',
-                onkeyup: (_: KeyboardEvent, v?: string) => (state.filterValue = v ? v : ''),
-                style: 'margin-right:100px',
-                className: 'col s12',
-              }),
-              m(Select, {
-                placeholder: 'Select one',
-                label: 'Country',
-                checkedId: countryFilter,
-                options: countries,
-                iconName: 'public',
-                multiple: true,
-                onchange: f => (state.countryFilter = f),
-                className: 'col s12',
-              }),
-              // m(Select, {
-              //   placeholder: 'Select one',
-              //   label: 'Event type',
-              //   checkedId: eventTypeFilter,
-              //   options: eventTypes,
-              //   iconName: 'event_note',
-              //   multiple: true,
-              //   onchange: f => (state.eventTypeFilter = f),
-              //   className: 'col s12',
-              // }),
-              // m(Select, {
-              //   placeholder: 'Select one',
-              //   label: 'Incident',
-              //   checkedId: incidentTypeFilter,
-              //   options: incidentTypes,
-              //   iconName: 'flash_on',
-              //   multiple: true,
-              //   onchange: f => (state.incidentTypeFilter = f as string[]),
-              //   className: 'col s12',
-              // }),
-              // m(Select, {
-              //   placeholder: 'Select one',
-              //   label: 'CM function',
-              //   checkedId: cmFunctionFilter,
-              //   options: cmFunctions,
-              //   iconName: 'notifications_active',
-              //   multiple: true,
-              //   onchange: f => (state.cmFunctionFilter = f),
-              //   className: 'col s12',
-              //   dropdownOptions: { container: 'body' as any },
-              // }),
-              m(FlatButton, {
-                label: 'Wis alle filters',
-                iconName: 'clear_all',
-                class: 'col s11',
-                style: 'margin: 1em;',
-                onclick: () => {
-                  state.filterValue = '';
-                  state.countryFilter.length = 0;
-                  state.cmFunctionFilter.length = 0;
-                  state.eventTypeFilter.length = 0;
-                  state.incidentTypeFilter.length = 0;
-                },
-              }),
-            ]
-          )
+          },
+          [
+            Auth.authenticated
+              ? m(FlatButton, {
+                  label: 'Nieuwe zorgaanbieder',
+                  iconName: 'add',
+                  class: 'col s11 indigo darken-4 white-text',
+                  style: 'margin: 1em;',
+                  onclick: () => {
+                    CareProvidersSvc.new({ naam: 'Naam', owner: Auth.email, published: false });
+                    dashboardSvc.switchTo(Dashboards.EDIT, { id: -1 });
+                  },
+                })
+              : undefined,
+            m('h4.primary-text', { style: 'margin-left: 0.5em;' }, 'Filter locaties'),
+            m(TextInput, {
+              label: 'Text filter',
+              id: 'filter',
+              placeholder: 'Part of title or description...',
+              iconName: 'filter_list',
+              onkeyup: (_: KeyboardEvent, v?: string) => (state.filterValue = v ? v : ''),
+              style: 'margin-right:100px',
+              className: 'col s12',
+            }),
+            m(Select, {
+              placeholder: 'Select one',
+              label: 'Country',
+              checkedId: countryFilter,
+              options: countries,
+              iconName: 'public',
+              multiple: true,
+              onchange: f => (state.countryFilter = f),
+              className: 'col s12',
+            }),
+            // m(Select, {
+            //   placeholder: 'Select one',
+            //   label: 'Event type',
+            //   checkedId: eventTypeFilter,
+            //   options: eventTypes,
+            //   iconName: 'event_note',
+            //   multiple: true,
+            //   onchange: f => (state.eventTypeFilter = f),
+            //   className: 'col s12',
+            // }),
+            // m(Select, {
+            //   placeholder: 'Select one',
+            //   label: 'Incident',
+            //   checkedId: incidentTypeFilter,
+            //   options: incidentTypes,
+            //   iconName: 'flash_on',
+            //   multiple: true,
+            //   onchange: f => (state.incidentTypeFilter = f as string[]),
+            //   className: 'col s12',
+            // }),
+            // m(Select, {
+            //   placeholder: 'Select one',
+            //   label: 'CM function',
+            //   checkedId: cmFunctionFilter,
+            //   options: cmFunctions,
+            //   iconName: 'notifications_active',
+            //   multiple: true,
+            //   onchange: f => (state.cmFunctionFilter = f),
+            //   className: 'col s12',
+            //   dropdownOptions: { container: 'body' as any },
+            // }),
+            m(FlatButton, {
+              label: 'Wis alle filters',
+              iconName: 'clear_all',
+              class: 'col s11',
+              style: 'margin: 1em;',
+              onclick: () => {
+                state.filterValue = '';
+                state.countryFilter.length = 0;
+              },
+            }),
+          ]
         ),
         m(
-          '.col.s12.l9',
+          '.contentarea',
           filteredCareProviders.map(cp =>
             m('.col.s12.m6.xl4', [
               m(

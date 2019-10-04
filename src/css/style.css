@@ -88,6 +88,15 @@ a,
 .buttons {
   padding: 0 20px;
 }
+.contentarea {
+  padding-left: 150px;
+}
+
+@media only screen and (max-width : 992px) {
+  .contentarea {
+    padding-left: 0;
+  }
+}
 
 /* print styles */
 @media print {

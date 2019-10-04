@@ -70,8 +70,8 @@ export const EditForm = () => {
         }));
       const section = m.route.param('section') || sections[0].id;
       return m('.row', [
-        m(
-          '.col.s12.l3',
+        // m(
+        //   '.col.s12.l3',
           m(
             'ul#slide-out.sidenav.sidenav-fixed',
             {
@@ -129,9 +129,9 @@ export const EditForm = () => {
                   )
                 : undefined,
             ]
-          )
-        ),
-        m('.col.s12.l9', [
+          ),
+        // ),
+        m('.contentarea', [
           m(LayoutForm, {
             key: section,
             form,

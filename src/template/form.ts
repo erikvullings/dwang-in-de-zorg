@@ -126,8 +126,8 @@ export const countries = [
 
 const ActivityForm: Form = [
   { type: 'md', value: '###### Activiteit/aantekening' },
-  { id: 'datumIngang', label: 'Ingangsdatum', type: 'date', required: true, className: 'col s6' },
-  { id: 'datumEinde', label: 'Einddatum', type: 'date', className: 'col s6' },
+  { id: 'datumIngang', label: 'Ingangsdatum', placeholder: 'Kies een datum', type: 'date', required: true, className: 'col s6' },
+  { id: 'datumEinde', label: 'Einddatum', placeholder: 'Kies een datum', type: 'date', className: 'col s6' },
 ];
 
 /** Zorgvorm formulier */
