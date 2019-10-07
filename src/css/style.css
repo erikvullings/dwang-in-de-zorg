@@ -150,3 +150,18 @@ a,
   display: inline-block;
   margin: 0 1rem;
 }
+
+#dummy-search + label {
+  top: 1em;
+}
+.input-field input[type=search] {
+  height: 3.2em;
+  vertical-align: bottom;
+  padding-left: 4rem;
+  width: calc(100% - 4rem);
+  border-radius: 50px;
+  border: 1px solid #575756;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+

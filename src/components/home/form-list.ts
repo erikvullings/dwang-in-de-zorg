@@ -7,6 +7,8 @@ import { careProvidersSvc } from '../../services/care-providers-service';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
 import { Auth } from '../../services/login-service';
 import { isLocationActive, nameAndDescriptionFilter as nameAndKvkFilter } from '../../utils';
+import { SearchComponent } from '../ui/search-component';
+import { CircularSpinner } from '../ui/preloader';
 
 export const EventsList = () => {
   const state = {
@@ -36,7 +38,9 @@ export const EventsList = () => {
   return {
     // oninit: () => careProvidersSvc.loadList(),
     view: () => {
-      const careProviders = (careProvidersSvc.getList() || ([] as ICareProvider[])).sort(sortByName).sort(sortByUpdated);
+      const careProviders = (careProvidersSvc.getList() || ([] as ICareProvider[]))
+        .sort(sortByName)
+        .sort(sortByUpdated);
       const query = nameAndKvkFilter(state.filterValue);
       const filteredCareProviders =
         careProviders
@@ -106,47 +110,80 @@ export const EventsList = () => {
         ),
         m(
           '.contentarea',
-          filteredCareProviders.map(cp =>
-            m('.col.s12.m6.xl4', [
-              m(
-                '.card.hoverable',
-                m('.card-content', { style: 'height: 150px;' }, [
+          filteredCareProviders.length > 0
+            ? filteredCareProviders.map(cp =>
+                m('.col.s12.m6.xl4', [
                   m(
-                    m.route.Link,
-                    {
-                      className: 'card-title',
-                      href: dashboardSvc.route(Dashboards.READ).replace(':id', `${cp.$loki}`),
-                    },
-                    cp.naam || 'Untitled'
-                  ),
-                  m('p.light.block-with-text', cp.kvk),
-                ]),
-                m('.card-action', [
-                  m(
-                    'a',
-                    {
-                      target: '_blank',
-                      href: `${AppState.apiService()}/events/${cp.$loki}`,
-                    },
-                    m(Icon, {
-                      className: 'white-text',
-                      iconName: 'cloud_download',
-                    })
-                  ),
-                  m(
-                    'span.badge',
-                    cp.locaties
-                      ? `${cp.locaties.reduce((acc, cur) => acc + (isLocationActive(cur) ? 1 : 0), 0)} actief`
-                      : ''
-                  ),
-                  m(
-                    'span.badge',
-                    cp.locaties ? `${cp.locaties.length} locatie${cp.locaties.length === 1 ? '' : 's'}` : '0 locaties'
+                    '.card.hoverable',
+                    m('.card-content', { style: 'height: 150px;' }, [
+                      m(
+                        m.route.Link,
+                        {
+                          className: 'card-title',
+                          href: dashboardSvc.route(Dashboards.READ).replace(':id', `${cp.$loki}`),
+                        },
+                        cp.naam || 'Untitled'
+                      ),
+                      m('p.light.block-with-text', cp.kvk),
+                    ]),
+                    m('.card-action', [
+                      m(
+                        'a',
+                        {
+                          target: '_blank',
+                          href: `${AppState.apiService()}/events/${cp.$loki}`,
+                        },
+                        m(Icon, {
+                          className: 'white-text',
+                          iconName: 'cloud_download',
+                        })
+                      ),
+                      m(
+                        'span.badge',
+                        cp.locaties
+                          ? `${cp.locaties.reduce((acc, cur) => acc + (isLocationActive(cur) ? 1 : 0), 0)} actief`
+                          : ''
+                      ),
+                      m(
+                        'span.badge',
+                        cp.locaties
+                          ? `${cp.locaties.length} locatie${cp.locaties.length === 1 ? '' : 's'}`
+                          : '0 locaties'
+                      ),
+                    ])
                   ),
                 ])
-              ),
-            ])
-          )
+              )
+            : m(
+                '.row.center-align',
+                {
+                  style: 'height: 80%; position: relative;',
+                },
+                m(
+                  'div',
+                  {
+                    style:
+                      'position: absolute; width: 100%; top: 50%; -ms-transform: translateY(-50%); transform: translateY(-50%);',
+                  },
+                  AppState.searchQuery
+                    ? m('.col.s12', m(CircularSpinner))
+                    : m(
+                        '.col.s12.m8.offset-m2',
+                        m(SearchComponent, {
+                          id: 'dummy-search',
+                          placeholder: 'Zoek op naam, adres, kvk- of vestigingsnummer',
+                          search: q => {
+                            AppState.searchQuery = q;
+                            const s = document.getElementById('search');
+                            if (s) {
+                              s.focus();
+                            }
+                          },
+                          query: AppState.searchQuery,
+                        })
+                      )
+                )
+              )
         ),
       ]);
     },

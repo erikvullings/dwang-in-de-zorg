@@ -1,20 +1,32 @@
-# LESSONS-LEARNED-FRAMEWORK
+# LOCATION REGISTER, part of [dwangindezorg.nl](dwangindezorg.nl)
 
-A web application for storing and searching your lessons learned.
+A web application for storing and searching locations, using:
+
+- A backend service, consisting of:
+  - [node.js](https://nodejs.org) and [koa](https://www.npmjs.com/package/koa) as the backend service.
+  - [lokijs](http://lokijs.org) as an in-memory database, with a JSON file for persistence.
+  - [rest-easy-loki](https://github.com/erikvullings/rest-easy-loki) a REST interface on top of loki, also supporting MongoDB like queries.
+- A frontend single-page application (a so-called SPA), using:
+  - [mithril](http://mithril.js.org) as JS framework
+  - [mithril-ui-form](https://github.com/erikvullings/mithril-ui-form) for creating the forms
+  - [mithril-materialized](https://github.com/erikvullings/mithril-materialized) for the Material design
+- A [Keycloak](https://www.keycloak.org) identity provider, running in a Docker container. In the `.env` file, the realm settings and application name need to be provided in order for it to work as expected.
 
 ## Installation
 
-Install all dependencies, start the database service and run parcel to bundle your dependencies. You can access the application at [http://localhost:3000](http://localhost:3000).
+This application is developed using [node.js](https://nodejs.org) v10, so please install that first if you don't have it.
+
+To install all project dependencies, start the database service and run parcel to bundle your dependencies. You can access the application at [http://localhost:3000](http://localhost:3000).
 
 ```bash
-npm i
+pnpm i
 npm build:domain
 npm run serve
 ```
 
 ## Development
 
-As above, but now run `parcel` in watch mode.
+As above, but now run `parcel` in watch mode, and access the application at [http://localhost:3000](http://localhost:1234).
 
 ```bash
 npm i

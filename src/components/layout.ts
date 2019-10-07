@@ -2,9 +2,11 @@ import m, { Vnode } from 'mithril';
 import { Icon } from 'mithril-materialized';
 import logo from '../assets/locatieregister.svg';
 import { IDashboard } from '../models';
+import { AppState } from '../models/app-state';
 import { careProvidersSvc } from '../services';
 import { dashboardSvc } from '../services/dashboard-service';
 import { debounce } from '../utils';
+import { SearchComponent } from './ui/search-component';
 
 const stripRouteParams = (path: string) => path.replace(/:[a-zA-Z]+/, '');
 
@@ -47,28 +49,10 @@ export const Layout = () => ({
               })
             ),
             m('ul.right', [
-              m(
-                'li',
-                m(
-                  'form',
-                  m('.input-field', [
-                    m('input[id=search][type=search][required]', { oninput: (e: UIEvent) => {
-                      if (e.target) {
-                        const input = e.target as HTMLInputElement;
-                        search(input.value);
-                      }
-                    }}),
-                    m('label.label-icon[for=search]', m(Icon, { iconName: 'search' })),
-                    m(Icon, { iconName: 'close', onclick: () => {
-                      const input = document.getElementById('search') as HTMLInputElement;
-                      if (input) {
-                        input.value = '';
-                        search('');
-                      }
-                    } }),
-                  ])
-                )
-              ),
+              m('li', m(SearchComponent, { search: q => {
+                AppState.searchQuery = q;
+                search(q);
+              }, query: AppState.searchQuery })),
               ...dashboardSvc
                 .getList()
                 .filter(d => d.visible || isActive(d.route))
