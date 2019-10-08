@@ -130,12 +130,32 @@ const ActivityForm: Form = [
   { id: 'datumEinde', label: 'Einddatum', placeholder: 'Kies een datum', type: 'date', className: 'col s6' },
 ];
 
+export const careOptions = [
+  { id: 'bejegening', label: 'Bejegening' },
+  { id: 'verzorging', label: 'Verzorging' },
+  { id: 'verpleging', label: 'Verpleging' },
+  { id: 'behandeling', label: 'Behandeling' },
+  { id: 'begeleiding', label: 'Begeleiding' },
+  { id: 'bescherming', label: 'Bescherming' },
+  { id: 'toediening', label: 'Toedienen van vocht, voeding en medicatie, verrichten van medische controles of handelingen, therapeutische maatregelen' },
+  { id: 'beperken_bewegingsvrijheid', label: 'Beperken van de bewegingsvrijheid' },
+  { id: 'insluiten', label: 'Insluiten' },
+  { id: 'toezicht', label: 'Uitoefenen van toezicht' },
+  { id: 'onderzoek_kleding', label: 'Onderzoek aan kleding of lichaam' },
+  { id: 'onderzoek_woonruimte', label: 'Onderzoek van de woon- of verblijfsruimte op gedrag-beïnvloedende middelen en gevaarlijke voorwerpen' },
+  { id: 'drugs_controle', label: 'Controleren op aanwezigheid van gedrag-beïnvloedende middelen' },
+  { id: 'beperken_vrijheid', label: 'Beperken in de vrijheid het eigen leven in te richten' },
+  { id: 'beperken_bezoeksrecht', label: 'Beperken van het recht op het ontvangen van bezoek' },
+  { id: 'ontnemen_vrijheid', label: 'Ontnemen van de vrijheid van betrokkene door hem over te brengen naar een plaats die geschikt is voor tijdelijk verblijf' },
+  { id: 'opnemen', label: 'Opnemen in een accommodatie' },
+];
+
 /** Zorgvorm formulier */
 const CareForm: Form = [
   { type: 'md', value: '###### Welke type zorg wordt geleverd?' },
   { id: 'isAmbulantGeleverd', type: 'checkbox', className: 'col s12 m6', label: 'Is ambulant geleverd?' },
   { id: 'isKlinischGeleverd', type: 'checkbox', className: 'col s12 m6', label: 'Is klinisch geleverd?' },
-  { id: 'zorgvorm', type: 'text', required: true, className: 'col s12', show: ['isEenWvggzLocatie'] },
+  { id: 'zorgvorm', type: 'options', options: careOptions, multiple: true, required: true, checkboxClass: 'col s12', show: ['isEenWvggzLocatie = true'] },
   ...ActivityForm,
 ];
 
