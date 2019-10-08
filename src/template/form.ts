@@ -6,122 +6,35 @@ import { Form } from 'mithril-ui-form';
 // ) => (a.label > b.label ? 1 : a.label < b.label ? -1 : 0);
 
 export const countries = [
-  {
-    id: 'netherlands',
-    label: 'Nederland',
-  },
-  {
-    id: 'austria',
-    label: 'Oostenrijk',
-  },
-  {
-    id: 'belgium',
-    label: 'België',
-  },
-  {
-    id: 'bulgaria',
-    label: 'Bulgarije',
-  },
-  {
-    id: 'croatia',
-    label: 'Kroatië',
-  },
-  {
-    id: 'cyprus',
-    label: 'Cyprus',
-  },
-  {
-    id: 'czech_republic',
-    label: 'Tsjechië',
-  },
-  {
-    id: 'denmark',
-    label: 'Denemarken',
-  },
-  {
-    id: 'estonia',
-    label: 'Estonië',
-  },
-  {
-    id: 'finland',
-    label: 'Finland',
-  },
-  {
-    id: 'france',
-    label: 'Frankrijk',
-  },
-  {
-    id: 'germany',
-    label: 'Duitsland',
-  },
-  {
-    id: 'greece',
-    label: 'Griekenland',
-  },
-  {
-    id: 'hungary',
-    label: 'Hungarije',
-  },
-  {
-    id: 'ireland',
-    label: 'Ierland',
-  },
-  {
-    id: 'italy',
-    label: 'Itali:e',
-  },
-  {
-    id: 'latvia',
-    label: 'Letland',
-  },
-  {
-    id: 'lithuania',
-    label: 'Litouwen',
-  },
-  {
-    id: 'luxembourg',
-    label: 'Luxemburg',
-  },
-  {
-    id: 'malta',
-    label: 'Malta',
-  },
-  {
-    id: 'poland',
-    label: 'Polen',
-  },
-  {
-    id: 'portugal',
-    label: 'Portugal',
-  },
-  {
-    id: 'romania',
-    label: 'Romanië',
-  },
-  {
-    id: 'slovakia',
-    label: 'Slovakije',
-  },
-  {
-    id: 'slovenia',
-    label: 'Slovenië',
-  },
-  {
-    id: 'spain',
-    label: 'Spanje',
-  },
-  {
-    id: 'united_kingdom',
-    label: 'Engeland',
-  },
-  {
-    id: 'sweden',
-    label: 'Zweden',
-  },
-  {
-    id: 'other',
-    label: 'Land buiten Europa',
-  },
+  { id: 'netherlands', label: 'Nederland' },
+  { id: 'austria', label: 'Oostenrijk' },
+  { id: 'belgium', label: 'België' },
+  { id: 'bulgaria', label: 'Bulgarije' },
+  { id: 'croatia', label: 'Kroatië' },
+  { id: 'cyprus', label: 'Cyprus' },
+  { id: 'czech_republic', label: 'Tsjechië' },
+  { id: 'denmark', label: 'Denemarken' },
+  { id: 'estonia', label: 'Estonië' },
+  { id: 'finland', label: 'Finland' },
+  { id: 'france', label: 'Frankrijk' },
+  { id: 'germany', label: 'Duitsland' },
+  { id: 'greece', label: 'Griekenland' },
+  { id: 'hungary', label: 'Hungarije' },
+  { id: 'ireland', label: 'Ierland' },
+  { id: 'italy', label: 'Italië' },
+  { id: 'latvia', label: 'Letland' },
+  { id: 'lithuania', label: 'Litouwen' },
+  { id: 'luxembourg', label: 'Luxemburg' },
+  { id: 'malta', label: 'Malta' },
+  { id: 'poland', label: 'Polen' },
+  { id: 'portugal', label: 'Portugal' },
+  { id: 'romania', label: 'Romanië' },
+  { id: 'slovakia', label: 'Slovakije' },
+  { id: 'slovenia', label: 'Slovenië' },
+  { id: 'spain', label: 'Spanje' },
+  { id: 'united_kingdom', label: 'Engeland' },
+  { id: 'sweden', label: 'Zweden' },
+  { id: 'other', label: 'Land buiten Europa' },
 ];
 
 const rechtsvorm = [
@@ -255,7 +168,7 @@ const LocationForm: Form = [
   { id: 'locatieomschrijving', type: 'textarea' },
   { id: 'isEenAccommodatie', label: 'Is een accomodatie?', type: 'checkbox', className: 'col s6 m4' },
   { id: 'isEenWzdLocatie', label: 'Is een WZD locatie?', type: 'checkbox', className: 'col s6 m4' },
-  { id: 'isEenWvggzLocatie', label: 'Is een WVGGGZ locatie?', type: 'checkbox', className: 'col s6 m4' },
+  { id: 'isEenWvggzLocatie', label: 'Is een WVGGZ locatie?', type: 'checkbox', className: 'col s6 m4' },
   ...AddressForm,
   ...CareForm,
 ];
