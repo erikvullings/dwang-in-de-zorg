@@ -12,6 +12,7 @@ const apiDevService = process.env.SERVER;
 
 /** Application state */
 export const AppState = {
+  isSearching: false,
   searchQuery: '',
   usingDevServer: false,
   apiService: () => AppState.usingDevServer ? apiDevService : getRootUrl(),

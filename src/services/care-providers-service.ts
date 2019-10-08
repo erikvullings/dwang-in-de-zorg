@@ -3,6 +3,7 @@ import { ICareProvider } from '../models';
 import { ChannelNames } from '../models/channels';
 import { stripSpaces } from '../utils';
 import { RestService } from './rest-service';
+import { AppState } from '../models/app-state';
 
 class CareProvidersService extends RestService<Partial<ICareProvider>> {
   constructor() {
@@ -48,12 +49,14 @@ class CareProvidersService extends RestService<Partial<ICareProvider>> {
     // http://localhost:3000/zorgaanbieders?q={"locaties.target":{"$contains":"car"}}
     // http://localhost:3000/zorgaanbieders?q={"$or":[{"target":{"$contains":"car"}},{"locaties.target":{"$contains":"car"}}]}
     try {
+      AppState.isSearching = true;
       const result = await m.request<ICareProvider[]>({
         method: 'GET',
         url: this.baseUrl,
         params: { q: JSON.stringify(q) },
         withCredentials: this.withCredentials,
       });
+      AppState.isSearching = false;
       if (!result) {
         throw Error('No result found at ' + this.baseUrl);
       }

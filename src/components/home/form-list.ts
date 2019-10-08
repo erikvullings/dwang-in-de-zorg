@@ -7,8 +7,8 @@ import { careProvidersSvc } from '../../services/care-providers-service';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
 import { Auth } from '../../services/login-service';
 import { isLocationActive, nameAndDescriptionFilter as nameAndKvkFilter } from '../../utils';
-import { SearchComponent } from '../ui/search-component';
 import { CircularSpinner } from '../ui/preloader';
+import { SearchComponent } from '../ui/search-component';
 
 export const EventsList = () => {
   const state = {
@@ -166,7 +166,9 @@ export const EventsList = () => {
                       'position: absolute; width: 100%; top: 50%; -ms-transform: translateY(-50%); transform: translateY(-50%);',
                   },
                   AppState.searchQuery
-                    ? m('.col.s12', m(CircularSpinner))
+                    ? AppState.isSearching || AppState.searchQuery.length <= 3
+                      ? m('.col.s12', m(CircularSpinner))
+                      : m('.col.s12.m8.offset-m2', m('h5', 'Geen resultaten gevonden.'))
                     : m(
                         '.col.s12.m8.offset-m2',
                         m(SearchComponent, {
