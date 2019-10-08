@@ -1,9 +1,9 @@
 import m from 'mithril';
 import { ICareProvider } from '../models';
+import { AppState } from '../models/app-state';
 import { ChannelNames } from '../models/channels';
 import { stripSpaces } from '../utils';
 import { RestService } from './rest-service';
-import { AppState } from '../models/app-state';
 
 class CareProvidersService extends RestService<Partial<ICareProvider>> {
   constructor() {
