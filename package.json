@@ -40,7 +40,7 @@
     "mithril": "^2.0.4",
     "mithril-leaflet": "^0.1.6",
     "mithril-materialized": "^0.15.0",
-    "mithril-ui-form": "^0.3.8",
+    "mithril-ui-form": "^0.3.11",
     "rest-easy-loki": "^0.3.2"
   },
   "devDependencies": {
@@ -48,10 +48,10 @@
     "@types/lokijs": "^1.5.2",
     "@types/materialize-css": "^1.0.6",
     "@types/mithril": "^2.0.0",
-    "autoprefixer": "^9.6.1",
-    "concurrently": "^4.1.2",
+    "autoprefixer": "^9.6.4",
+    "concurrently": "^5.0.0",
     "cssnano": "^4.1.10",
-    "parcel-bundler": "^1.12.3",
+    "parcel-bundler": "^1.12.4",
     "rimraf": "^3.0.0",
     "typescript": "^3.6.3"
   }
