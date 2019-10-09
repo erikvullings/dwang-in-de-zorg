@@ -12,4 +12,7 @@ export interface ILocation extends IAddress, IQueryable, IActivity {
   isEenWzdLocatie?: boolean;
   /** Wordt op de locatie Wvggz zorg geleverd */
   isEenWvggzLocatie?: boolean;
+
+  /** RoWe: een locatie heeft 1..n "activity records" */
+  // activity: IActivity[];
 }
