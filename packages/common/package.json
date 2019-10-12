@@ -1,11 +1,13 @@
 {
-  "name": "dwang-in-de-zorg",
+  "name": "locatieregistermodellen",
   "version": "0.0.1",
-  "description": "Capture, store and share your learned lessons in a simple to use web application.",
+  "description": "Models for the location register.",
   "scripts": {
-    "clean": "pnpm recursive run cleanup",
-    "start": "pnpm recursive run dev",
-    "build:domain": "pnpm run build:domain"
+    "clean": "pnpm run clean",
+    "cleanup": "pnpm run clean",
+    "dev": "tsc -w",
+    "start": "tsc -w",
+    "build:domain": "tsc"
   },
   "repository": {
     "type": "git",
@@ -28,6 +30,6 @@
   },
   "homepage": "https://github.com/erikvullings/dwang-in-de-zorg#readme",
   "devDependencies": {
-    "pnpm": "^3.6.5"
+    "typescript": "^3.4.3"
   }
 }
