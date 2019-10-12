@@ -1,5 +1,7 @@
+.*
 *.db
 *.db.json
 node_modules
 dist
 public
+*.orig

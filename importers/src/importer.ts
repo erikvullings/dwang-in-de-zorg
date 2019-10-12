@@ -11,7 +11,7 @@ const filename = path.resolve(process.cwd(), 'locatieregister.csv');
 interface IImportedData {
   naam: string;
   kvk: string;
-  // rechtsvorm: string;
+  rechtsvorm?: string;
   straat: string;
   huisnummer: string;
   huisletter?: string;
@@ -19,7 +19,11 @@ interface IImportedData {
   postcode: string;
   woonplaatsnaam: string;
   landnaam: string;
+  // RoWe: aanvullende adresinfo voor adressen voor zorgaanbiederadres
+  zaanvadresinfo?: string;
   locatienaam: string;
+  // RoWe: locatieomschrijving (niet zijnde additionele adresinformatie)
+  lomschrijving?: string;
   vestigingsnummer?: string;
   lstraat: string;
   lhuisnummer: string;
@@ -28,6 +32,34 @@ interface IImportedData {
   lpostcode: string;
   lwoonplaatsnaam: string;
   llandnaam: string;
+  // RoWe: aanvullende adresinfo voor adressen van locatieadres
+  laanvadresinfo?: string;
+  // RoWe: isAccommodatie + onder welke wetten wordt zorg geleverd
+  isaccommodatie?: string;
+  iswzd?: string;
+  iswvggz?: string;
+  // RoWe: deze velden alleen voor eerste imports
+  aantekeningingang: string;
+  aantekeningeinde?: string;
+  // RoWe: velden voor geleverde typen zorg
+  zvbejegening?: string;
+  zvverzorging?: string;
+  zvverpleging?: string;
+  zvbehandeling?: string;
+  zvbegeleiding?: string;
+  zvbescherming?: string;
+  zvvochtvoedingmedicatie?: string;
+  zvmedishcecontroles?: string;
+  zvbeperkenbewegingsvrijheid?: string;
+  zvinsluiten?: string;
+  zvtoezicht?: string;
+  zvonderzoekkledinglichaam?: string;
+  zvonderzoekwoonruimte?: string;
+  zvcontrolerenmiddelen?: string,
+  zvbeperkeneigenleven?: string;
+  zvbeperkenbezoek?: string;
+  zvopnemen?: string;
+  zvtijdelijkverblijf?: string;
 }
 
 fs.readFile(filename, 'utf8', function(err, csv) {
@@ -51,6 +83,8 @@ fs.readFile(filename, 'utf8', function(err, csv) {
         postcode,
         woonplaatsnaam,
         landnaam,
+        //RoWe: zorgaanbieder aanvullende adresinfo
+        zaanvadresinfo,
         locatienaam,
         vestigingsnummer,
         lstraat,
@@ -60,6 +94,11 @@ fs.readFile(filename, 'utf8', function(err, csv) {
         lpostcode,
         lwoonplaatsnaam,
         llandnaam,
+        // RoWe: extra velden
+        laanvadresinfo,
+        isaccommodatie,
+        iswzd,
+        iswvggz,
       } = cur;
       const location = {
         locatienaam,
@@ -71,6 +110,11 @@ fs.readFile(filename, 'utf8', function(err, csv) {
         huisnummerToevoeging: lhuisnummerToevoeging,
         woonplaatsnaam: lwoonplaatsnaam,
         landnaam: llandnaam,
+        // RoWe: extra velden
+        aanvullendeAdresinformatie: laanvadresinfo,
+        isEenAccommodatie: isaccommodatie,
+        isEenWzdLocatie: iswzd,
+        isEenWvggzLocatie: iswvggz,
       } as Partial<ILocation>;
       location.target = locationToQueryTarget(location);
       if (+kvk === acc.kvk) {
@@ -94,6 +138,8 @@ fs.readFile(filename, 'utf8', function(err, csv) {
             postcode,
             woonplaatsnaam,
             landnaam,
+            // RoWe: aanvullende adresinfo
+            aanvullendeAdresinformatie: zaanvadresinfo,
             locaties: [location],
           } as Partial<ICareProvider>;
           toQueryTarget(acc);
