@@ -85,8 +85,8 @@ const rechtsvorm = [
 ];
 
 const ActivityForm: Form = [
-  { id: 'datumIngang', label: 'Ingangsdatum', type: 'date', required: true, className: 'col s6' },
-  { id: 'datumEinde', label: 'Einddatum', type: 'date', className: 'col s6' },
+  { id: 'datumIngang', label: 'Ingangsdatum', type: 'date', min: Date.now(), required: true, className: 'col s6' },
+  { id: 'datumEinde', label: 'Einddatum', type: 'date', min: Date.now(), className: 'col s6' },
 ];
 
 export const careOptions = [
