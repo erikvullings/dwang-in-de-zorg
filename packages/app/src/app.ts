@@ -42,6 +42,8 @@ if (loginRequired === 'true') {
       dashboardSvc.switchTo(Dashboards.USER);
     })
     .error(error => {
+      window.localStorage.setItem('loginRequired', 'false');
+      console.log('Failed login via Keycloak');
       alert('failed to initialize: ' + error);
     });
 }
