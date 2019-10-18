@@ -1,10 +1,12 @@
 import m, { Attributes, FactoryComponent } from 'mithril';
-import { InputCheckbox } from 'mithril-materialized';
-import { IAddress, ICareProvider, ILocation } from '../../../common/src';
-import { isLocationActive, p } from '../utils';
+import { Pagination } from 'mithril-materialized';
+import { IAddress, ICareProvider, isLocationActive } from '../../../common/dist';
+import { limitLength, p, padLeft, targetFilter, slice, range } from '../utils';
+import { dashboardSvc, Dashboards } from './dashboard-service';
 
 export interface IFormattedEvent extends Attributes {
   careProvider: ICareProvider;
+  filterValue?: string;
 }
 
 const AddressView: FactoryComponent<{ address: IAddress }> = () => {
@@ -32,28 +34,28 @@ const AddressView: FactoryComponent<{ address: IAddress }> = () => {
   };
 };
 
+const paginationSize = 10;
+
 /**
  * Display the form in a format that is useful for the end user.
  */
 export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
-  const formatDate = (d: number | string | Date) => new Date(d).toLocaleDateString();
-
-  const locationActiveLabel = (l: ILocation) => {
-    const { datumIngang, datumEinde } = l;
-    const isActive = isLocationActive(l);
-    if (!isActive) {
-      return 'Deze locatie is niet actief';
-    }
-    return datumIngang && datumEinde
-      ? `Deze locatie is actief sinds ${formatDate(datumIngang)} tot en met ${formatDate(datumEinde)}.`
-      : `Deze locatie is actief sinds ${formatDate(datumIngang)}.`;
-  };
   return {
-    view: ({ attrs: { careProvider: cp } }) => {
-      const { naam, kvk, rechtsvorm, locaties } = cp;
+    view: ({ attrs: { careProvider: cp, filterValue } }) => {
+      const { naam, kvk, rechtsvorm, locaties, $loki } = cp;
+      const query = targetFilter(filterValue);
+      const route = dashboardSvc.route(Dashboards.READ).replace(':id', $loki.toString());
+
       const activeLocations =
         locaties && locaties.length > 0 ? locaties.reduce((acc, cur) => acc + (isLocationActive(cur) ? 1 : 0), 0) : 0;
 
+      const queryResults = query ? locaties && locaties.filter(query) : locaties;
+      const page = m.route.param('page') ? +m.route.param('page') : 1;
+      const curPage = queryResults && page * paginationSize < queryResults.length ? page : 1;
+      const filteredLocations =
+        queryResults && queryResults.filter(slice((curPage - 1) * paginationSize, curPage * paginationSize));
+
+      const maxPages = Math.ceil(queryResults.length / paginationSize);
       return m('.row', { key: cp.$loki }, [
         m('.row', m('h4.col.s12.primary-text', naam)),
         m('.row', [m('span.col.s6', 'KvK nummer: ' + kvk), m('span.col.s6', 'Rechtsvorm: ' + p(rechtsvorm))]),
@@ -72,44 +74,58 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
               ),
           ])
         ),
-        locaties &&
-          locaties.map((l, i) =>
-            m('.row', [
-              m(
-                'h6.col.s12',
-                `${i + 1}. ${p(l.locatienaam)}${l.vestigingsnummer ? ` (vestigingsnr. ${l.vestigingsnummer})` : ''}`
-              ),
-              l.locatieomschrijving && m('p.col.s12', l.locatieomschrijving),
-              m(AddressView, { address: l }),
-              m('.row', [
-                m(InputCheckbox, {
-                  className: 'col s12 l4',
-                  disabled: true,
-                  checked: l.isEenAccommodatie,
-                  label: 'Is een Accomodatie',
-                }),
-                m(InputCheckbox, {
-                  className: 'col s12 l4',
-                  disabled: true,
-                  checked: l.isEenWzdLocatie,
-                  label: 'Levert WZD zorg',
-                }),
-                m(InputCheckbox, {
-                  className: 'col s12 l4',
-                  disabled: true,
-                  checked: l.isEenWvggzLocatie,
-                  label: 'Levert WVGGZ zorg',
-                }),
-              ]),
-              m('.row', [
-                m(InputCheckbox, {
-                  className: 'col s12',
-                  disabled: true,
-                  checked: isLocationActive(l),
-                  label: locationActiveLabel(l),
-                }),
-              ]),
-            ])
+        m(
+          '.row',
+          m('ul.nowrap', [
+            m('li', [
+              m('span.col.s2', m('b', 'Locatie')),
+              m('span.col.s3', m('b', 'Adres')),
+              m('span.col.s1', m('b', 'Accomodatie')),
+              m('span.col.s1', m('b', 'WZD')),
+              m('span.col.s1', m('b', 'WVGGZ')),
+              m('span.col.s1', m('b', 'Actief')),
+              m('span.col.s2', m('b', 'Ingangsdatum')),
+            ]),
+            ...filteredLocations.map((l, i) =>
+              m('li', [
+                m(
+                  'span.col.s2',
+                  m.trust(
+                    `${padLeft(i + 1, '&nbsp;')}. ${p(l.locatienaam)} ${p(
+                      l.vestigingsnummer,
+                      `, #${l.vestigingsnummer}`
+                    )}`
+                  )
+                ),
+                m(
+                  'span.col.s3',
+                  `${p(l.straat)} ${p(l.huisnummer)}${p(l.huisletter)}${p(l.huisnummerToevoeging)}, ${p(
+                    l.postcode
+                  )}, ${p(l.woonplaatsnaam)}`
+                ),
+                m('span.col.s1', `${l.isAccommodatie ? 'ja' : ''}`),
+                m('span.col.s1', `${l.isWzd ? 'ja' : ''}`),
+                m('span.col.s1', `${l.isWvggz ? 'ja' : ''}`),
+                m('span.col.s1', `${isLocationActive(l) ? 'ja' : ''}`),
+                m(
+                  'span.col.s2',
+                  `${new Date(
+                    l.aantekeningen && l.aantekeningen[l.aantekeningen.length - 1].datumIngang
+                  ).toLocaleDateString()}`
+                ),
+              ])
+            ),
+          ])
+        ),
+        maxPages >= 1 &&
+          m(
+            '.row',
+            m(Pagination, {
+              curPage,
+              items: range(0, maxPages).map(i => ({
+                href: `${route}?page=${i + 1}`,
+              })),
+            })
           ),
       ]);
     },
