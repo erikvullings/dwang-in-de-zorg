@@ -167,3 +167,8 @@ a,
 label > input[type=checkbox] + span:not(.lever) {
   display: inline-table;
 }
+ul.nowrap span {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
