@@ -1,7 +1,7 @@
 import { KeycloakInstance } from 'keycloak-js';
 import m, { FactoryComponent } from 'mithril';
 import { EmailInput, FlatButton, Options, TextInput } from 'mithril-materialized';
-import { ICareProvider } from '../../../common/src';
+import { ICareProvider } from '../../../common/dist';
 import { Roles } from '../models/roles';
 
 export const Auth = {
