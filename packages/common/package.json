@@ -3,11 +3,11 @@
   "version": "0.0.1",
   "description": "Models for the location register.",
   "scripts": {
-    "clean": "pnpm run clean",
-    "cleanup": "pnpm run clean",
-    "dev": "tsc -w",
-    "start": "tsc -w",
-    "build:domain": "tsc"
+    "clean": "rimraf ./dist",
+    "cleanup": "npm run clean",
+    "dev": "tsc -b -w",
+    "start": "tsc -b -w",
+    "build:domain": "tsc -b"
   },
   "repository": {
     "type": "git",

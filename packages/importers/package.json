@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsc -w",
-    "start": "tsc -w"
+    "clean": "rimraf ./dist",
+    "cleanup": "npm run clean",
+    "dev": "tsc -b -w",
+    "start": "tsc -b -w"
   },
   "keywords": [],
   "author": "Erik Vullings <erik.vullings@gmail.com> (http://www.tno.nl)",
