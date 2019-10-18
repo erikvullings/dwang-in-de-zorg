@@ -2,8 +2,7 @@ import axios from 'axios';
 import * as fs from 'fs';
 import * as Papa from 'papaparse';
 import * as path from 'path';
-import { ICareProvider, ILocation } from '../../common/src';
-import { locationToQueryTarget, toQueryTarget } from './utils';
+import { ICareProvider, ILocation, locationToQueryTarget, toQueryTarget } from '../../common/dist';
 
 const filename = path.resolve(process.cwd(), 'locatieregister.csv');
 
@@ -62,7 +61,9 @@ interface IImportedData {
 }
 
 fs.readFile(filename, 'utf8', (err, csv) => {
-  if (err) { throw err; }
+  if (err) {
+    throw err;
+  }
   const data = Papa.parse(csv.replace(/^\uFEFF/, ''), {
     delimiter: ';',
     header: true,
@@ -82,6 +83,8 @@ fs.readFile(filename, 'utf8', (err, csv) => {
         postcode,
         woonplaatsnaam,
         landnaam,
+        aantekeningingang,
+        aantekeningeinde,
         // RoWe: zorgaanbieder aanvullende adresinfo
         zaanvadresinfo,
         locatienaam,
@@ -108,12 +111,19 @@ fs.readFile(filename, 'utf8', (err, csv) => {
         huisletter: lhuisletter,
         huisnummerToevoeging: lhuisnummerToevoeging,
         woonplaatsnaam: lwoonplaatsnaam,
-        landnaam: llandnaam,
+        landnaam: llandnaam || 'netherlands',
         // RoWe: extra velden
         aanvullendeAdresinformatie: laanvadresinfo,
-        isEenAccommodatie: isaccommodatie,
-        isEenWzdLocatie: iswzd,
-        isEenWvggzLocatie: iswvggz,
+        isAccommodatie: isaccommodatie ? isaccommodatie === 'ja' : undefined,
+        isWzd: iswzd ? iswzd === 'ja' : undefined,
+        isWvggz: iswvggz ? iswvggz === 'ja' : undefined,
+        aantekeningen: [
+          {
+            createdAt: Date.now(),
+            datumIngang: new Date(aantekeningingang).valueOf(),
+            datumEinde: aantekeningeinde ? new Date(aantekeningeinde).valueOf() : undefined,
+          },
+        ],
       } as Partial<ILocation>;
       location.target = locationToQueryTarget(location);
       if (+kvk === acc.kvk) {
@@ -138,7 +148,7 @@ fs.readFile(filename, 'utf8', (err, csv) => {
             huisnummerToevoeging,
             postcode,
             woonplaatsnaam,
-            landnaam,
+            landnaam: landnaam || 'netherlands',
             // RoWe: aanvullende adresinfo
             aanvullendeAdresinformatie: zaanvadresinfo,
             locaties: [location],
@@ -152,5 +162,11 @@ fs.readFile(filename, 'utf8', (err, csv) => {
     {} as Partial<ICareProvider>
   );
   // console.log(JSON.stringify(careProviders, null, 2));
-  careProviders.forEach(cp => axios.post('http://localhost:3000/zorgaanbieders', cp));
+  careProviders.forEach(async cp => {
+    await axios.post('http://localhost:3000/zorgaanbieders', cp).catch(e => {
+      console.error(e.message);
+      console.log(cp.naam);
+      console.log(JSON.stringify(cp).length);
+    });
+  });
 });
