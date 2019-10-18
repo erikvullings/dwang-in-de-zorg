@@ -1,6 +1,6 @@
-import { IAddress, ICareProvider, ILocation } from '../../../common/src';
+import { IAddress, ICareProvider, ILocation } from '../models';
 
-const stripSpaces = (s: string) => s.replace(/\s/g, '');
+export const stripSpaces = (s: string) => s.replace(/\s/g, '');
 
 /** Convert an address to something that is easy to query */
 const addressToQueryTarget = (a: Partial<IAddress>) => {
@@ -22,10 +22,21 @@ export const locationToQueryTarget = (loc: Partial<ILocation>) => {
   return `${stripSpaces(locatienaam).toLowerCase()}${vestigingsnummer}${addressToQueryTarget(loc)}`;
 };
 
-export const toQueryTarget = (cp: Partial<ICareProvider>, includeLocations = false) => {
+export const toQueryTarget = (cp: Partial<ICareProvider>) => {
   cp.target = careProviderToQueryTarget(cp);
-  if (includeLocations && cp.locaties && cp.locaties instanceof Array) {
-    cp.locaties.forEach(loc => loc.target = locationToQueryTarget(loc));
+  if (cp.locaties && cp.locaties instanceof Array) {
+    cp.locaties.forEach(loc => (loc.target = locationToQueryTarget(loc)));
   }
   return cp;
+};
+
+export const isLocationActive = (loc: ILocation) => {
+  if (!loc.aantekeningen) {
+    return false;
+  }
+  const { datumIngang, datumEinde } = loc.aantekeningen[loc.aantekeningen.length - 1];
+  const d = Date.now();
+  const s = new Date(datumIngang).valueOf();
+  const e = datumEinde ? new Date(datumEinde).valueOf() : Number.MAX_VALUE;
+  return s <= d && d <= e;
 };

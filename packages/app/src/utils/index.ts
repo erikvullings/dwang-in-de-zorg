@@ -1,4 +1,4 @@
-import { IAddress, ICareProvider, ILocation } from '../../../common/src';
+import { ICareProvider } from '../../../common/dist';
 
 /**
  * Create a GUID
@@ -43,41 +43,22 @@ export const toLetters = (num: number): string => {
 };
 
 /**
- * Generate a sequence of numbers between from and to with step size: [from, to].
- *
- * @static
- * @param {number} from
- * @param {number} to : inclusive
- * @param {number} [count=to-from+1]
- * @param {number} [step=1]
- * @returns
- */
-export const range = (from: number, to: number, count: number = to - from + 1, step: number = 1) => {
-  // See here: http://stackoverflow.com/questions/3746725/create-a-javascript-array-containing-1-n
-  // let a = Array.apply(null, {length: n}).map(Function.call, Math.random);
-  const a: number[] = new Array(count);
-  const min = from;
-  const max = to - (count - 1) * step;
-  const theRange = max - min;
-  const x0 = Math.round(from + theRange * Math.random());
-  for (let i = 0; i < count; i++) {
-    a[i] = x0 + i * step;
-  }
-  return a;
-};
-
-/**
  * Function to filter case-insensitive name and description.
  * @param filterValue Filter text
  */
-export const nameAndDescriptionFilter = (filterValue?: string) => {
+export const targetFilter = (filterValue?: string) => {
   if (!filterValue) {
     return () => true;
   }
-  const fv = filterValue.toLowerCase() as string;
-  return (content: { naam?: string; kvk?: number }) =>
-    !content.naam || content.naam.toLowerCase().indexOf(fv) >= 0 || (content.kvk && `${content.kvk}`.indexOf(fv) >= 0);
+  const fv = filterValue.toLowerCase().trim() as string;
+  return (content: { target?: string }) => content.target && content.target.indexOf(fv) >= 0;
 };
+
+/** Limit the length of a list using a filter */
+export const limitLength = (limit: number) => (_: any, i: number) => i < limit;
+
+/** Slice an array */
+export const slice = (from: number, to: number) => (_: any, i: number) => from <= i && i < to;
 
 /**
  * Function to filter on a named type.
@@ -167,46 +148,6 @@ export const l = (val: undefined | string | string[]) => {
   }
 };
 
-export const stripSpaces = (s: string) => s.replace(/\s/g, '');
-
-/** Convert an address to something that is easy to query */
-const addressToQueryTarget = (a: Partial<IAddress>) => {
-  const { straat = '', huisnummer = 0, postcode = '', woonplaatsnaam = '' } = a;
-  return `${stripSpaces(straat).toLowerCase()}${huisnummer}${stripSpaces(postcode).toLowerCase()}${stripSpaces(
-    woonplaatsnaam
-  ).toLowerCase()}`;
-};
-
-/** Convert an care provider object to something that is easy to query */
-const careProviderToQueryTarget = (cp: Partial<ICareProvider>) => {
-  const { naam = '', kvk = 0 } = cp;
-  return `${stripSpaces(naam).toLowerCase()}${kvk}${addressToQueryTarget(cp)}`;
-};
-
-/** Convert an care provider object to something that is easy to query */
-const locationToQueryTarget = (loc: Partial<ILocation>) => {
-  const { locatienaam = '', vestigingsnummer = 0 } = loc;
-  return `${stripSpaces(locatienaam).toLowerCase()}${vestigingsnummer}${addressToQueryTarget(loc)}`;
-};
-
-export const toQueryTarget = (cp: Partial<ICareProvider>) => {
-  cp.target = careProviderToQueryTarget(cp);
-  if (cp.locaties && cp.locaties instanceof Array) {
-    cp.locaties.forEach(loc => loc.target = locationToQueryTarget(loc));
-  }
-  return cp;
-};
-
-export const isLocationActive = (loc: ILocation) => {
-  const d = Date.now();
-  if (!loc.datumIngang) {
-    return false;
-  }
-  const s = new Date(loc.datumIngang).valueOf();
-  const e = loc.datumEinde ? new Date(loc.datumEinde).valueOf() : Number.MAX_VALUE;
-  return s <= d && d <= e;
-};
-
 export const debounce = (func: (...args: any) => void, timeout: number) => {
   let timer: number;
   return (...args: any) => {
@@ -215,4 +156,25 @@ export const debounce = (func: (...args: any) => void, timeout: number) => {
       func(...args);
     }, timeout);
   };
+};
+
+export const padLeft = (str: string | number, ch = ' ', len = 2): string =>
+  str.toString().length >= len ? str.toString() : padLeft(ch + str.toString(), ch, len);
+
+  
+/**
+ * Generate a sequence of numbers between from and to with step size: [from, to].
+ *
+ * @static
+ * @param {number} from
+ * @param {number} to : inclusive
+ * @param {number} [step=1]
+ * @returns
+ */
+export const range = (from: number, to: number, step: number = 1) => {
+  const arr = [] as number[];
+  for (let i = from; i <= to; i += step) {
+    arr.push(i);
+  }
+  return arr;
 };
