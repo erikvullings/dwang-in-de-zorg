@@ -126,7 +126,7 @@ const CareForm: Form = [
     multiple: true,
     required: true,
     checkboxClass: 'col s12',
-    show: ['isEenWvggzLocatie = true'],
+    show: ['isWvggz = true'],
   },
   { id: 'aantekeningen', label: 'Activiteit/aantekening', type: ActivityForm, repeat: true },
 ];
@@ -159,9 +159,10 @@ const LocationForm: Form = [
   { id: 'locatienaam', type: 'text', required: true, className: 'col s12 m6' },
   { id: 'vestigingsnummer', type: 'number', className: 'col s12 m6' },
   { id: 'locatieomschrijving', type: 'textarea' },
-  { id: 'isEenAccommodatie', label: 'Is een accomodatie?', type: 'checkbox', className: 'col s6 m4' },
-  { id: 'isEenWzdLocatie', label: 'Is een WZD locatie?', type: 'checkbox', className: 'col s6 m4' },
-  { id: 'isEenWvggzLocatie', label: 'Is een WVGGZ locatie?', type: 'checkbox', className: 'col s6 m4' },
+  { id: 'isAccommodatie', label: 'Is een accomodatie?', type: 'checkbox', className: 'col s6 m4' },
+  { id: 'isWzd', label: 'Is een WZD locatie?', type: 'checkbox', className: 'col s6 m4' },
+  { id: 'isWvggz', label: 'Is een WVGGZ locatie?', type: 'checkbox', className: 'col s6 m4' },
+  { id: 'target' },
   ...AddressForm,
   ...CareForm,
 ];
@@ -180,25 +181,4 @@ export const CareProviderForm: Form = [
 
   { id: 'Locaties', type: 'section' },
   { id: 'locaties', label: 'Nieuwe locatie toevoegen', type: LocationForm, repeat: true },
-  // straat: string;
-  // huisnummer: number;
-  // huisletter?: string;
-  // huisnummerToevoeging?: string;
-  // postcode: string;
-  // woonplaatsnaam: string;
-  // landnaam?: string;
-  // aanvullendeAdresinformatie?: string;
-
-  // {
-  //   id: 'editors',
-  //   label: 'Add editor',
-  //   className: 'col s12',
-  //   repeat: true,
-  //   type: editorForm,
-  //   i18n: {
-  //     createRepeat: 'Create a new editor',
-  //     editRepeat: 'Edit editor',
-  //   },
-  // },
-  // { id: 'created', label: 'Created "{{event}}" event on:', type: 'date', required: true },
 ] as Form;
