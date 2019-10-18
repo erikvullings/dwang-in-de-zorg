@@ -6,8 +6,8 @@ dependencies:
   materialize-css: 1.0.0
   mithril: 2.0.4
   mithril-leaflet: 0.1.6_154c6bfd3ace91745ba245372494e571
-  mithril-materialized: 0.15.0_f3d9df6f4766fd28b6cfb8072ccbc3ca
-  mithril-ui-form: 0.3.11_80da7a27c35a02100e303638036c1b2c
+  mithril-materialized: 0.15.1_f3d9df6f4766fd28b6cfb8072ccbc3ca
+  mithril-ui-form: 0.3.11_fafa47a37f67698f6f7582dc1e2f0421
   rest-easy-loki: 0.4.1
 devDependencies:
   '@types/leaflet': 1.5.4
@@ -3682,7 +3682,7 @@ packages:
       mithril: ^2.0.4
     resolution:
       integrity: sha512-amVfw2T1+eo8H4VSRaBq3OSWQkV+FNc80FwQ/MZ3ofLlkx5+9Bt6AM5zicjAsM/RnONJ/PA2tPr8Q/DSGpqZPg==
-  /mithril-materialized/0.15.0_f3d9df6f4766fd28b6cfb8072ccbc3ca:
+  /mithril-materialized/0.15.1_f3d9df6f4766fd28b6cfb8072ccbc3ca:
     dependencies:
       materialize-css: 1.0.0
       mithril: 2.0.4
@@ -3691,14 +3691,14 @@ packages:
       materialize-css: ^1.0.0
       mithril: ^2.0.4
     resolution:
-      integrity: sha512-EY6/Iy3G/9WD+zrbBAo9Tiq2N6n4PK879W8TYy2vnDguSEJzz8gGwlnyXQuyu2Qd7RwOOANOS3zUbKHGPPNABQ==
-  /mithril-ui-form/0.3.11_80da7a27c35a02100e303638036c1b2c:
+      integrity: sha512-yphDRbUfKc4juQhI+U8bAKpDw21dqMz0sFsCZmTH1x4gwGbJPtVqOktk7ZhM7oP+JPGixTJ7yfamcfE9mMv1yQ==
+  /mithril-ui-form/0.3.11_fafa47a37f67698f6f7582dc1e2f0421:
     dependencies:
       leaflet: 1.5.1
       leaflet-draw: 1.0.4
       materialize-css: 1.0.0
       mithril: 2.0.4
-      mithril-materialized: 0.15.0_f3d9df6f4766fd28b6cfb8072ccbc3ca
+      mithril-materialized: 0.15.1_f3d9df6f4766fd28b6cfb8072ccbc3ca
       slimdown-js: 0.1.4
     dev: false
     peerDependencies:
@@ -6096,7 +6096,7 @@ specifiers:
   materialize-css: ^1.0.0
   mithril: ^2.0.4
   mithril-leaflet: ^0.1.6
-  mithril-materialized: ^0.15.0
+  mithril-materialized: ^0.15.1
   mithril-ui-form: ^0.3.11
   parcel-bundler: ^1.12.4
   rest-easy-loki: ^0.4.1

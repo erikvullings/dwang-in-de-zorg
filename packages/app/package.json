@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "clean": "rimraf ./public ./.cache ./dist",
-    "cleanup": "rimraf ./public ./.cache ./dist",
+    "cleanup": "npm run clean",
     "dev": "concurrently \"npm run serve\" \"parcel index.html\"",
     "start": "concurrently \"npm run serve\" \"parcel index.html\"",
     "build:domain": "npm run clean && parcel build index.html --out-dir ./public",
@@ -41,7 +41,7 @@
     "materialize-css": "^1.0.0",
     "mithril": "^2.0.4",
     "mithril-leaflet": "^0.1.6",
-    "mithril-materialized": "^0.15.0",
+    "mithril-materialized": "^0.15.1",
     "mithril-ui-form": "^0.3.11",
     "rest-easy-loki": "^0.4.1"
   },
