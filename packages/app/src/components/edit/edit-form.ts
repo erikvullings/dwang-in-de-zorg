@@ -2,12 +2,12 @@ import M from 'materialize-css';
 import m from 'mithril';
 import { Button, Chips, ModalPanel } from 'mithril-materialized';
 import { deepCopy, LayoutForm } from 'mithril-ui-form';
-import { ICareProvider } from '../../../../common/src';
+import { ICareProvider, toQueryTarget } from '../../../../common/dist';
 import { careProvidersSvc } from '../../services';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
 import { Auth } from '../../services/login-service';
 import { CareProviderForm } from '../../template/form';
-import { capitalizeFirstLetter, toQueryTarget } from '../../utils';
+import { capitalizeFirstLetter } from '../../utils';
 import { CircularSpinner } from '../ui/preloader';
 
 const log = console.log;
