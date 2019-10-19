@@ -126,7 +126,7 @@ fs.readFile(filename, 'utf8', (err, csv) => {
         ],
       } as Partial<ILocation>;
       location.target = locationToQueryTarget(location);
-      if (+kvk === acc.kvk) {
+      if (+kvk === acc.kvk && naam === acc.naam) {
         // New location
         if (acc.locaties) {
           acc.locaties.push(location as ILocation);
