@@ -1,8 +1,8 @@
 import m, { Attributes, FactoryComponent } from 'mithril';
 import { Pagination } from 'mithril-materialized';
 import { IAddress, ICareProvider, isLocationActive } from '../../../common/dist';
-import { limitLength, p, padLeft, targetFilter, slice, range } from '../utils';
-import { dashboardSvc, Dashboards } from './dashboard-service';
+import { p, range, slice, targetFilter } from '../utils';
+import { Dashboards, dashboardSvc } from './dashboard-service';
 
 export interface IFormattedEvent extends Attributes {
   careProvider: ICareProvider;
@@ -25,16 +25,18 @@ const AddressView: FactoryComponent<{ address: IAddress }> = () => {
         },
       },
     }) => {
-      return m('.row', [
-        m('span.col.s12', `${p(straat)} ${p(huisnummer)}${p(huisletter)}${p(huisnummerToevoeging)}`),
-        m('span.col.s12', `${p(postcode)}${p(woonplaatsnaam, `, ${woonplaatsnaam}`)}`),
-        m('span.col.s12', `${landnaam === 'other' ? p(landnaamBuitenEuropa) : p(landnaam)}`),
-      ]);
+      return m(
+        'span.col.s12',
+        `${p(straat)} ${p(huisnummer)}${p(huisletter)}${p(huisnummerToevoeging)}, ${p(postcode)}${p(
+          woonplaatsnaam,
+          `, ${woonplaatsnaam}, ${landnaam === 'other' ? p(landnaamBuitenEuropa) : p(landnaam)}`
+        )}`
+      );
     },
   };
 };
 
-const paginationSize = 10;
+const paginationSize = 20;
 
 /**
  * Display the form in a format that is useful for the end user.
@@ -58,8 +60,11 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
       const maxPages = Math.ceil(queryResults.length / paginationSize);
       return m('.row', { key: cp.$loki }, [
         m('.row', m('h4.col.s12.primary-text', naam)),
-        m('.row', [m('span.col.s6', 'KvK nummer: ' + kvk), m('span.col.s6', 'Rechtsvorm: ' + p(rechtsvorm))]),
-        m(AddressView, { address: cp }),
+        m('.row', [
+          m('span.col.s12', 'KvK nummer: ' + kvk),
+          m('span.col.s12', 'Rechtsvorm: ' + p(rechtsvorm)),
+          m(AddressView, { address: cp }),
+        ]),
         m(
           '.row',
           m('.col.s12', [
@@ -79,26 +84,17 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
           m('ul.nowrap', [
             m('li', [
               m('span.col.s2', m('b', 'Locatie')),
-              m('span.col.s3', m('b', 'Adres')),
+              m('span.col.s4', m('b', 'Adres')),
               m('span.col.s1', m('b', 'Accomodatie')),
               m('span.col.s1', m('b', 'WZD')),
               m('span.col.s1', m('b', 'WVGGZ')),
-              m('span.col.s1', m('b', 'Actief')),
-              m('span.col.s2', m('b', 'Ingangsdatum')),
+              m('span.col.s2', m('b', 'Actief')),
             ]),
-            ...filteredLocations.map((l, i) =>
+            ...filteredLocations.map(l =>
               m('li', [
+                m('span.col.s2', `${p(l.locatienaam)} ${p(l.vestigingsnummer, `, #${l.vestigingsnummer}`)}`),
                 m(
-                  'span.col.s2',
-                  m.trust(
-                    `${padLeft(i + 1, '&nbsp;')}. ${p(l.locatienaam)} ${p(
-                      l.vestigingsnummer,
-                      `, #${l.vestigingsnummer}`
-                    )}`
-                  )
-                ),
-                m(
-                  'span.col.s3',
+                  'span.col.s4',
                   `${p(l.straat)} ${p(l.huisnummer)}${p(l.huisletter)}${p(l.huisnummerToevoeging)}, ${p(
                     l.postcode
                   )}, ${p(l.woonplaatsnaam)}`
@@ -106,12 +102,15 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
                 m('span.col.s1', `${l.isAccommodatie ? 'ja' : ''}`),
                 m('span.col.s1', `${l.isWzd ? 'ja' : ''}`),
                 m('span.col.s1', `${l.isWvggz ? 'ja' : ''}`),
-                m('span.col.s1', `${isLocationActive(l) ? 'ja' : ''}`),
                 m(
                   'span.col.s2',
-                  `${new Date(
-                    l.aantekeningen && l.aantekeningen[l.aantekeningen.length - 1].datumIngang
-                  ).toLocaleDateString()}`
+                  `${
+                    isLocationActive(l)
+                      ? `Sinds ${new Date(
+                          l.aantekeningen && l.aantekeningen[l.aantekeningen.length - 1].datumIngang
+                        ).toLocaleDateString()}`
+                      : ''
+                  }`
                 ),
               ])
             ),
