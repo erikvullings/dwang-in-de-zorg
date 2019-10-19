@@ -78,7 +78,7 @@ export const dashboardSvc: DashboardService = new DashboardService(Layout, [
     id: Dashboards.READ,
     title: 'READ',
     icon: 'description',
-    route: '/read/:id',
+    route: '/lezen/:id',
     visible: false,
     component: FormView,
   },
