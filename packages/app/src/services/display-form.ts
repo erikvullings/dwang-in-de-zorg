@@ -116,7 +116,7 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
             ),
           ])
         ),
-        maxPages >= 1 &&
+        maxPages > 1 &&
           m(
             '.row',
             m(
