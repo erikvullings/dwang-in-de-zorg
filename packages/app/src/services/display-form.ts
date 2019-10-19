@@ -83,7 +83,7 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
           '.row',
           m('ul.nowrap', [
             m('li', [
-              m('span.col.s2', m('b', 'Locatie')),
+              m('span.col.s3', m('b', 'Locatie')),
               m('span.col.s4', m('b', 'Adres')),
               m('span.col.s1', m('b', 'Accomodatie')),
               m('span.col.s1', m('b', 'WZD')),
@@ -92,7 +92,7 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
             ]),
             ...filteredLocations.map(l =>
               m('li', [
-                m('span.col.s2', `${p(l.locatienaam)} ${p(l.vestigingsnummer, `, #${l.vestigingsnummer}`)}`),
+                m('span.col.s3', `${p(l.locatienaam)} ${p(l.vestigingsnummer, `, #${l.vestigingsnummer}`)}`),
                 m(
                   'span.col.s4',
                   `${p(l.straat)} ${p(l.huisnummer)}${p(l.huisletter)}${p(l.huisnummerToevoeging)}, ${p(
@@ -119,12 +119,15 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
         maxPages >= 1 &&
           m(
             '.row',
-            m(Pagination, {
-              curPage,
-              items: range(0, maxPages).map(i => ({
-                href: `${route}?page=${i + 1}`,
-              })),
-            })
+            m(
+              '.right',
+              m(Pagination, {
+                curPage,
+                items: range(0, maxPages).map(i => ({
+                  href: `${route}?page=${i + 1}`,
+                })),
+              })
+            )
           ),
       ]);
     },
