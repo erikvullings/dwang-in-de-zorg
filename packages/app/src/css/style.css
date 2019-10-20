@@ -172,3 +172,12 @@ ul.nowrap span {
   text-overflow: ellipsis;
   overflow: hidden;
 }
+
+ul.nowrap > li .wrap span {
+  white-space: normal;
+}
+
+li.clickable {
+  cursor: pointer;
+  color: #1a237e;
+}

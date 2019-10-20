@@ -57,15 +57,6 @@ const locationFromViewModel = (l: ILocation) => {
       laatsteAantekening.datumEinde = new Date(datumEinde).valueOf();
     }
   }
-  // const wasActief =
-  //   laatsteAantekening.datumIngang < now && (!laatsteAantekening.datumEinde || laatsteAantekening.datumEinde > now);
-  // if (isActief && !wasActief) {
-  //   // became active, so create a new aantekening
-  //   aantekeningen.push({ createdAt: now, datumIngang, datumEinde });
-  // } else if (!isActief) {
-  //   // stopped being active
-  //   laatsteAantekening.datumEinde = datumEinde;
-  // }
   return lvm;
 };
 

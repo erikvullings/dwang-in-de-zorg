@@ -118,7 +118,7 @@ const day = 24 * 3600000;
 const now = Date.now() - 30 * day;
 
 /** Zorgvorm formulier */
-const CareForm: Form = [
+export const CareForm: Form = [
   { type: 'md', value: '###### Welke type zorg wordt geleverd?' },
   { id: 'isAmbulantGeleverd', type: 'checkbox', className: 'col s12 m4', label: 'Is ambulant geleverd?' },
   { id: 'isKlinischGeleverd', type: 'checkbox', className: 'col s12 m4', label: 'Is klinisch geleverd?' },

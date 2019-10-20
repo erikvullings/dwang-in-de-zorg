@@ -1,6 +1,8 @@
 import m, { Attributes, FactoryComponent } from 'mithril';
 import { Pagination } from 'mithril-materialized';
+import { LayoutForm, Form } from 'mithril-ui-form';
 import { IAddress, ICareProvider, ILocation, isLocationActive } from '../../../common/dist';
+import { CareForm } from '../template/form';
 import { p, range, slice, targetFilter } from '../utils';
 import { Dashboards, dashboardSvc } from './dashboard-service';
 
@@ -42,6 +44,22 @@ const paginationSize = 20;
  * Display the form in a format that is useful for the end user.
  */
 export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
+  const state = {
+    showDetails: undefined,
+  } as {
+    showDetails?: string;
+  };
+
+  const ignoredIdsInCareForm = ['isActief', 'datumIngang', 'datumEinde'];
+
+  const abbreviatedCareForm = CareForm.reduce((acc, cur) => {
+    const { id } = cur;
+    if (!id || ignoredIdsInCareForm.indexOf(id) < 0) {
+      acc.push(cur);
+    }
+    return acc;
+  }, [] as Form);
+
   const getStartDate = (l: ILocation) => {
     if (l.aantekeningen) {
       const di = l.aantekeningen[l.aantekeningen.length - 1].datumIngang;
@@ -50,9 +68,13 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
     return '';
   };
 
+  const uniqueLocationIdentifier = (l: ILocation) =>
+    `${p(l.postcode)}${p(l.huisnummer)}${p(l.huisnummer)}${p(l.huisnummerToevoeging)}`;
+
   return {
     view: ({ attrs: { careProvider: cp, filterValue } }) => {
       const { naam, kvk, rechtsvorm, locaties, $loki } = cp;
+      const { showDetails } = state;
       const query = targetFilter(filterValue);
       const route = dashboardSvc.route(Dashboards.READ).replace(':id', `${$loki}`);
 
@@ -100,24 +122,44 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
               m('span.col.s2', m('b', 'Actief')),
             ]),
             ...filteredLocations.map(l =>
-              m('li', [
-                m('span.col.s3', `${p(l.locatienaam)} ${p(l.vestigingsnummer, `, #${l.vestigingsnummer}`)}`),
-                m(
-                  'span.col.s4',
-                  `${p(l.straat)} ${p(l.huisnummer)}${p(l.huisletter)}${p(l.huisnummerToevoeging)}, ${p(
-                    l.postcode
-                  )}, ${p(l.woonplaatsnaam)}`
-                ),
-                m('span.col.s1', `${l.isAccommodatie ? 'ja' : ''}`),
-                m('span.col.s1', `${l.isWzd ? 'ja' : ''}`),
-                m('span.col.s1', `${l.isWvggz ? 'ja' : ''}`),
-                m(
-                  'span.col.s2',
-                  `${
-                    isLocationActive(l) ? `Sinds ${getStartDate(l)}` : getStartDate(l) ? `Vanaf ${getStartDate(l)}` : ''
-                  }`
-                ),
-              ])
+              m(
+                'li.clickable',
+                {
+                  onclick: () => {
+                    const sd = uniqueLocationIdentifier(l);
+                    state.showDetails = showDetails === sd ? undefined : sd;
+                  },
+                },
+                [
+                  m('span.col.s3', `${p(l.locatienaam)} ${p(l.vestigingsnummer, `, #${l.vestigingsnummer}`)}`),
+                  m(
+                    'span.col.s4',
+                    `${p(l.straat)} ${p(l.huisnummer)}${p(l.huisletter)}${p(l.huisnummerToevoeging)}, ${p(
+                      l.postcode
+                    )}, ${p(l.woonplaatsnaam)}`
+                  ),
+                  m('span.col.s1', `${l.isAccommodatie ? 'ja' : ''}`),
+                  m('span.col.s1', `${l.isWzd ? 'ja' : ''}`),
+                  m('span.col.s1', `${l.isWvggz ? 'ja' : ''}`),
+                  m(
+                    'span.col.s2',
+                    `${
+                      isLocationActive(l)
+                        ? `Sinds ${getStartDate(l)}`
+                        : getStartDate(l)
+                        ? `Vanaf ${getStartDate(l)}`
+                        : ''
+                    }`
+                  ),
+                  showDetails === uniqueLocationIdentifier(l)
+                    ? m('.col.s12.card.wrap', m(LayoutForm, {
+                      form: abbreviatedCareForm,
+                      obj: l,
+                      disabled: true,
+                    }))
+                    : undefined,
+                ]
+              )
             ),
           ])
         ),
