@@ -90,28 +90,41 @@ const ActivityForm: Form = [
 ];
 
 export const careOptions = [
+  { id: 'isAmbulantGeleverd', label: 'Is ambulant geleverd?' },
+  { id: 'isKlinischGeleverd', label: 'Is klinisch geleverd?' },
   {
     id: 'isVochtVoedingMedicatie',
     label:
       'Toedienen van vocht, voeding en medicatie, verrichten van medische controles of handelingen, therapeutische maatregelen',
+    show: ['isWvggz = true'],
   },
-  { id: 'isBeperkenBewegingsvrijheid', label: 'Beperken van de bewegingsvrijheid' },
-  { id: 'isInsluiten', label: 'Insluiten' },
-  { id: 'isToezicht', label: 'Uitoefenen van toezicht' },
-  { id: 'isOnderzoekKledingLichaam', label: 'Onderzoek aan kleding of lichaam' },
+  { id: 'isBeperkenBewegingsvrijheid', label: 'Beperken van de bewegingsvrijheid', show: ['isWvggz = true'] },
+  { id: 'isInsluiten', label: 'Insluiten', show: ['isWvggz = true'] },
+  { id: 'isToezicht', label: 'Uitoefenen van toezicht', show: ['isWvggz = true'] },
+  { id: 'isOnderzoekKledingLichaam', label: 'Onderzoek aan kleding of lichaam', show: ['isWvggz = true'] },
   {
     id: 'isOnderzoekWoonruimte',
     label: 'Onderzoek van de woon- of verblijfsruimte op gedrag-beïnvloedende middelen en gevaarlijke voorwerpen',
+    show: ['isWvggz = true'],
   },
-  { id: 'isMedischeControles', label: 'Controleren op aanwezigheid van gedrag-beïnvloedende middelen' },
-  { id: 'isBeperkenEigenLeven', label: 'Beperken in de vrijheid het eigen leven in te richten' },
-  { id: 'isBeperkenBezoek', label: 'Beperken van het recht op het ontvangen van bezoek' },
+  {
+    id: 'isControlerenMiddelen',
+    label: 'Controleren op aanwezigheid van gedrag-beïnvloedende middelen',
+    show: ['isWvggz = true'],
+  },
+  {
+    id: 'isBeperkenEigenLeven',
+    label: 'Beperken in de vrijheid het eigen leven in te richten',
+    show: ['isWvggz = true'],
+  },
+  { id: 'isBeperkenBezoek', label: 'Beperken van het recht op het ontvangen van bezoek', show: ['isWvggz = true'] },
   {
     id: 'isTijdelijkVerblijf',
     label:
       'Ontnemen van de vrijheid van betrokkene door hem over te brengen naar een plaats die geschikt is voor tijdelijk verblijf',
+    show: ['isWvggz = true'],
   },
-  { id: 'isOpnemen', label: 'Opnemen in een accommodatie' },
+  { id: 'isOpnemen', label: 'Opnemen in een accommodatie', show: ['isWvggz = true'] },
 ];
 
 const day = 24 * 3600000;
@@ -120,8 +133,6 @@ const now = Date.now() - 30 * day;
 /** Zorgvorm formulier */
 export const CareForm: Form = [
   { type: 'md', value: '###### Welke type zorg wordt geleverd?' },
-  { id: 'isAmbulantGeleverd', type: 'checkbox', className: 'col s12 m4', label: 'Is ambulant geleverd?' },
-  { id: 'isKlinischGeleverd', type: 'checkbox', className: 'col s12 m4', label: 'Is klinisch geleverd?' },
   {
     id: 'zorgvorm',
     type: 'options',
@@ -129,7 +140,6 @@ export const CareForm: Form = [
     multiple: true,
     required: true,
     checkboxClass: 'col s12',
-    show: ['isWvggz = true'],
   },
   { id: 'isActief', disabled: true, type: 'checkbox', className: 'col s12 m4', label: 'Is actief?' },
   { id: 'datumIngang', label: 'Ingangsdatum', type: 'date', min: now, required: true, className: 'col s6 m4' },

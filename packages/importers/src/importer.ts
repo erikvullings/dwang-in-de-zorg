@@ -60,6 +60,8 @@ interface IImportedData {
   zvtijdelijkverblijf?: string;
 }
 
+const ja = (value?: string) => (value ? value === 'ja' : undefined);
+
 fs.readFile(filename, 'utf8', (err, csv) => {
   if (err) {
     throw err;
@@ -101,7 +103,45 @@ fs.readFile(filename, 'utf8', (err, csv) => {
         isaccommodatie,
         iswzd,
         iswvggz,
+        zvbejegening,
+        zvverzorging,
+        zvverpleging,
+        zvbehandeling,
+        zvbegeleiding,
+        zvbescherming,
+        zvvochtvoedingmedicatie,
+        zvmedishcecontroles,
+        zvbeperkenbewegingsvrijheid,
+        zvinsluiten,
+        zvtoezicht,
+        zvonderzoekkledinglichaam,
+        zvonderzoekwoonruimte,
+        zvcontrolerenmiddelen,
+        zvbeperkeneigenleven,
+        zvbeperkenbezoek,
+        zvopnemen,
+        zvtijdelijkverblijf,
       } = cur;
+      const zorgvormen = {
+        isBejegening: ja(zvbejegening),
+        isVerzorging: ja(zvverzorging),
+        isVerpleging: ja(zvverpleging),
+        isBehandeling: ja(zvbehandeling),
+        isBegeleiding: ja(zvbegeleiding),
+        isBescherming: ja(zvbescherming),
+        isVochtVoedingMedicatie: ja(zvvochtvoedingmedicatie),
+        // isMedischeControles: ja(zvmedishcecontroles),
+        isBeperkenBewegingsvrijheid: ja(zvbeperkenbewegingsvrijheid),
+        isInsluiten: ja(zvinsluiten),
+        isToezicht: ja(zvtoezicht),
+        isOnderzoekKledingLichaam: ja(zvonderzoekkledinglichaam),
+        isOnderzoekWoonruimte: ja(zvonderzoekwoonruimte),
+        isControlerenMiddelen: ja(zvcontrolerenmiddelen),
+        isBeperkenEigenLeven: ja(zvbeperkeneigenleven),
+        isBeperkenBezoek: ja(zvbeperkenbezoek),
+        isOpnemen: ja(zvopnemen),
+        isTijdelijkVerblijf: ja(zvtijdelijkverblijf),
+      } as { [key: string]: boolean | undefined };
       const location = {
         locatienaam,
         vestigingsnummer,
@@ -112,11 +152,11 @@ fs.readFile(filename, 'utf8', (err, csv) => {
         huisnummerToevoeging: lhuisnummerToevoeging,
         woonplaatsnaam: lwoonplaatsnaam,
         landnaam: llandnaam || 'netherlands',
-        // RoWe: extra velden
         aanvullendeAdresinformatie: laanvadresinfo,
-        isAccommodatie: isaccommodatie ? isaccommodatie === 'ja' : undefined,
-        isWzd: iswzd ? iswzd === 'ja' : undefined,
-        isWvggz: iswvggz ? iswvggz === 'ja' : undefined,
+        isAccommodatie: ja(isaccommodatie),
+        isWzd: ja(iswzd),
+        isWvggz: ja(iswvggz),
+        zorgvorm: Object.keys(zorgvormen).filter(key => zorgvormen[key]),
         aantekeningen: [
           {
             createdAt: Date.now(),

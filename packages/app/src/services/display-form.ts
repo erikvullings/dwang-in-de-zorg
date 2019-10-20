@@ -1,6 +1,6 @@
 import m, { Attributes, FactoryComponent } from 'mithril';
 import { Pagination } from 'mithril-materialized';
-import { LayoutForm, Form } from 'mithril-ui-form';
+import { Form, LayoutForm } from 'mithril-ui-form';
 import { IAddress, ICareProvider, ILocation, isLocationActive } from '../../../common/dist';
 import { CareForm } from '../template/form';
 import { p, range, slice, targetFilter } from '../utils';
