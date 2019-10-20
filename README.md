@@ -36,4 +36,21 @@ npm start
 ### Environment settings
 
 - LOKI_PORT: to change the output port, default 3000, e.g. `set LOKI_PORT=80` to serve it at [http://localhost](http://localhost).
-- NODE_DEV: When set to `development`, every server request is logged to the command line. Set it to `production` to stop logging requests.
+- LOKI_DB: to change the database name.
+- LOKI_CORS: to disable CORS.
+- LOKI_PRETTY: to show nicely formatted logs.
+
+### Activities
+
+1. Ik heb al een ingangsdatum, maar nog geen einddatum of een einddatum in de toekomst (van de laatste aantekening)
+  Pas de ingangsdatum aan => pas de laatste aantekening aan (ingangsdatum)
+  Pas de einddatum aan => pas de laatste aantekening aan (einddatum)
+2. Ik heb al een ingangsdatum en ook een einddatum in het verleden (van de laatste aantekening).
+  Maak een nieuwe aantekening aan, nog zonder ingangsdatum.
+3. Ik heb nog geen ingangsdatum (van de laatste aantekening).
+  Biedt een date picker aan om de ingangsdatum in te stellen
+
+Hoe los ik op:
+
+- Einddatum moet groter zijn dan ingangsdatum.
+- Ingangsdatum in het verleden mag je niet meer aanpassen.
