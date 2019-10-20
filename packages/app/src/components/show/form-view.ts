@@ -1,33 +1,30 @@
 import m, { FactoryComponent } from 'mithril';
 import { FlatButton, InputCheckbox, TextInput } from 'mithril-materialized';
-import { deepCopy, labelResolver } from 'mithril-ui-form';
+import { deepCopy } from 'mithril-ui-form';
 import { ICareProvider } from '../../../../common/dist';
 import { careProvidersSvc } from '../../services';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
 import { DisplayForm } from '../../services/display-form';
 import { Auth } from '../../services/login-service';
-import { CareProviderForm } from '../../template/form';
 import { CircularSpinner } from '../ui/preloader';
 
 export const FormView: FactoryComponent = () => {
   const state = {
     filterValue: '',
-    cp: {} as Partial<ICareProvider>,
+    careProvider: {} as Partial<ICareProvider>,
     loaded: false,
-    resolveObj: labelResolver(CareProviderForm),
   };
   return {
     oninit: () => {
       return new Promise(async (resolve, reject) => {
         const event = await careProvidersSvc.load(m.route.param('id')).catch(r => reject(r));
-        state.cp = event ? deepCopy(event) : ({} as ICareProvider);
+        state.careProvider = event ? deepCopy(event) : ({} as ICareProvider);
         state.loaded = true;
         resolve();
       });
     },
     view: () => {
-      const { cp, loaded, resolveObj, filterValue } = state;
-      const careProvider = resolveObj<ICareProvider>(cp);
+      const { careProvider, loaded, filterValue } = state;
       console.log(JSON.stringify(careProvider, null, 2));
       if (!loaded) {
         return m(CircularSpinner, { className: 'center-align', style: 'margin-top: 20%;' });
@@ -76,7 +73,7 @@ export const FormView: FactoryComponent = () => {
           ]
         ),
         m('.contentarea', [
-          Auth.canEdit(cp)
+          Auth.canEdit(careProvider)
             ? m('ul.do-not-print', [
                 m(
                   'li',
@@ -84,17 +81,17 @@ export const FormView: FactoryComponent = () => {
                     label: 'Bewerk zorgaanbieder',
                     iconName: 'edit',
                     className: 'right hide-on-small-only',
-                    onclick: () => dashboardSvc.switchTo(Dashboards.EDIT, { id: cp.$loki }),
+                    onclick: () => dashboardSvc.switchTo(Dashboards.EDIT, { id: careProvider.$loki }),
                   })
                 ),
                 m(
                   'li',
                   m(InputCheckbox, {
                     className: 'left margin-top7',
-                    checked: cp.published,
+                    checked: careProvider.published,
                     onchange: async checked => {
-                      cp.published = checked;
-                      await careProvidersSvc.save(cp);
+                      careProvider.published = checked;
+                      await careProvidersSvc.save(careProvider);
                     },
                     label: 'Publiceer uw wijzigingen',
                   })

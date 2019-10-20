@@ -1,17 +1,18 @@
 import m, { Attributes, FactoryComponent } from 'mithril';
 import { Pagination } from 'mithril-materialized';
-import { Form, LayoutForm } from 'mithril-ui-form';
+import { Form, labelResolver, LayoutForm } from 'mithril-ui-form';
 import { IAddress, ICareProvider, ILocation, isLocationActive } from '../../../common/dist';
+import { CareProviderForm } from '../template/form';
 import { CareForm } from '../template/form';
 import { p, range, slice, targetFilter } from '../utils';
 import { Dashboards, dashboardSvc } from './dashboard-service';
 
 export interface IFormattedEvent extends Attributes {
-  careProvider: ICareProvider;
+  careProvider: Partial<ICareProvider>;
   filterValue?: string;
 }
 
-const AddressView: FactoryComponent<{ address: IAddress }> = () => {
+const AddressView: FactoryComponent<{ address: Partial<IAddress> }> = () => {
   return {
     view: ({
       attrs: {
@@ -46,7 +47,9 @@ const paginationSize = 20;
 export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
   const state = {
     showDetails: undefined,
+    resolveObj: labelResolver(CareProviderForm),
   } as {
+    resolveObj: <T>(obj: any, parent?: string | undefined) => T | undefined;
     showDetails?: string;
   };
 
@@ -73,8 +76,11 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
 
   return {
     view: ({ attrs: { careProvider: cp, filterValue } }) => {
-      const { naam, kvk, rechtsvorm, locaties, $loki } = cp;
-      const { showDetails } = state;
+      const { naam, kvk, locaties = [], $loki } = cp;
+      const { showDetails, resolveObj } = state;
+
+      const careProvider = resolveObj<ICareProvider>(cp) as ICareProvider;
+      const { rechtsvorm } = careProvider;
       const query = targetFilter(filterValue);
       const route = dashboardSvc.route(Dashboards.READ).replace(':id', `${$loki}`);
 
