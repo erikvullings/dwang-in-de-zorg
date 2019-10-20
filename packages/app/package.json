@@ -42,7 +42,7 @@
     "mithril": "^2.0.4",
     "mithril-leaflet": "^0.1.6",
     "mithril-materialized": "^0.15.1",
-    "mithril-ui-form": "^0.3.11",
+    "mithril-ui-form": "^0.3.12",
     "file-saver": "^2.0.2",
     "rest-easy-loki": "^0.4.1"
   },
