@@ -43,6 +43,7 @@
     "mithril-leaflet": "^0.1.6",
     "mithril-materialized": "^0.15.1",
     "mithril-ui-form": "^0.3.11",
+    "file-saver": "^2.0.2",
     "rest-easy-loki": "^0.4.1"
   },
   "devDependencies": {
@@ -50,6 +51,7 @@
     "@types/lokijs": "^1.5.2",
     "@types/materialize-css": "^1.0.6",
     "@types/mithril": "^2.0.0",
+    "@types/file-saver": "^2.0.1",
     "autoprefixer": "^9.6.4",
     "concurrently": "^5.0.0",
     "cssnano": "^4.1.10",

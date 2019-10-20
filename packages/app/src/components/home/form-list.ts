@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import m from 'mithril';
 import { FlatButton, Icon } from 'mithril-materialized';
 import { ICareProvider, isLocationActive } from '../../../../common/dist';
@@ -91,7 +92,13 @@ export const EventsList = () => {
                         {
                           target: '_blank',
                           style: 'margin-right: 0',
-                          href: `${AppState.apiService}/zorgaanbieders/${cp.$loki}`,
+                          // href: `${AppState.apiService}/zorgaanbieders/${cp.$loki}`,
+                          onclick: () => {
+                            const blob = new Blob(['Hell world'], {
+                              type: 'text/plain;charset=utf-8'
+                             });
+                            saveAs(blob, `${cp.naam}.csv`, { autoBom: true });
+                          }
                         },
                         m(Icon, {
                           iconName: 'cloud_download',
