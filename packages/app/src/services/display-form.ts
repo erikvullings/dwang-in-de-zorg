@@ -116,9 +116,9 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
             m('li', [
               m('span.col.s3', m('b', 'Locatie')),
               m('span.col.s4', m('b', 'Adres')),
-              m('span.col.s1', m('b', 'Accomodatie')),
-              m('span.col.s1', m('b', 'WZD')),
-              m('span.col.s1', m('b', 'WVGGZ')),
+              m('span.col.s1', { style: 'padding-right: 0;' }, m('b', 'Accomodatie')),
+              m('span.col.s1', { style: 'padding-right: 0;' }, m('b', 'WZD')),
+              m('span.col.s1', { style: 'padding-right: 0;' }, m('b', 'WVGGZ')),
               m('span.col.s2', m('b', 'Actief')),
             ]),
             ...filteredLocations.map(l =>
