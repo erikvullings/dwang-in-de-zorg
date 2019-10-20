@@ -114,11 +114,14 @@ export const careOptions = [
   { id: 'isOpnemen', label: 'Opnemen in een accommodatie' },
 ];
 
+const day = 24 * 3600000;
+const now = Date.now() - 30 * day;
+
 /** Zorgvorm formulier */
 const CareForm: Form = [
   { type: 'md', value: '###### Welke type zorg wordt geleverd?' },
-  { id: 'isAmbulantGeleverd', type: 'checkbox', className: 'col s12 m6', label: 'Is ambulant geleverd?' },
-  { id: 'isKlinischGeleverd', type: 'checkbox', className: 'col s12 m6', label: 'Is klinisch geleverd?' },
+  { id: 'isAmbulantGeleverd', type: 'checkbox', className: 'col s12 m4', label: 'Is ambulant geleverd?' },
+  { id: 'isKlinischGeleverd', type: 'checkbox', className: 'col s12 m4', label: 'Is klinisch geleverd?' },
   {
     id: 'zorgvorm',
     type: 'options',
@@ -128,7 +131,10 @@ const CareForm: Form = [
     checkboxClass: 'col s12',
     show: ['isWvggz = true'],
   },
-  { id: 'aantekeningen', label: 'Activiteit/aantekening', type: ActivityForm, repeat: true },
+  { id: 'isActief', disabled: true, type: 'checkbox', className: 'col s12 m4', label: 'Is actief?' },
+  { id: 'datumIngang', label: 'Ingangsdatum', type: 'date', min: now, required: true, className: 'col s6 m4' },
+  { id: 'datumEinde', show: 'datumIngang', label: 'Einddatum', type: 'date', min: now, className: 'col s6 m4' },
+  { id: 'aantekeningen', disabled: true, label: 'Activiteit/aantekening', type: ActivityForm, repeat: true },
 ];
 
 const AddressForm: Form = [
