@@ -2,7 +2,7 @@ export interface IActivity {
   /** Datum van aanmaken "activity" record */
   createdAt: number;
   /** Ingangsdatum */
-  datumIngang: number;
+  datumIngang?: number;
   /** Einddatum */
   datumEinde?: number;
 }

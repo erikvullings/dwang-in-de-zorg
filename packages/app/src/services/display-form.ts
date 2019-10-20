@@ -1,6 +1,6 @@
 import m, { Attributes, FactoryComponent } from 'mithril';
 import { Pagination } from 'mithril-materialized';
-import { IAddress, ICareProvider, isLocationActive } from '../../../common/dist';
+import { IAddress, ICareProvider, ILocation, isLocationActive } from '../../../common/dist';
 import { p, range, slice, targetFilter } from '../utils';
 import { Dashboards, dashboardSvc } from './dashboard-service';
 
@@ -42,11 +42,19 @@ const paginationSize = 20;
  * Display the form in a format that is useful for the end user.
  */
 export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
+  const getStartDate = (l: ILocation) => {
+    if (l.aantekeningen) {
+      const di = l.aantekeningen[l.aantekeningen.length - 1].datumIngang;
+      return di ? new Date(di).toLocaleDateString() : '';
+    }
+    return '';
+  };
+
   return {
     view: ({ attrs: { careProvider: cp, filterValue } }) => {
       const { naam, kvk, rechtsvorm, locaties, $loki } = cp;
       const query = targetFilter(filterValue);
-      const route = dashboardSvc.route(Dashboards.READ).replace(':id', $loki.toString());
+      const route = dashboardSvc.route(Dashboards.READ).replace(':id', `${$loki}`);
 
       const activeLocations =
         locaties && locaties.length > 0 ? locaties.reduce((acc, cur) => acc + (isLocationActive(cur) ? 1 : 0), 0) : 0;
@@ -58,6 +66,7 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
         queryResults && queryResults.filter(slice((curPage - 1) * paginationSize, curPage * paginationSize));
 
       const maxPages = Math.ceil(queryResults.length / paginationSize);
+
       return m('.row', { key: cp.$loki }, [
         m('.row', m('h4.col.s12.primary-text', naam)),
         m('.row', [
@@ -105,11 +114,7 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
                 m(
                   'span.col.s2',
                   `${
-                    isLocationActive(l)
-                      ? `Sinds ${new Date(
-                          l.aantekeningen && l.aantekeningen[l.aantekeningen.length - 1].datumIngang
-                        ).toLocaleDateString()}`
-                      : ''
+                    isLocationActive(l) ? `Sinds ${getStartDate(l)}` : getStartDate(l) ? `Vanaf ${getStartDate(l)}` : ''
                   }`
                 ),
               ])
