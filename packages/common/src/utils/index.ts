@@ -37,6 +37,9 @@ export const isLocationActive = (loc: ILocation) => {
     return false;
   }
   const { datumIngang, datumEinde } = loc.aantekeningen[loc.aantekeningen.length - 1];
+  if (!datumIngang) {
+    return false;
+  }
   const d = Date.now();
   const s = new Date(datumIngang).valueOf();
   const e = datumEinde ? new Date(datumEinde).valueOf() : Number.MAX_VALUE;

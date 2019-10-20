@@ -2,7 +2,7 @@ import M from 'materialize-css';
 import m from 'mithril';
 import { Button, Chips, ModalPanel } from 'mithril-materialized';
 import { deepCopy, LayoutForm } from 'mithril-ui-form';
-import { ICareProvider, toQueryTarget } from '../../../../common/dist';
+import { ICareProvider, toQueryTarget, ILocation, IActivity, isLocationActive } from '../../../../common/dist';
 import { careProvidersSvc } from '../../services';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
 import { Auth } from '../../services/login-service';
@@ -11,6 +11,71 @@ import { capitalizeFirstLetter } from '../../utils';
 import { CircularSpinner } from '../ui/preloader';
 
 const log = console.log;
+
+interface ILocationVM extends ILocation, IActivity {
+  isActief: boolean;
+}
+
+const locationToViewModel = (l: ILocation) => {
+  const now = Date.now();
+  const lvm = l as ILocationVM;
+  const { aantekeningen } = lvm;
+  // console.table(lvm);
+  if (aantekeningen && aantekeningen instanceof Array && aantekeningen.length > 0) {
+    const { datumEinde, datumIngang } = aantekeningen[aantekeningen.length - 1];
+    lvm.isActief = isLocationActive(lvm);
+    if (!lvm.isActief && datumIngang && datumIngang < now) {
+      aantekeningen.push({ createdAt: now });
+    } else {
+      lvm.datumIngang = datumIngang;
+      lvm.datumEinde = datumEinde;
+    }
+  }
+  return lvm;
+};
+
+const careProviderToViewModel = (careProvider: Partial<ICareProvider>) => {
+  const cp = deepCopy(careProvider);
+  if (cp && cp.locaties) {
+    cp.locaties = cp.locaties.map(locationToViewModel);
+  }
+  return cp;
+};
+
+const locationFromViewModel = (l: ILocation) => {
+  const lvm = l as ILocationVM;
+  const { aantekeningen, datumEinde, datumIngang } = lvm;
+  delete lvm.isActief;
+  delete lvm.datumEinde;
+  delete lvm.datumIngang;
+  if (aantekeningen && aantekeningen.length > 0) {
+    const laatsteAantekening = aantekeningen[aantekeningen.length - 1];
+    if (datumIngang) {
+      laatsteAantekening.datumIngang = new Date(datumIngang).valueOf();
+    }
+    if (datumEinde) {
+      laatsteAantekening.datumEinde = new Date(datumEinde).valueOf();
+    }
+  }
+  // const wasActief =
+  //   laatsteAantekening.datumIngang < now && (!laatsteAantekening.datumEinde || laatsteAantekening.datumEinde > now);
+  // if (isActief && !wasActief) {
+  //   // became active, so create a new aantekening
+  //   aantekeningen.push({ createdAt: now, datumIngang, datumEinde });
+  // } else if (!isActief) {
+  //   // stopped being active
+  //   laatsteAantekening.datumEinde = datumEinde;
+  // }
+  return lvm;
+};
+
+const careProviderFromViewModel = (careProvider: Partial<ICareProvider>) => {
+  const cp = deepCopy(careProvider);
+  if (cp && cp.locaties) {
+    cp.locaties = cp.locaties.map(locationFromViewModel);
+  }
+  return cp;
+};
 
 const close = async (e?: UIEvent) => {
   log('closing...');
@@ -39,16 +104,16 @@ export const EditForm = () => {
     if (cp) {
       // const event = deepCopy(state.event);
       // console.log(JSON.stringify(event.memberCountries, null, 2));
-      await careProvidersSvc.save(toQueryTarget(cp));
-      state.cp = careProvidersSvc.getCurrent();
+      await careProvidersSvc.save(toQueryTarget(careProviderFromViewModel(cp)));
+      state.cp = careProviderToViewModel(careProvidersSvc.getCurrent());
     }
   };
 
   return {
     oninit: () => {
       return new Promise(async (resolve, reject) => {
-        const event = await careProvidersSvc.load(m.route.param('id')).catch(r => reject(r));
-        state.cp = event ? deepCopy(event) : ({} as ICareProvider);
+        const cp = await careProvidersSvc.load(m.route.param('id')).catch(r => reject(r));
+        state.cp = cp ? careProviderToViewModel(cp) : ({} as ICareProvider);
         state.loaded = true;
         m.redraw();
         resolve();
@@ -56,11 +121,10 @@ export const EditForm = () => {
     },
 
     view: () => {
-      const { cp: event, form, context, loaded } = state;
+      const { cp, form, context, loaded } = state;
       if (!loaded) {
         return m(CircularSpinner, { className: 'center-align', style: 'margin-top: 20%;' });
       }
-      // log(event);
       const sections = form
         .filter(c => c.type === 'section')
         .map(c => ({
@@ -72,70 +136,70 @@ export const EditForm = () => {
       return m('.row', [
         // m(
         //   '.col.s12.l3',
-          m(
-            'ul#slide-out.sidenav.sidenav-fixed',
-            {
-              oncreate: ({ dom }) => {
-                M.Sidenav.init(dom);
-              },
+        m(
+          'ul#slide-out.sidenav.sidenav-fixed',
+          {
+            oncreate: ({ dom }) => {
+              M.Sidenav.init(dom);
             },
-            [
-              m('h5.primary-text', { style: 'margin-left: 20px;' }, 'Registratieformulier'),
-              ...sections.map(s =>
+          },
+          [
+            m('h5.primary-text', { style: 'margin-left: 20px;' }, 'Registratieformulier'),
+            ...sections.map(s =>
+              m(
+                'li',
                 m(
+                  m.route.Link,
+                  { href: dashboardSvc.route(Dashboards.EDIT).replace(':id', `${cp.$loki}?section=${s.id}`) },
+                  m('span.primary-text', s.title)
+                )
+              )
+            ),
+            m('.buttons', [
+              m(Button, {
+                label: 'Toon registratie',
+                iconName: 'visibility',
+                className: 'right col s12',
+                onclick: () => dashboardSvc.switchTo(Dashboards.READ, { id: cp.$loki }),
+              }),
+              // m(Button, {
+              //   label: 'Save event',
+              //   iconName: 'save',
+              //   class: `green col s12 ${hasChanged ? '' : 'disabled'}`,
+              //   onclick: onsubmit,
+              // }),
+              m(Button, {
+                modalId: 'delete-event',
+                label: 'Verwijder registratie',
+                iconName: 'delete',
+                class: 'red col s12',
+              }),
+            ]),
+            Auth.canCRUD(cp)
+              ? m(
                   'li',
                   m(
-                    m.route.Link,
-                    { href: dashboardSvc.route(Dashboards.EDIT).replace(':id', `${event.$loki}?section=${s.id}`) },
-                    m('span.primary-text', s.title)
+                    '.col.s12',
+                    m(Chips, {
+                      label: 'Wijzigingen toegestaan van',
+                      placeholder: '+email',
+                      onchange: chips => {
+                        cp.canEdit = chips.map(({ tag }) => tag);
+                        m.redraw();
+                      },
+                      data: (cp.canEdit || []).map(editor => ({ tag: editor })),
+                    })
                   )
                 )
-              ),
-              m('.buttons', [
-                m(Button, {
-                  label: 'Toon registratie',
-                  iconName: 'visibility',
-                  className: 'right col s12',
-                  onclick: () => dashboardSvc.switchTo(Dashboards.READ, { id: event.$loki }),
-                }),
-                // m(Button, {
-                //   label: 'Save event',
-                //   iconName: 'save',
-                //   class: `green col s12 ${hasChanged ? '' : 'disabled'}`,
-                //   onclick: onsubmit,
-                // }),
-                m(Button, {
-                  modalId: 'delete-event',
-                  label: 'Verwijder registratie',
-                  iconName: 'delete',
-                  class: 'red col s12',
-                }),
-              ]),
-              Auth.canCRUD(event)
-                ? m(
-                    'li',
-                    m(
-                      '.col.s12',
-                      m(Chips, {
-                        label: 'Wijzigingen toegestaan van',
-                        placeholder: '+email',
-                        onchange: chips => {
-                          event.canEdit = chips.map(({ tag }) => tag);
-                          m.redraw();
-                        },
-                        data: (event.canEdit || []).map(editor => ({ tag: editor })),
-                      })
-                    )
-                  )
-                : undefined,
-            ]
-          ),
+              : undefined,
+          ]
+        ),
         // ),
         m('.contentarea', [
           m(LayoutForm, {
             key: section,
             form,
-            obj: event,
+            obj: cp,
             onchange: async () => {
               // console.log(JSON.stringify(event, null, 2));
               // console.log(JSON.stringify(event.memberCountries, null, 2));
@@ -154,7 +218,7 @@ export const EditForm = () => {
             {
               label: 'Delete',
               onclick: async () => {
-                careProvidersSvc.delete(event.$loki);
+                careProvidersSvc.delete(cp.$loki);
                 close();
               },
             },
