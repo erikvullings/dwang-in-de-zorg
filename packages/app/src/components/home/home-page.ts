@@ -1,10 +1,13 @@
+import { saveAs } from 'file-saver';
 import m from 'mithril';
 import { Button, Icon, Parallax } from 'mithril-materialized';
 import { SlimdownView } from 'mithril-ui-form';
 import background from '../../assets/background.jpg';
 import logo from '../../assets/locatieregister.svg';
 import vws from '../../assets/logo_minvws.svg';
+import { careProvidersSvc } from '../../services';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
+import { careProvidersToCSV, padLeft } from '../../utils';
 
 export const HomePage = () => ({
   view: () => [
@@ -18,11 +21,7 @@ export const HomePage = () => ({
             { style: 'margin: 0 10px 0 20px; left: 20px' },
             m(`img[width=48][height=48][src=${logo}]`, { style: 'margin-top: 5px; margin-left: -5px;' })
           ),
-          m(
-            'h3.center.hide-on-small-only',
-            { style: 'padding: 10px 0; margin: 0 auto;' },
-            'Locatieregister'
-          ),
+          m('h3.center.hide-on-small-only', { style: 'padding: 10px 0; margin: 0 auto;' }, 'Locatieregister'),
         ]),
         m(
           '.overlay.center',
@@ -33,13 +32,33 @@ export const HomePage = () => ({
             m(Button, {
               className: 'btn-large',
               label: 'START',
+              iconName: 'play_arrow',
               onclick: () => dashboardSvc.switchTo(Dashboards.SEARCH),
             }),
-            // m(Button, {
-            //   className: 'yellow darken-3 btn-large',
-            //   label: 'Registreer uw locatie',
-            //   onclick: () => dashboardSvc.switchTo(Dashboards.HOME),
-            // })
+            m(Button, {
+              style: 'margin-left: 10px;',
+              className: 'yellow darken-3 btn-large',
+              label: 'CSV',
+              iconName: 'cloud_download',
+              onclick: async () => {
+                const now = new Date();
+                const careProviders = await careProvidersSvc.loadList();
+                const csv = careProvidersToCSV(careProviders);
+                if (csv) {
+                  const blob = new Blob([csv], {
+                    type: 'text/plain;charset=utf-8',
+                  });
+                  saveAs(
+                    blob,
+                    `${now.getFullYear()}${padLeft(now.getMonth() + 1, '0')}${padLeft(
+                      now.getDate(),
+                      '0'
+                    )}_locatieregister.csv`,
+                    { autoBom: true }
+                  );
+                }
+              },
+            }),
           ]
         )
       ),
@@ -94,13 +113,7 @@ Zorgaanbieders dienen hier alle locaties te registreren alwaar zij deze vorm van
       { style: 'height: 60px; padding: 5px 0;' },
       m(
         '.container.center-align',
-        m('.clearfix', [
-          m(
-            '.white-text',
-            'Footer text'
-          ),
-          m('span', '©2019 VWS, v0.1, Oktober 2019'),
-        ])
+        m('.clearfix', [m('.white-text', 'Footer text'), m('span', '©2019 VWS, v0.1, Oktober 2019')])
       )
     ),
   ],

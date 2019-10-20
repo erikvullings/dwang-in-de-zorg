@@ -1,4 +1,4 @@
-import { ICareProvider } from '../../../common/dist';
+import { IActivity, ICareProvider, ILocation } from '../../../common/dist';
 
 /**
  * Create a GUID
@@ -130,7 +130,7 @@ export const formatOptional = (
 };
 
 /** Print optional */
-export const p = (val: string | number | Date | undefined, output?: string) => (val ? output || val : '');
+export const p = (val: string | number | Date | boolean | undefined, output?: string) => (val ? output || val : '');
 
 /** Print a list: a, b and c */
 export const l = (val: undefined | string | string[]) => {
@@ -161,7 +161,6 @@ export const debounce = (func: (...args: any) => void, timeout: number) => {
 export const padLeft = (str: string | number, ch = ' ', len = 2): string =>
   str.toString().length >= len ? str.toString() : padLeft(ch + str.toString(), ch, len);
 
-  
 /**
  * Generate a sequence of numbers between from and to with step size: [from, to].
  *
@@ -178,3 +177,159 @@ export const range = (from: number, to: number, step: number = 1) => {
   }
   return arr;
 };
+
+export const activityToCSV = (locationData: string) => ({ datumIngang, datumEinde }: IActivity) =>
+  `${locationData}${datumIngang ? new Date(datumIngang).toLocaleDateString() : ''};${
+    datumEinde ? new Date(datumEinde).toLocaleDateString() : ''
+  };`;
+
+export const locationToCSV = (careProviderData: string) => ({
+  locatienaam,
+  locatieomschrijving,
+  vestigingsnummer,
+  straat,
+  huisnummer,
+  huisletter,
+  huisnummerToevoeging,
+  postcode,
+  woonplaatsnaam,
+  landnaam,
+  landnaamBuitenEuropa,
+  aanvullendeAdresinformatie,
+  isAccommodatie,
+  isWzd,
+  isWvggz,
+  zorgvorm = [],
+  aantekeningen = [],
+}: ILocation) => {
+  const locationData =
+    careProviderData +
+    [
+      p(locatienaam),
+      p(locatieomschrijving),
+      p(vestigingsnummer),
+      p(straat),
+      p(huisnummer),
+      p(huisletter),
+      p(huisnummerToevoeging),
+      p(postcode),
+      p(woonplaatsnaam),
+      p(landnaam || landnaamBuitenEuropa),
+      p(aanvullendeAdresinformatie),
+      p(isAccommodatie, 'ja'),
+      p(isWzd, 'ja'),
+      p(isWvggz, 'ja'),
+      p(zorgvorm.indexOf('isAmbulantGeleverd') >= 0, 'ja'),
+      p(zorgvorm.indexOf('isKlinischGeleverd') >= 0, 'ja'),
+      p(zorgvorm.indexOf('isBejegening') >= 0, 'ja'),
+      p(zorgvorm.indexOf('isVerzorging') >= 0, 'ja'),
+      p(zorgvorm.indexOf('isVerpleging') >= 0, 'ja'),
+      p(zorgvorm.indexOf('isBehandeling') >= 0, 'ja'),
+      p(zorgvorm.indexOf('isBegeleiding') >= 0, 'ja'),
+      p(zorgvorm.indexOf('isBescherming') >= 0, 'ja'),
+      p(zorgvorm.indexOf('isVochtVoedingMedicatie') >= 0, 'ja'),
+      p(zorgvorm.indexOf('isBeperkenBewegingsvrijheid') >= 0, 'ja'),
+      p(zorgvorm.indexOf('isInsluiten') >= 0, 'ja'),
+      p(zorgvorm.indexOf('isToezicht') >= 0, 'ja'),
+      p(zorgvorm.indexOf('isOnderzoekKledingLichaam') >= 0, 'ja'),
+      p(zorgvorm.indexOf('isOnderzoekWoonruimte') >= 0, 'ja'),
+      p(zorgvorm.indexOf('isControlerenMiddelen') >= 0, 'ja'),
+      p(zorgvorm.indexOf('isBeperkenEigenLeven') >= 0, 'ja'),
+      p(zorgvorm.indexOf('isBeperkenBezoek') >= 0, 'ja'),
+      p(zorgvorm.indexOf('isOpnemen') >= 0, 'ja'),
+      p(zorgvorm.indexOf('isTijdelijkVerblijf') >= 0, 'ja'),
+    ].join(';') +
+    ';';
+  const actToCsv = activityToCSV(locationData);
+  return aantekeningen.map(actToCsv);
+};
+
+export const careProviderToCSV = (
+  {
+    naam,
+    kvk,
+    rechtsvorm,
+    straat,
+    huisnummer,
+    huisletter,
+    huisnummerToevoeging,
+    postcode,
+    woonplaatsnaam,
+    landnaam,
+    landnaamBuitenEuropa,
+    aanvullendeAdresinformatie,
+    locaties = [],
+  }: Partial<ICareProvider>,
+  includeHeader = true
+) => {
+  const headers =
+    [
+      'naam',
+      'kvk',
+      'rechtsvorm',
+      'straat',
+      'huisnummer',
+      'huisletter',
+      'huisnummerToevoeging',
+      'postcode',
+      'woonplaatsnaam',
+      'landnaam',
+      'zaanvadresinfo',
+      'locatienaam',
+      'lomschrijving',
+      'vestigingsnummer',
+      'lstraat',
+      'lhuisnummer',
+      'lhuisletter',
+      'lhuisnummerToevoeging',
+      'lpostcode',
+      'lwoonplaatsnaam',
+      'llandnaam',
+      'laanvadresinfo',
+      'isAccommodatie',
+      'isWzd',
+      'isWvggz',
+      'isAmbulantGeleverd',
+      'isKlinischGeleverd',
+      'zvbejegening',
+      'zvverzorging',
+      'zvverpleging',
+      'zvbehandeling',
+      'zvbegeleiding',
+      'zvbescherming',
+      'zvvochtvoedingmedicatie',
+      // 'zvmedischecontroles',
+      'zvbeperkenbewegingsvrijheid',
+      'zvinsluiten',
+      'zvtoezicht',
+      'zvonderzoekkledinglichaam',
+      'zvonderzoekwoonruimte',
+      'zvcontrolerenmiddelen',
+      'zvbeperkeneigenleven',
+      'zvbeperkenbezoek',
+      'zvopnemen',
+      'zvtijdelijkverblijf',
+      'aantekeningingang',
+      'aantekeningeinde',
+    ].join(';') + ';';
+  const careProviderData =
+    [
+      p(naam),
+      p(kvk),
+      p(rechtsvorm),
+      p(straat),
+      p(huisnummer),
+      p(huisletter),
+      p(huisnummerToevoeging),
+      p(postcode),
+      p(woonplaatsnaam),
+      p(landnaam || landnaamBuitenEuropa),
+      p(aanvullendeAdresinformatie),
+    ].join(';') + ';';
+  const locToCSV = locationToCSV(careProviderData);
+  const locations = locaties.map(locToCSV);
+  return includeHeader ? [headers, ...locations].join('\r\n') : locations.join('\r\n');
+};
+
+export const careProvidersToCSV = (cps?: Array<Partial<ICareProvider>>) =>
+  cps && cps.map((cp, i) => careProviderToCSV(cp, i === 0)).join('\r\n');

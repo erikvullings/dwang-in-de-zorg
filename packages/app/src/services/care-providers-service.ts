@@ -10,6 +10,19 @@ class CareProvidersService extends RestService<Partial<ICareProvider>> {
   }
 
   public async loadList(): Promise<Array<Partial<ICareProvider>> | undefined> {
+    const result = await m.request<ICareProvider[]>({
+      method: 'GET',
+      url: this.baseUrl,
+      withCredentials: this.withCredentials,
+    });
+    if (!result) {
+      console.warn('No result found at ' + this.baseUrl);
+    }
+    this.setList(result || []);
+    return this.list;
+  }
+
+  public async loadFilteredList(): Promise<Array<Partial<ICareProvider>> | undefined> {
     const filter = 'view?props=$loki,naam,kvk,locaties,owner,published,canEdit';
     // http://localhost:3000/events/view?props=name,cmFunctions,incidentType,eventType
     const result = await m.request<ICareProvider[]>({

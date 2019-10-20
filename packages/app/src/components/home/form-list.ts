@@ -7,6 +7,7 @@ import { Roles } from '../../models/roles';
 import { careProvidersSvc } from '../../services/care-providers-service';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
 import { Auth } from '../../services/login-service';
+import { careProviderToCSV } from '../../utils';
 import { CircularSpinner } from '../ui/preloader';
 import { SearchComponent } from '../ui/search-component';
 
@@ -30,8 +31,8 @@ export const EventsList = () => {
     // oninit: () => careProvidersSvc.loadList(),
     view: () => {
       const careProviders = (careProvidersSvc.getList() || ([] as ICareProvider[]))
-        .sort(sortByName)
-        .sort(sortByUpdated);
+        .sort(sortByUpdated)
+        .sort(sortByName);
       const filteredCareProviders =
         careProviders
           .filter(
@@ -39,10 +40,6 @@ export const EventsList = () => {
               ev.published || (Auth.authenticated && (Auth.roles.indexOf(Roles.ADMIN) >= 0 || ev.owner === Auth.email))
           )
           .filter((_, i) => i < 24) ||
-        // .filter(typeFilter('memberCountries', countryFilter))
-        // .filter(typeFilter('eventType', eventTypeFilter))
-        // .filter(typeFilter('cmFunctions', cmFunctionFilter))
-        // .filter(incidentFilter(incidentTypeFilter))
         [];
       // console.log(JSON.stringify(filteredCareProviders, null, 2));
       return m('.row', { style: 'margin-top: 1em;' }, [
@@ -92,9 +89,9 @@ export const EventsList = () => {
                         {
                           target: '_blank',
                           style: 'margin-right: 0',
-                          // href: `${AppState.apiService}/zorgaanbieders/${cp.$loki}`,
                           onclick: () => {
-                            const blob = new Blob(['Hell world'], {
+                            const csv = careProviderToCSV(cp);
+                            const blob = new Blob([csv], {
                               type: 'text/plain;charset=utf-8'
                              });
                             saveAs(blob, `${cp.naam}.csv`, { autoBom: true });
