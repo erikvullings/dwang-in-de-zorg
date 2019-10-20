@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as fs from 'fs';
 import * as Papa from 'papaparse';
 import * as path from 'path';
-import { ICareProvider, ILocation, locationToQueryTarget, toQueryTarget } from '../../common/dist';
+import { ICareProvider, ILocation, locationToQueryTarget, toQueryTarget, removeEmpty } from '../../common/dist';
 
 const filename = path.resolve(process.cwd(), 'locatieregister.csv');
 
@@ -110,7 +110,7 @@ fs.readFile(filename, 'utf8', (err, csv) => {
         zvbegeleiding,
         zvbescherming,
         zvvochtvoedingmedicatie,
-        zvmedishcecontroles,
+        // zvmedishcecontroles,
         zvbeperkenbewegingsvrijheid,
         zvinsluiten,
         zvtoezicht,
@@ -173,10 +173,10 @@ fs.readFile(filename, 'utf8', (err, csv) => {
         }
       } else {
         // Change of care provider
-        const found = careProviders.filter(cp => cp.kvk === +kvk);
+        const found = careProviders.filter(cp => cp.kvk === +kvk && cp.naam === naam);
         if (found.length > 0) {
           acc = found[0];
-        } else {
+        } else if (naam) {
           // New provider
           acc = {
             naam,
@@ -201,8 +201,10 @@ fs.readFile(filename, 'utf8', (err, csv) => {
     },
     {} as Partial<ICareProvider>
   );
-  // console.log(JSON.stringify(careProviders, null, 2));
-  careProviders.forEach(async cp => {
+  const cps = removeEmpty(careProviders) as Array<Partial<ICareProvider>>;
+  // console.log(JSON.stringify(cps, null, 2));
+
+  cps.forEach(async cp => {
     await axios.post('http://localhost:3000/zorgaanbieders', cp).catch(e => {
       console.error(e.message);
       console.log(cp.naam);

@@ -1,6 +1,6 @@
 import { IAddress, ICareProvider, ILocation } from '../models';
 
-export const stripSpaces = (s: string) => s.replace(/\s/g, '');
+export const stripSpaces = (s: string) => s.replace(/\s|,|\./g, '');
 
 /** Convert an address to something that is easy to query */
 const addressToQueryTarget = (a: Partial<IAddress>) => {
@@ -30,6 +30,18 @@ export const toQueryTarget = (cp: Partial<ICareProvider>) => {
     cp.locaties.forEach(loc => (loc.target = locationToQueryTarget(loc)));
   }
   return cp;
+};
+
+/** Remove empty and undefined properties */
+export const removeEmpty = <T>(obj: { [key: string]: any }): T => {
+  Object.keys(obj).forEach(key => {
+    if (obj[key] && typeof obj[key] === 'object') {
+      removeEmpty(obj[key]);
+    } else if (obj[key] === '' || obj[key] === undefined) {
+      delete obj[key];
+    }
+  });
+  return obj as T;
 };
 
 export const isLocationActive = (loc: ILocation) => {
