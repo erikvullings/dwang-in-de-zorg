@@ -34,6 +34,8 @@
   },
   "homepage": "https://github.com/erikvullings/dwang-in-de-zorg#readme",
   "dependencies": {
+    "deep-object-diff": "^1.1.0",
+    "file-saver": "^2.0.2",
     "keycloak-js": "6.0.0",
     "leaflet": "^1.5.1",
     "leaflet-draw": "^1.0.4",
@@ -42,16 +44,15 @@
     "mithril": "^2.0.4",
     "mithril-leaflet": "^0.1.6",
     "mithril-materialized": "^0.15.1",
-    "mithril-ui-form": "^0.3.12",
-    "file-saver": "^2.0.2",
+    "mithril-ui-form": "^0.3.14",
     "rest-easy-loki": "^0.4.1"
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.1",
     "@types/leaflet": "^1.5.2",
     "@types/lokijs": "^1.5.2",
     "@types/materialize-css": "^1.0.6",
     "@types/mithril": "^2.0.0",
-    "@types/file-saver": "^2.0.1",
     "autoprefixer": "^9.6.4",
     "concurrently": "^5.0.0",
     "cssnano": "^4.1.10",
