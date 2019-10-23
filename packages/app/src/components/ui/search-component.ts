@@ -27,6 +27,7 @@ export const SearchComponent: FactoryComponent<ISearchComponent> = () => {
           }),
           m('label.label-icon', { for: id }, m(Icon, { iconName: 'search' })),
           m(Icon, {
+            style: 'top: 0.75rem',
             iconName: 'close',
             onclick: () => {
               const input = document.getElementById('search') as HTMLInputElement;
