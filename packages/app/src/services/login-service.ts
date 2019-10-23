@@ -20,7 +20,7 @@ export const Auth = {
   },
   /** Can edit the document, but also change the persons that have access. */
   isOwner(doc: Partial<ICareProvider>) {
-    return Auth.authenticated && doc.owner === Auth.email;
+    return Auth.isAdmin() || (Auth.authenticated && doc.owner && doc.owner.indexOf(Auth.email) >= 0);
   },
   /** Can edit the document, but also change the persons that have access. */
   canCRUD(doc: Partial<ICareProvider>) {
@@ -46,7 +46,7 @@ export const Auth = {
     Auth.authenticated = authN;
   },
   login() {
-    window.localStorage.setItem('loginRequired', 'true');
+    window.localStorage.setItem('loginRequired', Date.now().toString());
     window.location.href = '/';
   },
   logout() {

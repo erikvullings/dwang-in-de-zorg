@@ -1,8 +1,9 @@
+import { detailedDiff } from 'deep-object-diff';
 import M from 'materialize-css';
 import m from 'mithril';
 import { Button, Chips, ModalPanel } from 'mithril-materialized';
 import { deepCopy, LayoutForm } from 'mithril-ui-form';
-import { ICareProvider, toQueryTarget, ILocation, IActivity, isLocationActive } from '../../../../common/dist';
+import { IActivity, ICareProvider, ILocation, isLocationActive, toQueryTarget } from '../../../../common/dist';
 import { careProvidersSvc } from '../../services';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
 import { Auth } from '../../services/login-service';
@@ -79,6 +80,7 @@ const close = async (e?: UIEvent) => {
 export const EditForm = () => {
   const state = {
     cp: {} as Partial<ICareProvider>,
+    originalCareProvider: {} as Partial<ICareProvider>,
     loaded: false,
     isValid: false,
     form: CareProviderForm,
@@ -91,11 +93,13 @@ export const EditForm = () => {
 
   const onsubmit = async () => {
     log('submitting...');
-    const { cp } = state;
+    const { cp, originalCareProvider } = state;
     if (cp) {
-      // const event = deepCopy(state.event);
-      // console.log(JSON.stringify(event.memberCountries, null, 2));
-      await careProvidersSvc.save(toQueryTarget(careProviderFromViewModel(cp)));
+      // console.log(JSON.stringify(cp, null, 2));
+      const restoredCP = toQueryTarget(careProviderFromViewModel(cp));
+      const mutation = detailedDiff(originalCareProvider, restoredCP);
+      console.log(JSON.stringify(mutation, null, 2));
+      await careProvidersSvc.save(restoredCP);
       state.cp = careProviderToViewModel(careProvidersSvc.getCurrent());
     }
   };
@@ -104,6 +108,7 @@ export const EditForm = () => {
     oninit: () => {
       return new Promise(async (resolve, reject) => {
         const cp = await careProvidersSvc.load(m.route.param('id')).catch(r => reject(r));
+        state.originalCareProvider = cp ? cp : ({} as ICareProvider);
         state.cp = cp ? careProviderToViewModel(cp) : ({} as ICareProvider);
         state.loaded = true;
         m.redraw();
@@ -166,6 +171,28 @@ export const EditForm = () => {
                 class: 'red col s12',
               }),
             ]),
+            Auth.isOwner(cp)
+              ? m(
+                  'li',
+                  m(
+                    '.col.s12',
+                    m(Chips, {
+                      label: 'Eigenaar(s)',
+                      placeholder: '+email',
+                      onchange: async chips => {
+                        cp.owner = chips.map(({ tag }) => tag);
+                        if (cp.owner.length === 0) {
+                          M.toast({ html: 'Er moet minimaal één eigenaar zijn.', classes: 'red' });
+                          cp.owner.push(Auth.email);
+                        }
+                        await onsubmit();
+                        // m.redraw();
+                      },
+                      data: (cp.owner || []).map(owner => ({ tag: owner })),
+                    })
+                  )
+                )
+              : undefined,
             Auth.canCRUD(cp)
               ? m(
                   'li',
@@ -174,9 +201,10 @@ export const EditForm = () => {
                     m(Chips, {
                       label: 'Wijzigingen toegestaan van',
                       placeholder: '+email',
-                      onchange: chips => {
+                      onchange: async chips => {
                         cp.canEdit = chips.map(({ tag }) => tag);
-                        m.redraw();
+                        await onsubmit();
+                        // m.redraw();
                       },
                       data: (cp.canEdit || []).map(editor => ({ tag: editor })),
                     })
@@ -194,6 +222,10 @@ export const EditForm = () => {
             onchange: async () => {
               // console.log(JSON.stringify(event, null, 2));
               // console.log(JSON.stringify(event.memberCountries, null, 2));
+              // state.cp = cp;
+              // console.log(JSON.stringify(cp, null, 2));
+              // const mutation = detailedDiff(state.originalCareProvider, cp);
+              // console.log(JSON.stringify(mutation, null, 2));
               await onsubmit();
             },
             context,

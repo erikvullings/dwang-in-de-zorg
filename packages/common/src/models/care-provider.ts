@@ -17,8 +17,8 @@ export interface IQueryable {
 }
 
 export interface ICareProvider extends ILokiObj, IAddress, IQueryable {
-  /** Owner of the document */
-  owner: string;
+  /** Owner(s) of the document */
+  owner: string[];
   /** If true, the document is published */
   published: boolean;
   /** List of emails of the persons who can edit this document */

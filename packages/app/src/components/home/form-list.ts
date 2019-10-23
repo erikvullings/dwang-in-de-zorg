@@ -58,7 +58,7 @@ export const EventsList = () => {
                   class: 'col s11 indigo darken-4 white-text',
                   style: 'margin: 1em;',
                   onclick: () => {
-                    careProvidersSvc.new({ naam: 'Naam', owner: Auth.email, published: false });
+                    careProvidersSvc.new({ naam: 'Naam', owner: [ Auth.email ], published: false });
                     dashboardSvc.switchTo(Dashboards.EDIT, { id: -1 });
                   },
                 })
