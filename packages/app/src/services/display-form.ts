@@ -89,7 +89,7 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
 
       const queryResults = query ? locaties && locaties.filter(query) : locaties;
       const page = m.route.param('page') ? +m.route.param('page') : 1;
-      const curPage = queryResults && page * paginationSize < queryResults.length ? page : 1;
+      const curPage = queryResults && (page - 1) * paginationSize < queryResults.length ? page : 1;
       const filteredLocations =
         queryResults && queryResults.filter(slice((curPage - 1) * paginationSize, curPage * paginationSize));
 
@@ -176,8 +176,8 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
               '.right',
               m(Pagination, {
                 curPage,
-                items: range(0, maxPages).map(i => ({
-                  href: `${route}?page=${i + 1}`,
+                items: range(1, maxPages).map(i => ({
+                  href: `${route}?page=${i}`,
                 })),
               })
             )

@@ -43,7 +43,7 @@
     "materialize-css": "^1.0.0",
     "mithril": "^2.0.4",
     "mithril-leaflet": "^0.1.6",
-    "mithril-materialized": "^0.15.1",
+    "mithril-materialized": "^0.15.2",
     "mithril-ui-form": "^0.3.14",
     "rest-easy-loki": "^0.4.1"
   },
