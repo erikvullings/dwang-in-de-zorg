@@ -186,7 +186,6 @@ export const EditForm = () => {
                           cp.owner.push(Auth.email);
                         }
                         await onsubmit();
-                        // m.redraw();
                       },
                       data: (cp.owner || []).map(owner => ({ tag: owner })),
                     })
@@ -204,7 +203,6 @@ export const EditForm = () => {
                       onchange: async chips => {
                         cp.canEdit = chips.map(({ tag }) => tag);
                         await onsubmit();
-                        // m.redraw();
                       },
                       data: (cp.canEdit || []).map(editor => ({ tag: editor })),
                     })

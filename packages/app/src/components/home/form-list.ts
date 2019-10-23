@@ -36,11 +36,9 @@ export const EventsList = () => {
       const filteredCareProviders =
         careProviders
           .filter(
-            ev =>
-              ev.published || (Auth.authenticated && (Auth.roles.indexOf(Roles.ADMIN) >= 0 || ev.owner === Auth.email))
+            cp => cp.published || (Auth.authenticated && (Auth.roles.indexOf(Roles.ADMIN) >= 0 || Auth.canEdit(cp)))
           )
-          .filter((_, i) => i < 24) ||
-        [];
+          .filter((_, i) => i < 24) || [];
       // console.log(JSON.stringify(filteredCareProviders, null, 2));
       return m('.row', { style: 'margin-top: 1em;' }, [
         m(
@@ -58,7 +56,7 @@ export const EventsList = () => {
                   class: 'col s11 indigo darken-4 white-text',
                   style: 'margin: 1em;',
                   onclick: () => {
-                    careProvidersSvc.new({ naam: 'Naam', owner: [ Auth.email ], published: false });
+                    careProvidersSvc.new({ naam: 'Naam', owner: [Auth.email], published: false });
                     dashboardSvc.switchTo(Dashboards.EDIT, { id: -1 });
                   },
                 })
@@ -92,10 +90,10 @@ export const EventsList = () => {
                           onclick: () => {
                             const csv = careProviderToCSV(cp);
                             const blob = new Blob([csv], {
-                              type: 'text/plain;charset=utf-8'
-                             });
+                              type: 'text/plain;charset=utf-8',
+                            });
                             saveAs(blob, `${cp.naam}.csv`, { autoBom: true });
-                          }
+                          },
                         },
                         m(Icon, {
                           iconName: 'cloud_download',
@@ -104,7 +102,10 @@ export const EventsList = () => {
                       m(
                         'span.badge',
                         cp.locaties
-                          ? `${cp.locaties.length} locatie${cp.locaties.length === 1 ? '' : 's'}, ${cp.locaties.reduce((acc, cur) => acc + (isLocationActive(cur) ? 1 : 0), 0)} actief`
+                          ? `${cp.locaties.length} locatie${cp.locaties.length === 1 ? '' : 's'}, ${cp.locaties.reduce(
+                              (acc, cur) => acc + (isLocationActive(cur) ? 1 : 0),
+                              0
+                            )} actief`
                           : '0 locaties'
                       ),
                     ])
