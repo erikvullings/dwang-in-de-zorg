@@ -7,8 +7,10 @@ export interface ILocation extends IAddress, IQueryable {
   locatienaam: string;
   locatieomschrijving: string;
   vestigingsnummer?: number;
-  /** Is de locatie een accommodatie (geschikt voor opname) */
-  isAccommodatie: boolean;
+  /** Is de locatie een WZD accommodatie */
+  isWzdAcco: boolean;
+  /** Is de locatie een WVGGZ accommodatie */
+  isWvggzAcco: boolean;
   /** Wordt op de locatie Wzd-zorg geleverd */
   isWzd?: boolean;
   /** Wordt op de locatie Wvggz zorg geleverd */

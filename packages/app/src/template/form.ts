@@ -171,13 +171,16 @@ const AddressForm: Form = [
 ];
 
 const LocationForm: Form = [
-  { type: 'md', value: '##### Locatiegegevens' },
-  { id: 'locatienaam', type: 'text', required: true, className: 'col s12 m6' },
-  { id: 'vestigingsnummer', type: 'number', className: 'col s12 m6' },
+  { type: 'md', value: `##### Locatiegegevens
+
+NB: De locatie is nooit het adres van de patiënt. In dat geval, gebruik het adres waar de zorg geleverd wordt.` },
+  { id: 'locatienaam', type: 'text', required: true, className: 'col s12 m8' },
+  { id: 'vestigingsnummer', type: 'number', className: 'col s12 m4' },
   { id: 'locatieomschrijving', type: 'textarea' },
-  { id: 'isAccommodatie', label: 'Is een accomodatie?', type: 'checkbox', className: 'col s6 m4' },
-  { id: 'isWzd', label: 'Is een WZD locatie?', type: 'checkbox', className: 'col s6 m4' },
-  { id: 'isWvggz', label: 'Is een WVGGZ locatie?', type: 'checkbox', className: 'col s6 m4' },
+  { id: 'isWzd', label: 'Is het een WZD locatie?', type: 'checkbox', className: 'col s6 m6' },
+  { id: 'isWzdAcco', disabled: 'isWzd = false', label: 'Is het een WZD accomodatie?', type: 'checkbox', className: 'col s6 m6' },
+  { id: 'isWvggz', label: 'Is het een WVGGZ locatie?', type: 'checkbox', className: 'col s6 m6' },
+  { id: 'isWvggzAcco', disabled: 'isWvggz = false', label: 'Is het een WVGGZ accomodatie?', type: 'checkbox', className: 'col s6 m6' },
   { id: 'target' },
   ...AddressForm,
   ...CareForm,

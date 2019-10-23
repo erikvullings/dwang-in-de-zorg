@@ -14,6 +14,7 @@ export const FormView: FactoryComponent = () => {
     careProvider: {} as Partial<ICareProvider>,
     loaded: false,
   };
+
   return {
     oninit: () => {
       return new Promise(async (resolve, reject) => {
