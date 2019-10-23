@@ -101,12 +101,6 @@ export const deepEqual = <T extends { [key: string]: any }>(x?: T, y?: T): boole
     : x === y;
 };
 
-// let i = 0;
-// console.log(`${++i}: ${deepEqual([1, 2, 3], [1, 2, 3])}`);
-// console.log(`${++i}: ${deepEqual([1, 2, 3], [1, 2, 3, 4])}`);
-// console.log(`${++i}: ${deepEqual({ a: 'foo', b: 'bar' }, { a: 'foo', b: 'bar' })}`);
-// console.log(`${++i}: ${deepEqual({ a: 'foo', b: 'bar' }, { b: 'bar', a: 'foo' })}`);
-
 /** Remove paragraphs <p> and </p> and the beginning and end of a string. */
 export const removeParagraphs = (s: string) => s.replace(/<\/?p>/g, '');
 

@@ -202,7 +202,6 @@ fs.readFile(filename, 'utf8', (err, csv) => {
     {} as Partial<ICareProvider>
   );
   const cps = removeEmpty(careProviders) as Array<Partial<ICareProvider>>;
-  // console.log(JSON.stringify(cps, null, 2));
 
   cps.forEach(async cp => {
     await axios.post('http://localhost:3000/zorgaanbieders', cp).catch(e => {
