@@ -21,7 +21,7 @@ if (shouldLogin) {
     .init({ onLoad: 'login-required', checkLoginIframe: false })
     .success((authenticated: boolean) => {
       window.localStorage.removeItem('loginRequired');
-      console.log(authenticated ? 'authenticated' : 'not authenticated');
+      // console.log(authenticated ? 'authenticated' : 'not authenticated');
       Auth.setAuthenticated(authenticated);
       if (authenticated && keycloak.tokenParsed) {
         const { tokenParsed } = keycloak;
@@ -38,7 +38,7 @@ if (shouldLogin) {
           }
           Auth.setRoles(roles);
         }
-        console.log(tokenParsed);
+        // console.log(tokenParsed);
       }
       dashboardSvc.switchTo(Dashboards.USER);
     })
