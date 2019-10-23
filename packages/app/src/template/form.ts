@@ -147,19 +147,19 @@ export const CareForm: Form = [
   { id: 'aantekeningen', disabled: true, label: 'Activiteit/aantekening', type: ActivityForm, repeat: true },
 ];
 
+const addressDisabled = ['vestigingsnummer', 'kvk'];
+
 const AddressForm: Form = [
-  {
-    type: 'md',
-    value: `&nbsp;
-###### Bezoekadres gegevens`,
-  },
-  { id: 'postcode', label: 'Postcode', type: 'text', className: 'col s6 m4' },
-  { id: 'huisnummer', label: 'Huisnummer', type: 'number', className: 'col s6 m2' },
-  { id: 'huisletter', label: 'Huisletter', type: 'text', className: 'col s6 m2' },
-  { id: 'huisnummerToevoeging', label: 'Toevoeging', type: 'text', className: 'col s6 m4' },
-  { id: 'straat', label: 'Straat', type: 'text', className: 'col s12 m4' },
-  { id: 'woonplaatsnaam', label: 'Woonplaats', type: 'text', className: 'col s12 m4' },
-  { id: 'landnaam', label: 'Land', value: 'netherlands', type: 'select', options: countries, className: 'col s12 m4' },
+  { type: 'md', value: `&nbsp;
+###### Bezoekadres gegevens` },
+  { type: 'md', show: ['vestigingsnummer', 'kvk'], value: '_Adresgegevens uit KvK. Indien incorrect, gaarne wijzigen bij KvK._' },
+  { id: 'postcode', disabled: addressDisabled, label: 'Postcode', type: 'text', className: 'col s6 m4' },
+  { id: 'huisnummer', disabled: addressDisabled, label: 'Huisnummer', type: 'number', className: 'col s6 m2' },
+  { id: 'huisletter', disabled: addressDisabled, label: 'Huisletter', type: 'text', className: 'col s6 m2' },
+  { id: 'huisnummerToevoeging', disabled: addressDisabled, label: 'Toevoeging', type: 'text', className: 'col s6 m4' },
+  { id: 'straat', disabled: addressDisabled, label: 'Straat', type: 'text', className: 'col s12 m4' },
+  { id: 'woonplaatsnaam', disabled: addressDisabled, label: 'Woonplaats', type: 'text', className: 'col s12 m4' },
+  { id: 'landnaam', disabled: addressDisabled, label: 'Land', value: 'netherlands', type: 'select', options: countries, className: 'col s12 m4' },
   {
     id: 'landnaamBuitenEuropa',
     label: 'Land buiten Europa',
