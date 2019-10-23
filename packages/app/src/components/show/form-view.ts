@@ -1,7 +1,7 @@
 import m, { FactoryComponent } from 'mithril';
 import { FlatButton, InputCheckbox, TextInput } from 'mithril-materialized';
 import { deepCopy } from 'mithril-ui-form';
-import { ICareProvider } from '../../../../common/dist';
+import { ICareProvider, stripSpaces } from '../../../../common/dist';
 import { careProvidersSvc } from '../../services';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
 import { DisplayForm } from '../../services/display-form';
@@ -48,7 +48,7 @@ export const FormView: FactoryComponent = () => {
               id: 'filter',
               placeholder: 'Vestigings, adres',
               iconName: 'filter_list',
-              onkeyup: (_: KeyboardEvent, v?: string) => (state.filterValue = v ? v : ''),
+              onkeyup: (_: KeyboardEvent, v?: string) => (state.filterValue = v ? stripSpaces(v) : ''),
               style: 'margin-right:100px',
               className: 'col s12',
             }),
