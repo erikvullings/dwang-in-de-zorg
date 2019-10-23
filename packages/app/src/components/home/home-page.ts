@@ -37,7 +37,7 @@ export const HomePage = () => ({
             }),
             m(Button, {
               style: 'margin-left: 10px;',
-              className: 'yellow darken-3 btn-large',
+              className: 'btn-large',
               label: 'CSV',
               iconName: 'cloud_download',
               onclick: async () => {
