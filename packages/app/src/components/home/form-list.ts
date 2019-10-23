@@ -131,7 +131,7 @@ export const EventsList = () => {
                         '.col.s12.m8.offset-m2',
                         m(SearchComponent, {
                           id: 'dummy-search',
-                          placeholder: 'Zoek op naam, adres, kvk- of vestigingsnummer',
+                          placeholder: 'Zoek op naam, adres, kvk of vestiging',
                           search: q => {
                             AppState.searchQuery = q;
                             const s = document.getElementById('search');
