@@ -14,12 +14,13 @@ const keycloak = Keycloak({
 Auth.keycloak = keycloak;
 
 const loginRequired = window.localStorage.getItem('loginRequired');
+const shouldLogin = loginRequired && !isNaN(+loginRequired) && Date.now() - +loginRequired < 3000;
 
-if (loginRequired === 'true') {
+if (shouldLogin) {
   keycloak
     .init({ onLoad: 'login-required', checkLoginIframe: false })
     .success((authenticated: boolean) => {
-      window.localStorage.setItem('loginRequired', 'false');
+      window.localStorage.removeItem('loginRequired');
       console.log(authenticated ? 'authenticated' : 'not authenticated');
       Auth.setAuthenticated(authenticated);
       if (authenticated && keycloak.tokenParsed) {
