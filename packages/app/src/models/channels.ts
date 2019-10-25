@@ -3,6 +3,7 @@ import { messageBus } from '../services/message-bus-service';
 export const ChannelNames = {
   DEFAULT_CHANNEL: 'DEFAULT_CHANNEL',
   CARE: 'CARE',
+  MUTATIONS: 'MUTATIONS',
 };
 
 export const TopicNames = {
