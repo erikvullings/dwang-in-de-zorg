@@ -35,8 +35,7 @@ const locationToViewModel = (l: ILocation) => {
   return lvm;
 };
 
-const careProviderToViewModel = (careProvider: Partial<ICareProvider>) => {
-  const cp = deepCopy(careProvider);
+const careProviderToViewModel = (cp: Partial<ICareProvider>) => {
   if (cp && cp.locaties) {
     cp.locaties = cp.locaties.map(locationToViewModel);
   }
@@ -51,18 +50,22 @@ const locationFromViewModel = (l: ILocation) => {
   delete lvm.datumIngang;
   if (aantekeningen && aantekeningen.length > 0) {
     const laatsteAantekening = aantekeningen[aantekeningen.length - 1];
+    if (!laatsteAantekening.datumIngang) {
+      laatsteAantekening.createdAt = Date.now();
+    }
     if (datumIngang) {
       laatsteAantekening.datumIngang = new Date(datumIngang).valueOf();
     }
     if (datumEinde) {
       laatsteAantekening.datumEinde = new Date(datumEinde).valueOf();
     }
+  } else if (datumIngang) {
+    lvm.aantekeningen = [{ createdAt: Date.now(), datumIngang }];
   }
   return lvm;
 };
 
-const careProviderFromViewModel = (careProvider: Partial<ICareProvider>) => {
-  const cp = deepCopy(careProvider);
+const careProviderFromViewModel = (cp: Partial<ICareProvider>) => {
   if (cp && cp.locaties) {
     cp.locaties = cp.locaties.map(locationFromViewModel);
   }
@@ -108,7 +111,7 @@ export const EditForm = () => {
     oninit: () => {
       return new Promise(async (resolve, reject) => {
         const cp = await careProvidersSvc.load(m.route.param('id')).catch(r => reject(r));
-        state.originalCareProvider = cp ? cp : ({} as ICareProvider);
+        state.originalCareProvider = cp ? deepCopy(cp) : ({} as ICareProvider);
         state.cp = cp ? careProviderToViewModel(cp) : ({} as ICareProvider);
         state.loaded = true;
         m.redraw();

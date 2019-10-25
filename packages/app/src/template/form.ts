@@ -37,6 +37,7 @@ export const countries = [
   { id: 'other', label: 'Land buiten Europa' },
 ];
 
+// See also https://developers.kvk.nl/images/Manual%20KvK%20API%20User%20v.%20%202%205%20def.pdf
 const rechtsvorm = [
   { id: 1, label: 'Eenmanszaak' },
   { id: 2, label: 'Eenmanszaak met meer dan één eigenaar' },
@@ -85,8 +86,16 @@ const rechtsvorm = [
 ];
 
 const ActivityForm: Form = [
-  { id: 'datumIngang', label: 'Ingangsdatum', type: 'date', min: Date.now(), required: true, className: 'col s6' },
-  { id: 'datumEinde', label: 'Einddatum', type: 'date', min: Date.now(), className: 'col s6' },
+  {
+    id: 'datumIngang',
+    disabled: true,
+    label: 'Ingangsdatum',
+    type: 'date',
+    min: Date.now(),
+    required: true,
+    className: 'col s6',
+  },
+  { id: 'datumEinde', disabled: true, label: 'Einddatum', type: 'date', min: Date.now(), className: 'col s6' },
 ];
 
 export const careOptions = [
@@ -132,7 +141,7 @@ const now = Date.now() - 30 * day;
 
 /** Zorgvorm formulier */
 export const CareForm: Form = [
-  { type: 'md', value: '###### Welke type zorg wordt geleverd?' },
+  { type: 'md', value: '###### Welk type zorg wordt geleverd?' },
   {
     id: 'zorgvorm',
     type: 'options',
@@ -141,27 +150,97 @@ export const CareForm: Form = [
     required: true,
     checkboxClass: 'col s12',
   },
-  { id: 'isActief', disabled: true, type: 'checkbox', className: 'col s12 m4', label: 'Is actief?' },
-  { id: 'datumIngang', label: 'Ingangsdatum', type: 'date', min: now, required: true, className: 'col s6 m4' },
-  { id: 'datumEinde', show: 'datumIngang', label: 'Einddatum', type: 'date', min: now, className: 'col s6 m4' },
-  { id: 'aantekeningen', disabled: true, label: 'Activiteit/aantekening', type: ActivityForm, repeat: true },
+  { type: 'md', show: 'isActief', value: 'Deze locatie is momenteel actief.' },
+  {
+    type: 'md',
+    show: '!isActief',
+    value: 'Deze locatie is momenteel niet actief. Specificeer een ingangsdatum om hem te activeren:',
+  },
+  // { id: 'isActief', disabled: true, type: 'checkbox', className: 'col s12 m4', label: 'Is actief?' },
+  { id: 'datumIngang', label: 'Ingangsdatum', type: 'date', min: now, required: true, className: 'col s6' },
+  { id: 'datumEinde', show: 'datumIngang', label: 'Einddatum', type: 'date', min: now, className: 'col s6' },
+  {
+    id: 'aantekeningen',
+    disabled: true,
+    label: 'Laatste activiteit/aantekening',
+    type: ActivityForm,
+    max: 1,
+    repeat: true,
+  },
 ];
 
-const addressDisabled = ['vestigingsnummer', 'kvk'];
-
 const AddressForm: Form = [
-  { type: 'md', value: `&nbsp;
-###### Bezoekadres gegevens` },
-  { type: 'md', show: ['vestigingsnummer', 'kvk'], value: '_Adresgegevens uit KvK. Indien incorrect, gaarne wijzigen bij KvK._' },
-  { id: 'postcode', disabled: addressDisabled, label: 'Postcode', type: 'text', className: 'col s6 m4' },
-  { id: 'huisnummer', disabled: addressDisabled, label: 'Huisnummer', type: 'number', className: 'col s6 m2' },
-  { id: 'huisletter', disabled: addressDisabled, label: 'Huisletter', type: 'text', className: 'col s6 m2' },
-  { id: 'huisnummerToevoeging', disabled: addressDisabled, label: 'Toevoeging', type: 'text', className: 'col s6 m4' },
-  { id: 'straat', disabled: addressDisabled, label: 'Straat', type: 'text', className: 'col s12 m4' },
-  { id: 'woonplaatsnaam', disabled: addressDisabled, label: 'Woonplaats', type: 'text', className: 'col s12 m4' },
-  { id: 'landnaam', disabled: addressDisabled, label: 'Land', value: 'netherlands', type: 'select', options: countries, className: 'col s12 m4' },
+  {
+    type: 'md',
+    value: `&nbsp;
+###### Bezoekadres gegevens`,
+  },
+  {
+    type: 'md',
+    show: ['kvk'],
+    value: '_Adresgegevens uit KvK. Indien incorrect, aub wijzigen bij KvK of KvK nummer verwijderen._',
+  },
+  { id: 'postcode', disabled: 'kvk', label: 'Postcode', type: 'text', className: 'col s6 m4' },
+  { id: 'huisnummer', disabled: 'kvk', label: 'Huisnummer', type: 'number', className: 'col s6 m2' },
+  { id: 'huisletter', disabled: 'kvk', label: 'Huisletter', type: 'text', className: 'col s6 m2' },
+  { id: 'huisnummerToevoeging', disabled: 'kvk', label: 'Toevoeging', type: 'text', className: 'col s6 m4' },
+  { id: 'straat', disabled: 'kvk', label: 'Straat', type: 'text', className: 'col s12 m4' },
+  { id: 'woonplaatsnaam', disabled: 'kvk', label: 'Woonplaats', type: 'text', className: 'col s12 m4' },
+  {
+    id: 'landnaam',
+    disabled: 'kvk',
+    label: 'Land',
+    value: 'netherlands',
+    type: 'select',
+    options: countries,
+    className: 'col s12 m4',
+  },
   {
     id: 'landnaamBuitenEuropa',
+    disabled: 'kvk',
+    label: 'Land buiten Europa',
+    type: 'text',
+    show: ['landnaam=other'],
+    className: 'col s12 m6',
+  },
+  { id: 'adreslocatieomschrijving', label: 'Locatieomschrijving adres', type: 'textarea' },
+];
+
+const LocationAddressForm: Form = [
+  {
+    type: 'md',
+    value: `&nbsp;
+###### Bezoekadres gegevens`,
+  },
+  {
+    type: 'md',
+    show: ['vestigingsnummer', 'kvk'],
+    value: '_Adresgegevens uit KvK. Indien incorrect, aub wijzigen bij KvK of vestigingsnummer verwijderen._',
+  },
+  { id: 'postcode', disabled: 'vestigingsnummer', label: 'Postcode', type: 'text', className: 'col s6 m4' },
+  { id: 'huisnummer', disabled: 'vestigingsnummer', label: 'Huisnummer', type: 'number', className: 'col s6 m2' },
+  { id: 'huisletter', disabled: 'vestigingsnummer', label: 'Huisletter', type: 'text', className: 'col s6 m2' },
+  {
+    id: 'huisnummerToevoeging',
+    disabled: 'vestigingsnummer',
+    label: 'Toevoeging',
+    type: 'text',
+    className: 'col s6 m4',
+  },
+  { id: 'straat', disabled: 'vestigingsnummer', label: 'Straat', type: 'text', className: 'col s12 m4' },
+  { id: 'woonplaatsnaam', disabled: 'vestigingsnummer', label: 'Woonplaats', type: 'text', className: 'col s12 m4' },
+  {
+    id: 'landnaam',
+    disabled: 'vestigingsnummer',
+    label: 'Land',
+    value: 'netherlands',
+    type: 'select',
+    options: countries,
+    className: 'col s12 m4',
+  },
+  {
+    id: 'landnaamBuitenEuropa',
+    disabled: 'vestigingsnummer',
     label: 'Land buiten Europa',
     type: 'text',
     show: ['landnaam=other'],
@@ -171,18 +250,33 @@ const AddressForm: Form = [
 ];
 
 const LocationForm: Form = [
-  { type: 'md', value: `##### Locatiegegevens
+  {
+    type: 'md',
+    value: `##### Locatiegegevens
 
-NB: De locatie is nooit het adres van de patiënt. In dat geval, gebruik het adres waar de zorg geleverd wordt.` },
+NB: De locatie is nooit het adres van de patiënt. In dat geval, gebruik het adres van waaruit de zorg geleverd wordt.`,
+  },
   { id: 'locatienaam', type: 'text', required: true, className: 'col s12 m8' },
   { id: 'vestigingsnummer', type: 'number', className: 'col s12 m4' },
   { id: 'locatieomschrijving', type: 'textarea' },
   { id: 'isWzd', label: 'Is het een WZD locatie?', type: 'checkbox', className: 'col s6 m6' },
-  { id: 'isWzdAcco', disabled: 'isWzd = false', label: 'Is het een WZD accomodatie?', type: 'checkbox', className: 'col s6 m6' },
+  {
+    id: 'isWzdAcco',
+    disabled: '!isWzd',
+    label: 'Is het een WZD accomodatie?',
+    type: 'checkbox',
+    className: 'col s6 m6',
+  },
   { id: 'isWvggz', label: 'Is het een WVGGZ locatie?', type: 'checkbox', className: 'col s6 m6' },
-  { id: 'isWvggzAcco', disabled: 'isWvggz = false', label: 'Is het een WVGGZ accomodatie?', type: 'checkbox', className: 'col s6 m6' },
+  {
+    id: 'isWvggzAcco',
+    disabled: '!isWvggz',
+    label: 'Is het een WVGGZ accomodatie?',
+    type: 'checkbox',
+    className: 'col s6 m6',
+  },
   { id: 'target' },
-  ...AddressForm,
+  ...LocationAddressForm,
   ...CareForm,
 ];
 
@@ -199,5 +293,12 @@ export const CareProviderForm: Form = [
   { type: 'md', value: 'Voeg op de volgende pagina uw locaties toe (zie menu links).' },
 
   { id: 'Locaties', type: 'section' },
-  { id: 'locaties', label: 'Nieuwe locatie toevoegen', type: LocationForm, repeat: true },
+  {
+    id: 'locaties',
+    label: 'Nieuwe locatie toevoegen',
+    type: LocationForm,
+    repeat: true,
+    pageSize: 1,
+    propertyFilter: 'target',
+  },
 ] as Form;
