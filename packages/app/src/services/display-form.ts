@@ -121,10 +121,11 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
           m('ul.nowrap', [
             m('li', [
               m('span.col.s3', m('b', 'Locatie')),
-              m('span.col.s4', m('b', 'Adres')),
-              m('span.col.s1', { style: 'padding-right: 0;' }, m('b', 'Accomodatie')),
+              m('span.col.s3', m('b', 'Adres')),
               m('span.col.s1', { style: 'padding-right: 0;' }, m('b', 'WZD')),
+              m('span.col.s1', { style: 'padding-right: 0;' }, m('b', 'Accomodatie')),
               m('span.col.s1', { style: 'padding-right: 0;' }, m('b', 'WVGGZ')),
+              m('span.col.s1', { style: 'padding-right: 0;' }, m('b', 'Accomodatie')),
               m('span.col.s2', m('b', 'Actief')),
             ]),
             ...filteredLocations.map(l =>
@@ -139,14 +140,15 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
                 [
                   m('span.col.s3', `${p(l.locatienaam)} ${p(l.vestigingsnummer, `, #${l.vestigingsnummer}`)}`),
                   m(
-                    'span.col.s4',
+                    'span.col.s3',
                     `${p(l.straat)} ${p(l.huisnummer)}${p(l.huisletter)}${p(l.huisnummerToevoeging)}, ${p(
                       l.postcode
                     )}, ${p(l.woonplaatsnaam)}`
                   ),
-                  m('span.col.s1', `${l.isAccommodatie ? 'ja' : ''}`),
                   m('span.col.s1', `${l.isWzd ? 'ja' : ''}`),
+                  m('span.col.s1', `${l.isWzdAcco ? 'ja' : ''}`),
                   m('span.col.s1', `${l.isWvggz ? 'ja' : ''}`),
+                  m('span.col.s1', `${l.isWvggzAcco ? 'ja' : ''}`),
                   m(
                     'span.col.s2',
                     `${
