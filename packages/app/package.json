@@ -36,28 +36,28 @@
   "dependencies": {
     "deep-object-diff": "^1.1.0",
     "file-saver": "^2.0.2",
-    "keycloak-js": "6.0.0",
+    "keycloak-js": "6.0.1",
     "leaflet": "^1.5.1",
     "leaflet-draw": "^1.0.4",
     "material-icons": "^0.3.1",
     "materialize-css": "^1.0.0",
     "mithril": "^2.0.4",
     "mithril-leaflet": "^0.1.6",
-    "mithril-materialized": "^0.15.2",
-    "mithril-ui-form": "^0.3.14",
+    "mithril-materialized": "^0.15.4",
+    "mithril-ui-form": "^0.3.16",
     "rest-easy-loki": "^0.4.1"
   },
   "devDependencies": {
     "@types/file-saver": "^2.0.1",
-    "@types/leaflet": "^1.5.2",
+    "@types/leaflet": "^1.5.5",
     "@types/lokijs": "^1.5.2",
     "@types/materialize-css": "^1.0.6",
-    "@types/mithril": "^2.0.0",
-    "autoprefixer": "^9.6.4",
+    "@types/mithril": "^2.0.2",
+    "autoprefixer": "^9.7.0",
     "concurrently": "^5.0.0",
     "cssnano": "^4.1.10",
     "parcel-bundler": "^1.12.4",
     "rimraf": "^3.0.0",
-    "typescript": "^3.6.3"
+    "typescript": "^3.6.4"
   }
 }
