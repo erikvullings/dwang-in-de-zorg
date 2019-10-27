@@ -72,7 +72,7 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
   };
 
   const uniqueLocationIdentifier = (l: ILocation) =>
-    `${p(l.postcode)}${p(l.huisnummer)}${p(l.huisnummer)}${p(l.huisnummerToevoeging)}`;
+    `${p(l.postcode)}${p(l.huisnummer)}${p(l.huisletter)}${p(l.huisnummerToevoeging)}`;
 
   return {
     view: ({ attrs: { careProvider: cp, filterValue } }) => {
