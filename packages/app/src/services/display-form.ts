@@ -1,5 +1,5 @@
 import m, { Attributes, FactoryComponent } from 'mithril';
-import { Pagination } from 'mithril-materialized';
+import { FlatButton, Pagination } from 'mithril-materialized';
 import { Form, labelResolver, LayoutForm } from 'mithril-ui-form';
 import { IAddress, ICareProvider, ILocation, isLocationActive } from '../../../common/dist';
 import { CareProviderForm } from '../template/form';
@@ -55,13 +55,16 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
 
   const ignoredIdsInCareForm = ['isActief', 'datumIngang', 'datumEinde'];
 
-  const abbreviatedCareForm = CareForm.reduce((acc, cur) => {
-    const { id } = cur;
-    if (!id || ignoredIdsInCareForm.indexOf(id) < 0) {
-      acc.push(cur);
-    }
-    return acc;
-  }, [] as Form);
+  const abbreviatedCareForm = CareForm.reduce(
+    (acc, cur) => {
+      const { id } = cur;
+      if (!id || ignoredIdsInCareForm.indexOf(id) < 0) {
+        acc.push(cur);
+      }
+      return acc;
+    },
+    [] as Form
+  );
 
   const getStartDate = (l: ILocation) => {
     if (l.aantekeningen) {
@@ -132,10 +135,7 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
               m(
                 'li.clickable',
                 {
-                  onclick: () => {
-                    const sd = uniqueLocationIdentifier(l);
-                    state.showDetails = showDetails === sd ? undefined : sd;
-                  },
+                  onclick: () => (state.showDetails = uniqueLocationIdentifier(l)),
                 },
                 [
                   m('span.col.s3', `${p(l.locatienaam)} ${p(l.vestigingsnummer, `, #${l.vestigingsnummer}`)}`),
@@ -160,11 +160,21 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
                     }`
                   ),
                   showDetails === uniqueLocationIdentifier(l)
-                    ? m('.col.s12.card.wrap', m(LayoutForm, {
-                      form: abbreviatedCareForm,
-                      obj: l,
-                      disabled: true,
-                    }))
+                    ? m('.col.s12.card.wrap', [
+                        m(FlatButton, {
+                          className: 'right',
+                          iconName: 'close',
+                          onclick: (e: UIEvent) => {
+                            state.showDetails = undefined;
+                            e.stopPropagation();
+                          },
+                        }),
+                        m(LayoutForm, {
+                          form: abbreviatedCareForm,
+                          obj: l,
+                          disabled: true,
+                        }),
+                      ])
                     : undefined,
                 ]
               )
