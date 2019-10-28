@@ -95,7 +95,7 @@ const ActivityForm: Form = [
     required: true,
     className: 'col s6',
   },
-  { id: 'datumEinde', disabled: true, label: 'Einddatum', type: 'date', min: Date.now(), className: 'col s6' },
+  { id: 'datumEinde', label: 'Einddatum', type: 'date', min: Date.now(), className: 'col s6' },
 ];
 
 export const careOptions = [
