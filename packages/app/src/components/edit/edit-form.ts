@@ -3,7 +3,7 @@ import M from 'materialize-css';
 import m from 'mithril';
 import { Button, Chips, ModalPanel } from 'mithril-materialized';
 import { deepCopy, LayoutForm } from 'mithril-ui-form';
-import { IActivity, ICareProvider, ILocation, isLocationActive, toQueryTarget } from '../../../../common/dist';
+import { IActivity, ICareProvider, ILocation, isLocationActive, toQueryTarget, IMutation } from '../../../../common/dist';
 import { careProvidersSvc } from '../../services';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
 import { Auth } from '../../services/login-service';
@@ -100,7 +100,9 @@ export const EditForm = () => {
     if (cp) {
       // console.log(JSON.stringify(cp, null, 2));
       const restoredCP = toQueryTarget(careProviderFromViewModel(cp));
-      const mutation = detailedDiff(originalCareProvider, restoredCP);
+      const mutation = detailedDiff(originalCareProvider, restoredCP) as IMutation;
+      mutation.editor = Auth.email;
+      mutation.docId = cp.$loki!;
       console.log(JSON.stringify(mutation, null, 2));
       await careProvidersSvc.save(restoredCP);
       state.cp = careProviderToViewModel(careProvidersSvc.getCurrent());
@@ -220,6 +222,7 @@ export const EditForm = () => {
             key: section,
             form,
             obj: cp,
+            disabled: Auth.email ? false : true,
             onchange: async () => {
               // console.log(JSON.stringify(event, null, 2));
               // console.log(JSON.stringify(event.memberCountries, null, 2));
