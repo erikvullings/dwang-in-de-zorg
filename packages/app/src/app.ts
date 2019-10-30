@@ -31,10 +31,10 @@ if (shouldLogin) {
           const roles = tokenParsed.realm_access.roles;
           if (
             tokenParsed.resource_access &&
-            tokenParsed.resource_access.locatieregister &&
-            tokenParsed.resource_access.locatieregister.roles
+            (tokenParsed.resource_access as any).locatieregister &&
+            (tokenParsed.resource_access as any).locatieregister.roles
           ) {
-            roles.push(...tokenParsed.resource_access.locatieregister.roles);
+            roles.push(...(tokenParsed.resource_access as any).locatieregister.roles);
           }
           Auth.setRoles(roles);
         }
