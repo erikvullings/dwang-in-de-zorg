@@ -58,6 +58,8 @@ export const Auth = {
   },
 };
 
+(window as any).Auth = Auth;
+
 export const Login: FactoryComponent = () => {
   return {
     view: () => {
