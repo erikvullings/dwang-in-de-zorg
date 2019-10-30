@@ -1,5 +1,6 @@
 import m, { Vnode } from 'mithril';
 import { Icon } from 'mithril-materialized';
+import { stripSpaces } from '../../../common/dist';
 import logo from '../assets/locatieregister.svg';
 import { IDashboard } from '../models';
 import { AppState } from '../models/app-state';
@@ -17,7 +18,7 @@ const canSearch = () => {
   return dashboardSvc ? dashboardSvc.route(Dashboards.SEARCH).indexOf(m.route.get()) >= 0 : false;
 };
 
-const search = debounce((query: string) => careProvidersSvc.search(query), 400);
+const search = debounce((query: string) => careProvidersSvc.search(stripSpaces(query)), 400);
 
 export const Layout = () => ({
   view: (vnode: Vnode) => {

@@ -1,6 +1,5 @@
 import m, { Attributes, FactoryComponent } from 'mithril';
 import { Icon } from 'mithril-materialized';
-import { stripSpaces } from '../../../../common/dist';
 
 export interface ISearchComponent extends Attributes {
   id?: string;
@@ -22,7 +21,7 @@ export const SearchComponent: FactoryComponent<ISearchComponent> = () => {
             oninput: (e: UIEvent) => {
               if (e.target) {
                 const input = e.target as HTMLInputElement;
-                search(stripSpaces(input.value));
+                search(input.value);
               }
             },
           }),
