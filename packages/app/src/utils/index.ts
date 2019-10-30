@@ -197,6 +197,7 @@ export const locationToCSV = (careProviderData: string) => ({
   zv: zorgvorm = [],
   aant: aantekeningen = [],
 }: ILocation) => {
+  const land = landnaam ? landnaam === 'netherlands' ? 'NL' : landnaam : landnaamBuitenEuropa;
   const locationData =
     careProviderData +
     [
@@ -209,7 +210,7 @@ export const locationToCSV = (careProviderData: string) => ({
       p(huisnummerToevoeging),
       p(postcode),
       p(woonplaatsnaam),
-      p(landnaam || landnaamBuitenEuropa),
+      p(land),
       p(aanvullendeAdresinformatie),
       p(isWzd, 'ja'),
       p(isWzdAcco, 'ja'),
@@ -309,6 +310,7 @@ export const careProviderToCSV = (
       'aantekeningingang',
       'aantekeningeinde',
     ].join(';') + ';';
+  const land = landnaam ? landnaam === 'netherlands' ? 'NL' : landnaam : landnaamBuitenEuropa;
   const careProviderData =
     [
       p(naam),
@@ -320,7 +322,7 @@ export const careProviderToCSV = (
       p(huisnummerToevoeging),
       p(postcode),
       p(woonplaatsnaam),
-      p(landnaam || landnaamBuitenEuropa),
+      p(land),
       p(aanvullendeAdresinformatie),
     ].join(';') + ';';
   const locToCSV = locationToCSV(careProviderData);
