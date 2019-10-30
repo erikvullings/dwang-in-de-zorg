@@ -26,7 +26,7 @@ export const FormView: FactoryComponent = () => {
     },
     view: () => {
       const { careProvider, loaded, filterValue } = state;
-      console.log(JSON.stringify(careProvider, null, 2));
+      // console.log(JSON.stringify(careProvider, null, 2));
       if (!loaded) {
         return m(CircularSpinner, { className: 'center-align', style: 'margin-top: 20%;' });
       }

@@ -3,10 +3,19 @@ import M from 'materialize-css';
 import m from 'mithril';
 import { Button, Chips, ModalPanel } from 'mithril-materialized';
 import { deepCopy, LayoutForm } from 'mithril-ui-form';
-import { IActivity, ICareProvider, ILocation, isLocationActive, toQueryTarget, IMutation } from '../../../../common/dist';
+import {
+  IActivity,
+  ICareProvider,
+  ILocation,
+  IMutation,
+  isLocationActive,
+  removeEmptyKeys,
+  toQueryTarget,
+} from '../../../../common/dist';
 import { careProvidersSvc } from '../../services';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
 import { Auth } from '../../services/login-service';
+import { mutationsSvc } from '../../services/mutations-service';
 import { CareProviderForm } from '../../template/form';
 import { capitalizeFirstLetter } from '../../utils';
 import { CircularSpinner } from '../ui/preloader';
@@ -20,16 +29,16 @@ interface ILocationVM extends ILocation, IActivity {
 const locationToViewModel = (l: ILocation) => {
   const now = Date.now();
   const lvm = l as ILocationVM;
-  const { aantekeningen } = lvm;
+  const { aant } = lvm;
   // console.table(lvm);
-  if (aantekeningen && aantekeningen instanceof Array && aantekeningen.length > 0) {
-    const { datumEinde, datumIngang } = aantekeningen[aantekeningen.length - 1];
+  if (aant && aant instanceof Array && aant.length > 0) {
+    const { de, di } = aant[aant.length - 1];
     lvm.isActief = isLocationActive(lvm);
-    if (!lvm.isActief && datumIngang && datumIngang < now) {
-      aantekeningen.push({ createdAt: now });
+    if (!lvm.isActief && di && di < now) {
+      aant.push({ dc: now });
     } else {
-      lvm.datumIngang = datumIngang;
-      lvm.datumEinde = datumEinde;
+      lvm.di = di;
+      lvm.de = de;
     }
   }
   return lvm;
@@ -44,23 +53,27 @@ const careProviderToViewModel = (cp: Partial<ICareProvider>) => {
 
 const locationFromViewModel = (l: ILocation) => {
   const lvm = l as ILocationVM;
-  const { aantekeningen, datumEinde, datumIngang } = lvm;
+  const { aant, de, di } = lvm;
   delete lvm.isActief;
-  delete lvm.datumEinde;
-  delete lvm.datumIngang;
-  if (aantekeningen && aantekeningen.length > 0) {
-    const laatsteAantekening = aantekeningen[aantekeningen.length - 1];
-    if (!laatsteAantekening.datumIngang) {
-      laatsteAantekening.createdAt = Date.now();
+  delete lvm.de;
+  delete lvm.di;
+  if (aant && aant.length > 0) {
+    const laatsteAantekening = aant[aant.length - 1];
+    if (!laatsteAantekening.di) {
+      laatsteAantekening.dc = Date.now();
     }
-    if (datumIngang) {
-      laatsteAantekening.datumIngang = new Date(datumIngang).valueOf();
+    if (di) {
+      laatsteAantekening.di = new Date(di).valueOf();
+    } else {
+      delete laatsteAantekening.di;
     }
-    if (datumEinde) {
-      laatsteAantekening.datumEinde = new Date(datumEinde).valueOf();
+    if (de) {
+      laatsteAantekening.de = new Date(de).valueOf();
+    } else {
+      delete laatsteAantekening.de;
     }
-  } else if (datumIngang) {
-    lvm.aantekeningen = [{ createdAt: Date.now(), datumIngang }];
+  } else if (di) {
+    lvm.aant = [{ dc: Date.now(), di }];
   }
   return lvm;
 };
@@ -92,20 +105,44 @@ export const EditForm = () => {
     context: {
       admin: true,
     },
+    canSave: false,
   };
+
+  /** Remove empty/non-informative fields from mutating the locations.aant array */
+  // const cleanup = (mut: IMutation) => {
+  //   if (!mut.added || !mut.added.locaties) { return mut; }
+
+  // };
 
   const onsubmit = async () => {
     log('submitting...');
+    state.canSave = false;
     const { cp, originalCareProvider } = state;
     if (cp) {
       // console.log(JSON.stringify(cp, null, 2));
       const restoredCP = toQueryTarget(careProviderFromViewModel(cp));
-      const mutation = detailedDiff(originalCareProvider, restoredCP) as IMutation;
+      const mutation = removeEmptyKeys(detailedDiff(originalCareProvider, restoredCP) as IMutation);
+      // console.log(JSON.stringify(originalCareProvider!.locaties![0], null, 2));
+      // console.log(JSON.stringify(restoredCP!.locaties![0], null, 2));
       mutation.editor = Auth.email;
       mutation.docId = cp.$loki!;
-      console.log(JSON.stringify(mutation, null, 2));
       await careProvidersSvc.save(restoredCP);
+      console.log(JSON.stringify(mutation, null, 2));
+      await mutationsSvc.save(mutation);
+      state.originalCareProvider = deepCopy(careProvidersSvc.getCurrent());
       state.cp = careProviderToViewModel(careProvidersSvc.getCurrent());
+    }
+  };
+
+  const formChanged = (cp?: Partial<ICareProvider>, section?: string) => {
+    const locaties = 'locaties';
+    state.canSave = true;
+    if (section && section.toLowerCase() === locaties) {
+      const i = m.route.param(locaties) ? +m.route.param(locaties) - 1 : 0;
+      if (cp && cp.locaties && cp.locaties.length > i) {
+        cp.locaties[i].mutated = Date.now();
+        console.log('Mutated on ' + new Date());
+      }
     }
   };
 
@@ -120,7 +157,6 @@ export const EditForm = () => {
         resolve();
       });
     },
-
     view: () => {
       const { cp, form, context, loaded } = state;
       if (!loaded) {
@@ -134,6 +170,8 @@ export const EditForm = () => {
           title: c.label || capitalizeFirstLetter(c.id),
         }));
       const section = m.route.param('section') || sections[0].id;
+      const canCrud = Auth.canCRUD(cp);
+
       return m('.row', [
         // m(
         //   '.col.s12.l3',
@@ -163,14 +201,16 @@ export const EditForm = () => {
                 className: 'right col s12',
                 onclick: () => dashboardSvc.switchTo(Dashboards.READ, { id: cp.$loki }),
               }),
-              // m(Button, {
-              //   label: 'Save event',
-              //   iconName: 'save',
-              //   class: `green col s12 ${hasChanged ? '' : 'disabled'}`,
-              //   onclick: onsubmit,
-              // }),
               m(Button, {
-                modalId: 'delete-event',
+                label: 'Bewaar registratie',
+                iconName: 'save',
+                class: `green col s12 ${state.canSave ? '' : 'disabled'}`,
+                onclick: async () => {
+                  await onsubmit();
+                },
+              }),
+              m(Button, {
+                modalId: 'delete-cp',
                 label: 'Verwijder registratie',
                 iconName: 'delete',
                 class: 'red col s12',
@@ -197,7 +237,7 @@ export const EditForm = () => {
                   )
                 )
               : undefined,
-            Auth.canCRUD(cp)
+            canCrud
               ? m(
                   'li',
                   m(
@@ -222,35 +262,27 @@ export const EditForm = () => {
             key: section,
             form,
             obj: cp,
-            disabled: Auth.email ? false : true,
-            onchange: async () => {
-              // console.log(JSON.stringify(event, null, 2));
-              // console.log(JSON.stringify(event.memberCountries, null, 2));
-              // state.cp = cp;
-              // console.log(JSON.stringify(cp, null, 2));
-              // const mutation = detailedDiff(state.originalCareProvider, cp);
-              // console.log(JSON.stringify(mutation, null, 2));
-              await onsubmit();
-            },
+            disabled: !canCrud,
+            onchange: () => formChanged(cp, section),
             context,
             section,
           }),
         ]),
         m(ModalPanel, {
-          id: 'delete-event',
+          id: 'delete-cp',
           title: 'Verwijder registratie',
           description: 'Weet u zeker dat u deze registratie wilt verwijderen? U kunt dit niet ongedaan maken.',
           options: { opacity: 0.7 },
           buttons: [
             {
-              label: 'Delete',
+              label: 'Verwijder',
               onclick: async () => {
                 careProvidersSvc.delete(cp.$loki);
                 close();
               },
             },
             {
-              label: 'Discard',
+              label: 'Afbreken',
             },
           ],
         }),

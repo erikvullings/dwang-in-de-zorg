@@ -4,7 +4,7 @@ export const stripSpaces = (s: string) => s.replace(/\s|,|\./g, '');
 
 /** Convert an address to something that is easy to query */
 const addressToQueryTarget = (a: Partial<IAddress>) => {
-  const { straat = '', huisnummer = 0, postcode = '', woonplaatsnaam = '' } = a;
+  const { str: straat = '', hn: huisnummer = 0, pc: postcode = '', wn: woonplaatsnaam = '' } = a;
   return `${stripSpaces(straat).toLowerCase()}${huisnummer ? huisnummer : ''}${stripSpaces(
     postcode
   ).toLowerCase()}${stripSpaces(woonplaatsnaam).toLowerCase()}`;
@@ -18,10 +18,8 @@ const careProviderToQueryTarget = (cp: Partial<ICareProvider>) => {
 
 /** Convert an care provider object to something that is easy to query */
 export const locationToQueryTarget = (loc: Partial<ILocation>) => {
-  const { locatienaam = '', vestigingsnummer = 0 } = loc;
-  return `${stripSpaces(locatienaam).toLowerCase()}${vestigingsnummer ? vestigingsnummer : ''}${addressToQueryTarget(
-    loc
-  )}`;
+  const { naam: locatienaam = '', nmr = 0 } = loc;
+  return `${stripSpaces(locatienaam).toLowerCase()}${nmr ? nmr : ''}${addressToQueryTarget(loc)}`;
 };
 
 export const toQueryTarget = (cp: Partial<ICareProvider>) => {
@@ -32,7 +30,32 @@ export const toQueryTarget = (cp: Partial<ICareProvider>) => {
   return cp;
 };
 
-/** Remove empty and undefined properties */
+/** Remove empty and undefined properties, returning a new copy. */
+export const removeEmptyKeys = <T extends { [key: string]: any }>(obj: T): T =>
+  Object.keys(obj)
+    .filter(f => obj[f] != null)
+    .reduce(
+      (r, i) =>
+        typeof obj[i] === 'object'
+          ? Object.keys(obj[i]).length === 0
+            ? r
+            : { ...r, [i]: removeEmpty(obj[i]) } // recurse.
+          : typeof obj[i] === 'undefined' || obj[i] === ''
+          ? r
+          : { ...r, [i]: obj[i] },
+      {} as T
+    );
+// export const removeEmpty = <T extends { [key: string]: any }>(obj: T): T =>
+//   Object.keys(obj)
+//     .filter(k => obj[k] != null) // Remove undef. and null.
+//     .reduce(
+//       (newObj, k) =>
+//         typeof obj[k] === 'object'
+//           ? { ...newObj, [k]: removeEmpty(obj[k]) } // Recurse.
+//           : { ...newObj, [k]: obj[k] }, // Copy value.
+//       {} as T
+//     );
+/** Remove empty properties by mutating the original object. */
 export const removeEmpty = <T>(obj: { [key: string]: any }): T => {
   Object.keys(obj).forEach(key => {
     if (obj[key] && typeof obj[key] === 'object') {
@@ -45,10 +68,10 @@ export const removeEmpty = <T>(obj: { [key: string]: any }): T => {
 };
 
 export const isLocationActive = (loc: ILocation) => {
-  if (!loc.aantekeningen) {
+  if (!loc.aant) {
     return false;
   }
-  const { datumIngang, datumEinde } = loc.aantekeningen[loc.aantekeningen.length - 1];
+  const { di: datumIngang, de: datumEinde } = loc.aant[loc.aant.length - 1];
   if (!datumIngang) {
     return false;
   }

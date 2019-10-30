@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as fs from 'fs';
 import * as Papa from 'papaparse';
 import * as path from 'path';
-import { ICareProvider, ILocation, locationToQueryTarget, toQueryTarget, removeEmpty } from '../../common/dist';
+import { ICareProvider, ILocation, locationToQueryTarget, removeEmpty, toQueryTarget } from '../../common/dist';
 
 const filename = path.resolve(process.cwd(), 'locatieregister.csv');
 
@@ -142,26 +142,28 @@ fs.readFile(filename, 'utf8', (err, csv) => {
         isOpnemen: ja(zvopnemen),
         isTijdelijkVerblijf: ja(zvtijdelijkverblijf),
       } as { [key: string]: boolean | undefined };
+      const now = Date.now();
       const location = {
-        locatienaam,
-        vestigingsnummer,
-        straat: lstraat,
-        postcode: lpostcode,
-        huisnummer: +lhuisnummer,
-        huisletter: lhuisletter,
-        huisnummerToevoeging: lhuisnummerToevoeging,
-        woonplaatsnaam: lwoonplaatsnaam,
-        landnaam: llandnaam || 'netherlands',
-        aanvullendeAdresinformatie: laanvadresinfo,
-        isAccommodatie: ja(isaccommodatie),
+        mutated: now,
+        naam: locatienaam,
+        nmr: vestigingsnummer,
+        str: lstraat,
+        pc: lpostcode,
+        hn: +lhuisnummer,
+        hl: lhuisletter,
+        toev: lhuisnummerToevoeging,
+        wn: lwoonplaatsnaam,
+        land: llandnaam || 'netherlands',
+        aanv: laanvadresinfo,
+        isWvggzAcco: ja(isaccommodatie),
         isWzd: ja(iswzd),
         isWvggz: ja(iswvggz),
-        zorgvorm: Object.keys(zorgvormen).filter(key => zorgvormen[key]),
-        aantekeningen: [
+        zv: Object.keys(zorgvormen).filter(key => zorgvormen[key]),
+        aant: [
           {
-            createdAt: Date.now(),
-            datumIngang: new Date(aantekeningingang).valueOf(),
-            datumEinde: aantekeningeinde ? new Date(aantekeningeinde).valueOf() : undefined,
+            dc: now,
+            di: new Date(aantekeningingang).valueOf(),
+            de: aantekeningeinde ? new Date(aantekeningeinde).valueOf() : undefined,
           },
         ],
       } as Partial<ILocation>;
@@ -182,15 +184,15 @@ fs.readFile(filename, 'utf8', (err, csv) => {
             naam,
             published: true,
             kvk: +kvk,
-            straat,
-            huisnummer: +huisnummer,
-            huisletter,
-            huisnummerToevoeging,
-            postcode,
-            woonplaatsnaam,
-            landnaam: landnaam || 'netherlands',
+            str: straat,
+            hn: +huisnummer,
+            hl: huisletter,
+            toev: huisnummerToevoeging,
+            pc: postcode,
+            wn: woonplaatsnaam,
+            land: landnaam || 'netherlands',
             // RoWe: aanvullende adresinfo
-            aanvullendeAdresinformatie: zaanvadresinfo,
+            aanv: zaanvadresinfo,
             locaties: [location],
           } as Partial<ICareProvider>;
           toQueryTarget(acc);
@@ -204,7 +206,7 @@ fs.readFile(filename, 'utf8', (err, csv) => {
   const cps = removeEmpty(careProviders) as Array<Partial<ICareProvider>>;
 
   cps.forEach(async cp => {
-    await axios.post('http://localhost:3000/zorgaanbieders', cp).catch(e => {
+    await axios.post('http://localhost:3030/zorgaanbieders', cp).catch(e => {
       console.error(e.message);
       console.log(cp.naam);
       console.log(JSON.stringify(cp).length);

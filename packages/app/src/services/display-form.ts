@@ -17,14 +17,14 @@ const AddressView: FactoryComponent<{ address: Partial<IAddress> }> = () => {
     view: ({
       attrs: {
         address: {
-          straat,
-          huisnummer,
-          huisletter,
-          huisnummerToevoeging,
-          postcode,
-          woonplaatsnaam,
-          landnaam,
-          landnaamBuitenEuropa,
+          str: straat,
+          hn: huisnummer,
+          hl: huisletter,
+          toev: huisnummerToevoeging,
+          pc: postcode,
+          wn: woonplaatsnaam,
+          land: landnaam,
+          fland: landnaamBuitenEuropa,
         },
       },
     }) => {
@@ -67,15 +67,14 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
   );
 
   const getStartDate = (l: ILocation) => {
-    if (l.aantekeningen) {
-      const di = l.aantekeningen[l.aantekeningen.length - 1].datumIngang;
+    if (l.aant) {
+      const di = l.aant[l.aant.length - 1].di;
       return di ? new Date(di).toLocaleDateString() : '';
     }
     return '';
   };
 
-  const uniqueLocationIdentifier = (l: ILocation) =>
-    `${p(l.postcode)}${p(l.huisnummer)}${p(l.huisletter)}${p(l.huisnummerToevoeging)}`;
+  const uniqueLocationIdentifier = (l: ILocation) => `${p(l.pc)}${p(l.hn)}${p(l.hl)}${p(l.toev)}`;
 
   return {
     view: ({ attrs: { careProvider: cp, filterValue } }) => {
@@ -126,10 +125,9 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
               m('span.col.s3', m('b', 'Locatie')),
               m('span.col.s3', m('b', 'Adres')),
               m('span.col.s1', { style: 'padding-right: 0;' }, m('b', 'WZD')),
-              m('span.col.s1', { style: 'padding-right: 0;' }, m('b', 'Accomodatie')),
               m('span.col.s1', { style: 'padding-right: 0;' }, m('b', 'WVGGZ')),
-              m('span.col.s1', { style: 'padding-right: 0;' }, m('b', 'Accomodatie')),
               m('span.col.s2', m('b', 'Actief')),
+              m('span.col.s2', m('b', 'Mutatie')),
             ]),
             ...filteredLocations.map(l =>
               m(
@@ -138,17 +136,10 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
                   onclick: () => (state.showDetails = uniqueLocationIdentifier(l)),
                 },
                 [
-                  m('span.col.s3', `${p(l.locatienaam)} ${p(l.vestigingsnummer, `, #${l.vestigingsnummer}`)}`),
-                  m(
-                    'span.col.s3',
-                    `${p(l.straat)} ${p(l.huisnummer)}${p(l.huisletter)}${p(l.huisnummerToevoeging)}, ${p(
-                      l.postcode
-                    )}, ${p(l.woonplaatsnaam)}`
-                  ),
+                  m('span.col.s3', `${p(l.naam)} ${p(l.nmr, `, #${l.nmr}`)}`),
+                  m('span.col.s3', `${p(l.str)} ${p(l.hn)}${p(l.hl)}${p(l.toev)}, ${p(l.pc)}, ${p(l.wn)}`),
                   m('span.col.s1', `${l.isWzd ? 'ja' : ''}`),
-                  m('span.col.s1', `${l.isWzdAcco ? 'ja' : ''}`),
                   m('span.col.s1', `${l.isWvggz ? 'ja' : ''}`),
-                  m('span.col.s1', `${l.isWvggzAcco ? 'ja' : ''}`),
                   m(
                     'span.col.s2',
                     `${
@@ -159,6 +150,7 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
                         : ''
                     }`
                   ),
+                  m('span.col.s2', `${p(l.mutated, new Date(l.mutated).toLocaleDateString())}`),
                   showDetails === uniqueLocationIdentifier(l)
                     ? m('.col.s12.card.wrap', [
                         m(FlatButton, {

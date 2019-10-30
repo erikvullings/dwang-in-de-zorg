@@ -1,8 +1,8 @@
 export interface IActivity {
-  /** Datum van aanmaken "activity" record */
-  createdAt: number;
+  /** Datum van aanmaken "activity" record, date created */
+  dc: number;
   /** Ingangsdatum */
-  datumIngang?: number;
+  di?: number;
   /** Einddatum */
-  datumEinde?: number;
+  de?: number;
 }

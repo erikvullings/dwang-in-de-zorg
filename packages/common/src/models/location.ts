@@ -4,9 +4,14 @@ import { IQueryable } from './care-provider';
 import { CareType } from './care-type';
 
 export interface ILocation extends IAddress, IQueryable {
-  locatienaam: string;
-  locatieomschrijving: string;
-  vestigingsnummer?: number;
+  /** Last edited on (date as number, Unix timestamp) */
+  mutated: number;
+  /** Locatienaam */
+  naam: string;
+  /** Locatieomschrijving */
+  omschr: string;
+  /** Vestigingsnummer */
+  nmr?: number;
   /** Is de locatie een WZD accommodatie */
   isWzdAcco: boolean;
   /** Is de locatie een WVGGZ accommodatie */
@@ -16,7 +21,7 @@ export interface ILocation extends IAddress, IQueryable {
   /** Wordt op de locatie Wvggz zorg geleverd */
   isWvggz?: boolean;
   /** Welk type zorg wordt geleverd */
-  zorgvorm?: CareType[];
-  /** Een locatie heeft 1..n "activity records" */
-  aantekeningen: IActivity[];
+  zv?: CareType[];
+  /** Een locatie heeft 1..n aantekeningen */
+  aant: IActivity[];
 }
