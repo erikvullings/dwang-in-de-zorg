@@ -99,6 +99,7 @@ export const EventsList = () => {
                         },
                         m(Icon, {
                           iconName: 'cloud_download',
+                          style: 'cursor: pointer;'
                         })
                       ),
                       m(
