@@ -172,30 +172,30 @@ export const range = (from: number, to: number, step: number = 1) => {
   return arr;
 };
 
-export const activityToCSV = (locationData: string) => ({ datumIngang, datumEinde }: IActivity) =>
+export const activityToCSV = (locationData: string) => ({ di: datumIngang, de: datumEinde }: IActivity) =>
   `${locationData}${datumIngang ? new Date(datumIngang).toLocaleDateString() : ''};${
     datumEinde ? new Date(datumEinde).toLocaleDateString() : ''
   };`;
 
 export const locationToCSV = (careProviderData: string) => ({
-  locatienaam,
-  locatieomschrijving,
-  vestigingsnummer,
-  straat,
-  huisnummer,
-  huisletter,
-  huisnummerToevoeging,
-  postcode,
-  woonplaatsnaam,
-  landnaam,
-  landnaamBuitenEuropa,
-  aanvullendeAdresinformatie,
+  naam: locatienaam,
+  omschr: locatieomschrijving,
+  nmr: vestigingsnummer,
+  str: straat,
+  hn: huisnummer,
+  hl: huisletter,
+  toev: huisnummerToevoeging,
+  pc: postcode,
+  wn: woonplaatsnaam,
+  land: landnaam,
+  fland: landnaamBuitenEuropa,
+  aanv: aanvullendeAdresinformatie,
   isWzd,
   isWzdAcco,
   isWvggz,
   isWvggzAcco,
-  zorgvorm = [],
-  aantekeningen = [],
+  zv: zorgvorm = [],
+  aant: aantekeningen = [],
 }: ILocation) => {
   const locationData =
     careProviderData +
@@ -237,7 +237,8 @@ export const locationToCSV = (careProviderData: string) => ({
     ].join(';') +
     ';';
   const actToCsv = activityToCSV(locationData);
-  return aantekeningen.map(actToCsv);
+  return actToCsv(aantekeningen[aantekeningen.length - 1]);
+  // return aantekeningen.map(actToCsv);
 };
 
 export const careProviderToCSV = (
@@ -245,15 +246,15 @@ export const careProviderToCSV = (
     naam,
     kvk,
     rechtsvorm,
-    straat,
-    huisnummer,
-    huisletter,
-    huisnummerToevoeging,
-    postcode,
-    woonplaatsnaam,
-    landnaam,
-    landnaamBuitenEuropa,
-    aanvullendeAdresinformatie,
+    str: straat,
+    hn: huisnummer,
+    hl: huisletter,
+    toev: huisnummerToevoeging,
+    pc: postcode,
+    wn: woonplaatsnaam,
+    land: landnaam,
+    fland: landnaamBuitenEuropa,
+    aanv: aanvullendeAdresinformatie,
     locaties = [],
   }: Partial<ICareProvider>,
   includeHeader = true
