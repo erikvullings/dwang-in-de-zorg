@@ -10,6 +10,7 @@ FROM node:alpine AS builder
 #   npm i -g typescript
 ARG NODE_ENV=development
 ENV NODE_ENV=${NODE_ENV}
+ENV PARCEL_WORKERS=1
 # ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
 # optionally if you want to run npm global bin without specifying path
 # ENV PATH=$PATH:/home/node/.npm-global/bin
