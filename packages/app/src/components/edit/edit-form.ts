@@ -20,8 +20,6 @@ import { CareProviderForm } from '../../template/form';
 import { capitalizeFirstLetter } from '../../utils';
 import { CircularSpinner } from '../ui/preloader';
 
-const log = console.log;
-
 interface ILocationVM extends ILocation, IActivity {
   isActief: boolean;
 }
@@ -86,7 +84,7 @@ const careProviderFromViewModel = (cp: Partial<ICareProvider>) => {
 };
 
 const close = async (e?: UIEvent) => {
-  log('closing...');
+  // log('closing...');
   m.route.set('/');
   if (e) {
     e.preventDefault();
@@ -115,7 +113,7 @@ export const EditForm = () => {
   // };
 
   const onsubmit = async () => {
-    log('submitting...');
+    // log('submitting...');
     state.canSave = false;
     const { cp, originalCareProvider } = state;
     if (cp) {
@@ -127,7 +125,7 @@ export const EditForm = () => {
       mutation.editor = Auth.email;
       mutation.docId = cp.$loki!;
       await careProvidersSvc.save(restoredCP);
-      console.log(JSON.stringify(mutation, null, 2));
+      // console.log(JSON.stringify(mutation, null, 2));
       await mutationsSvc.save(mutation);
       state.originalCareProvider = deepCopy(careProvidersSvc.getCurrent());
       state.cp = careProviderToViewModel(careProvidersSvc.getCurrent());
@@ -141,7 +139,7 @@ export const EditForm = () => {
       const i = m.route.param(locaties) ? +m.route.param(locaties) - 1 : 0;
       if (cp && cp.locaties && cp.locaties.length > i) {
         cp.locaties[i].mutated = Date.now();
-        console.log('Mutated on ' + new Date());
+        // console.log('Mutated on ' + new Date());
       }
     }
   };
