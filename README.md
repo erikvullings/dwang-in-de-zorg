@@ -24,6 +24,18 @@ npm build:domain
 npm run serve
 ```
 
+## TODO
+
+- CSV: Slaan we alle aantekeningen op, of alleen de huidige. Laatste...
+- Date picker modals worden teveel aangemaakt - bug in mithril-materialized
+- Mutaties opslaan
+- Locatie wijzigingen van een datumstempel voorzien
+- Repeat items: wat als er 1200 locaties zijn? Pagination + filter
+- KvK koppeling
+- PDOK koppeling
+- Docker versie bouwen
+  - locatieregister.db in volume data (Kubernetics: persistent volume cache oid pvc)
+
 ## Development
 
 As above, but now run `parcel` in watch mode, and access the application at [http://localhost:3000](http://localhost:1234).
