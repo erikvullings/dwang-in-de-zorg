@@ -36,7 +36,7 @@ export const EventsList = () => {
       const filteredCareProviders =
         careProviders
           .filter(
-            cp => cp.published || (Auth.authenticated && (Auth.roles.indexOf(Roles.ADMIN) >= 0 || Auth.canEdit(cp)))
+            cp => cp.published || (Auth.isAuthenticated && (Auth.roles.indexOf(Roles.ADMIN) >= 0 || Auth.canEdit(cp)))
           )
           .filter((_, i) => i < 24) || [];
       // console.log(JSON.stringify(filteredCareProviders, null, 2));
@@ -49,7 +49,7 @@ export const EventsList = () => {
             },
           },
           [
-            Auth.authenticated
+            Auth.isAuthenticated
               ? m(FlatButton, {
                   label: 'Nieuwe zorgaanbieder',
                   iconName: 'add',
