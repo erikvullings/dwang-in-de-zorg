@@ -151,7 +151,7 @@ export class RestService<T extends { $loki?: number }> {
   // }
   /** Create the base URL, either using the apiService or the apiDevService */
   protected createBaseUrl(): string {
-    return `${AppState.apiService}/${this.urlFragment}/`;
+    return `${AppState.apiService}/api/${this.urlFragment}/`;
   }
 
   private setCurrent(value: T) {

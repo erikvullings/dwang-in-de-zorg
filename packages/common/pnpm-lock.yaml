@@ -10,4 +10,4 @@ packages:
     resolution:
       integrity: sha512-unoCll1+l+YK4i4F8f22TaNVPRHcD9PA3yCuZ8g5e0qGqlVlJ/8FSateOLLSagn+Yg5+ZwuPkL8LFUc0Jcvksg==
 specifiers:
-  typescript: ^3.4.3
+  typescript: ^3.6.4
