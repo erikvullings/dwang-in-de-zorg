@@ -1,7 +1,7 @@
 {
   "name": "dwang-in-de-zorg",
   "version": "0.0.1",
-  "description": "Capture, store and share your learned lessons in a simple to use web application.",
+  "description": "Register your care locations in a dedicated CMS-like application.",
   "scripts": {
     "clean": "pnpm recursive run cleanup",
     "start": "pnpm recursive run dev",
@@ -35,6 +35,6 @@
   },
   "homepage": "https://github.com/erikvullings/dwang-in-de-zorg#readme",
   "devDependencies": {
-    "pnpm": "^4.1.4"
+    "pnpm": "^4.1.7"
   }
 }

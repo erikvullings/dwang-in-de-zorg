@@ -30,6 +30,6 @@
   },
   "homepage": "https://github.com/erikvullings/dwang-in-de-zorg#readme",
   "devDependencies": {
-    "typescript": "^3.6.4"
+    "typescript": "^3.7.2"
   }
 }

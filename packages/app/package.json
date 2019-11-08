@@ -60,6 +60,11 @@
     "cssnano": "^4.1.10",
     "parcel-bundler": "^1.12.4",
     "rimraf": "^3.0.0",
-    "typescript": "^3.6.4"
-  }
+    "typescript": "^3.7.2"
+  },
+  "browserslist": [
+    "last 1 version",
+    "> 1%",
+    "IE 11"
+  ]
 }

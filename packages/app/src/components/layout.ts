@@ -1,24 +1,13 @@
 import m, { Vnode } from 'mithril';
 import { Icon } from 'mithril-materialized';
-import { stripSpaces } from '../../../common/dist';
 import logo from '../assets/locatieregister.svg';
 import { IDashboard } from '../models';
-import { AppState } from '../models/app-state';
-import { careProvidersSvc } from '../services';
-import { Dashboards, dashboardSvc } from '../services/dashboard-service';
-import { debounce } from '../utils';
-import { SearchComponent } from './ui/search-component';
+import { dashboardSvc } from '../services/dashboard-service';
 
 const stripRouteParams = (path: string) => path.replace(/:[a-zA-Z]+/, '');
 
 const isActiveRoute = (route = m.route.get()) => (path: string) =>
   path.length > 1 && route.indexOf(stripRouteParams(path)) >= 0 ? '.active' : '';
-
-const canSearch = () => {
-  return dashboardSvc ? dashboardSvc.route(Dashboards.SEARCH).indexOf(m.route.get()) >= 0 : false;
-};
-
-const search = debounce((query: string) => careProvidersSvc.search(stripSpaces(query)), 400);
 
 export const Layout = () => ({
   view: (vnode: Vnode) => {
@@ -53,20 +42,9 @@ export const Layout = () => ({
                 style: 'margin-left: 5px;',
               })
             ),
-            m('ul.right', [
-              canSearch()
-                ? m(
-                    'li',
-                    m(SearchComponent, {
-                      search: q => {
-                        AppState.searchQuery = q;
-                        search(q);
-                      },
-                      query: AppState.searchQuery,
-                    })
-                  )
-                : undefined,
-              ...dashboardSvc
+            m(
+              'ul.right',
+              dashboardSvc
                 .getList()
                 .filter(d => d.visible || isActive(d.route))
                 .map((d: IDashboard) =>
@@ -83,8 +61,8 @@ export const Layout = () => ({
                       )
                     )
                   )
-                ),
-            ]),
+                )
+            ),
           ])
         )
       ),

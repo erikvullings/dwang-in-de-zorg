@@ -99,6 +99,7 @@ a,
 }
 .contentarea {
   padding-left: 150px;
+  height: 85vh;
 }
 #search:not(:focus) {
   color: white;
@@ -189,4 +190,8 @@ ul.nowrap > li .wrap span {
 li.clickable {
   cursor: pointer;
   color: #1a237e;
+}
+
+.repeat-list .pagination {
+  margin: 0;
 }

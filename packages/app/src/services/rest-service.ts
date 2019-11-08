@@ -10,6 +10,7 @@ const error = console.error;
 export class RestService<T extends { $loki?: number }> {
   protected current: T = {} as T;
   protected list: T[] = [];
+  protected filteredList: T[] = [];
   protected baseUrl: string;
   protected channel: IChannelDefinition<{ list: T[] } | { cur: T; old: T }>;
   protected withCredentials = false;
@@ -81,12 +82,6 @@ export class RestService<T extends { $loki?: number }> {
     }
   }
 
-  public unload() {
-    if (this.current) {
-      this.new();
-    }
-  }
-
   public async load(id?: number | string): Promise<T | undefined> {
     if (id === '-1') {
       return this.current;
@@ -115,30 +110,23 @@ export class RestService<T extends { $loki?: number }> {
     }
     this.setList(result || []);
     return this.list;
-    // try {
-    //   const result = await m.request<T[]>({
-    //     method: 'GET',
-    //     url: this.baseUrl,
-    //     withCredentials: this.withCredentials,
-    //   });
-    //   if (!result) {
-    //     throw Error('No result found at ' + this.baseUrl);
-    //   }
-    //   this.setList(result);
-    //   return this.list;
-    // } catch (error) {
-    //   if (this.useDevServer) {
-    //     throw Error(`No result found at ${this.baseUrl}\n${error}`);
-    //   }
-    //   this.useDevServer = true;
-    //   this.baseUrl = this.createBaseUrl(true);
-    //   return this.loadList();
-    // }
   }
 
-  public new(item?: T) {
-    this.setCurrent(item || ({} as T));
-    return this.current;
+  public async loadFilteredList(filter: string, refresh = false): Promise<T[] | undefined> {
+    if (!refresh && this.filteredList && this.filteredList.length > 0) {
+      this.list = this.filteredList;
+      return this.list;
+    }
+    this.filteredList = await m.request<T[]>({
+      method: 'GET',
+      url: this.baseUrl + filter,
+      withCredentials: this.withCredentials,
+    });
+    if (!this.filteredList) {
+      console.warn('No result found at ' + this.baseUrl);
+    }
+    this.setList(this.filteredList || []);
+    return this.list;
   }
 
   protected setList(value: T[]) {
@@ -146,9 +134,6 @@ export class RestService<T extends { $loki?: number }> {
     this.channel.publish(TopicNames.LIST_UPDATE, { list: this.list });
   }
 
-  // private createBaseUrl(): string {
-  //   return `http://localhost:3000/${this.urlFragment}/`;
-  // }
   /** Create the base URL, either using the apiService or the apiDevService */
   protected createBaseUrl(): string {
     return `${AppState.apiService}/api/${this.urlFragment}/`;

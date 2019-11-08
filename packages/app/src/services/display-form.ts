@@ -2,14 +2,16 @@ import m, { Attributes, FactoryComponent } from 'mithril';
 import { FlatButton, Pagination } from 'mithril-materialized';
 import { Form, labelResolver, LayoutForm } from 'mithril-ui-form';
 import { IAddress, ICareProvider, ILocation, isLocationActive } from '../../../common/dist';
-import { CareProviderForm } from '../template/form';
-import { CareForm } from '../template/form';
+import { CareProviderForm, LocationForm } from '../template/form';
 import { p, range, slice, targetFilter } from '../utils';
 import { Dashboards, dashboardSvc } from './dashboard-service';
 
 export interface IFormattedEvent extends Attributes {
   careProvider: Partial<ICareProvider>;
   filterValue?: string;
+  isActive?: boolean;
+  isWzd?: boolean;
+  isWvggz?: boolean;
 }
 
 const AddressView: FactoryComponent<{ address: Partial<IAddress> }> = () => {
@@ -53,9 +55,9 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
     showDetails?: string;
   };
 
-  const ignoredIdsInCareForm = ['isActief', 'datumIngang', 'datumEinde'];
+  const ignoredIdsInCareForm = ['active', 'nonactive', 'di', 'de'];
 
-  const abbreviatedCareForm = CareForm.reduce(
+  const abbreviatedCareForm = LocationForm.reduce(
     (acc, cur) => {
       const { id } = cur;
       if (!id || ignoredIdsInCareForm.indexOf(id) < 0) {
@@ -77,7 +79,7 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
   const uniqueLocationIdentifier = (l: ILocation) => `${p(l.pc)}${p(l.hn)}${p(l.hl)}${p(l.toev)}`;
 
   return {
-    view: ({ attrs: { careProvider: cp, filterValue } }) => {
+    view: ({ attrs: { careProvider: cp, filterValue, isActive, isWvggz, isWzd } }) => {
       const { naam, kvk, locaties = [], $loki } = cp;
       const { showDetails, resolveObj } = state;
 
@@ -89,7 +91,14 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
       const activeLocations =
         locaties && locaties.length > 0 ? locaties.reduce((acc, cur) => acc + (isLocationActive(cur) ? 1 : 0), 0) : 0;
 
-      const queryResults = query ? locaties && locaties.filter(query) : locaties;
+      const queryResults = query
+        ? locaties &&
+          locaties
+            .filter(query)
+            .filter(l => !isWzd || l.isWzd)
+            .filter(l => !isWvggz || l.isWvggz)
+            .filter(l => !isActive || isLocationActive(l))
+        : locaties;
       const page = m.route.param('page') ? +m.route.param('page') : 1;
       const curPage = queryResults && (page - 1) * paginationSize < queryResults.length ? page : 1;
       const filteredLocations =

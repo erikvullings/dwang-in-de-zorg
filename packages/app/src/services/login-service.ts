@@ -25,6 +25,7 @@ const authSuccessHandler = (authenticated: boolean) => {
 export const Auth = {
   keycloak: {} as KeycloakInstance,
   isAuthenticated: false,
+  name: '',
   username: '',
   email: '',
   token: window.localStorage.getItem(tokenKey) || '',
@@ -50,7 +51,8 @@ export const Auth = {
     if (token && refreshToken && tokenParsed) {
       window.localStorage.setItem(tokenKey, token);
       window.localStorage.setItem(refreshTokenKey, refreshToken);
-      Auth.setUsername((tokenParsed as any).name || '');
+      Auth.setUsername((tokenParsed as any).preferred_username || '');
+      Auth.setName((tokenParsed as any).name || '');
       Auth.setEmail((tokenParsed as any).email || '');
       if (tokenParsed.realm_access) {
         const roles = tokenParsed.realm_access.roles;
@@ -93,6 +95,9 @@ export const Auth = {
   setUsername(username: string) {
     Auth.username = username;
   },
+  setName(name: string) {
+    Auth.name = name;
+  },
   setEmail(email: string) {
     Auth.email = email;
   },
@@ -107,8 +112,9 @@ export const Auth = {
     window.localStorage.removeItem(refreshTokenKey);
   },
   async refreshLogin() {
-    await Auth.init();
     if (Auth.isLoggedIn()) {
+      await Auth.init();
+      Auth.cleanTokens();
       Auth.keycloak
         .init({
           onLoad: 'check-sso',
@@ -133,7 +139,7 @@ export const Auth = {
         redirectUri: window.location.href.replace('?', '') + '?',
       })
       .success((authenticated: boolean) => {
-        authSuccessHandler(authenticated);
+          authSuccessHandler(authenticated);
       })
       .error(authErrorHandler);
   },
@@ -141,9 +147,11 @@ export const Auth = {
     Auth.cleanTokens();
     Auth.setAuthenticated(false);
     Auth.setUsername('');
+    Auth.setName('');
     Auth.setEmail('');
     Auth.setRoles([]);
     Auth.keycloak.logout();
+    m.route.set('/');
   },
 };
 
@@ -178,8 +186,17 @@ export const Login: FactoryComponent = () => {
                   inline: true,
                 })
               ),
-              m('.col.s12', m(FlatButton, { label: 'Logout', iconName: 'exit_to_app', onclick: () => Auth.logout() })),
-            ]
+              m(
+                '.col.s12',
+                m(FlatButton, {
+                  label: 'Logout',
+                  iconName: 'exit_to_app',
+                  onclick: (e: any) => {
+                    Auth.logout();
+                    e.redraw = false;
+                  },
+                })
+              )            ]
           : m(CircularSpinner, { className: 'center-align', style: 'margin-top: 20%;' })
       );
     },

@@ -99,8 +99,6 @@ const ActivityForm: Form = [
 ];
 
 export const careOptions = [
-  { id: 'isAmbulantGeleverd', label: 'Is ambulant geleverd?' },
-  { id: 'isKlinischGeleverd', label: 'Is klinisch geleverd?' },
   {
     id: 'isVochtVoedingMedicatie',
     label:
@@ -149,8 +147,9 @@ export const CareForm: Form = [
     multiple: true,
     checkboxClass: 'col s12',
   },
-  { type: 'md', show: 'isActief', value: 'Deze locatie is momenteel actief.' },
+  { id: 'active', type: 'md', show: 'isActief', value: 'Deze locatie is momenteel actief.' },
   {
+    id: 'nonactive',
     type: 'md',
     show: '!isActief',
     value: 'Deze locatie is momenteel niet actief. Specificeer een ingangsdatum om hem te activeren:',
@@ -249,7 +248,7 @@ const LocationAddressForm: Form = [
   { id: 'omschr', label: 'Locatieomschrijving adres', type: 'textarea' },
 ];
 
-const LocationForm: Form = [
+export const LocationForm: Form = [
   {
     type: 'md',
     value: `##### Locatiegegevens (laatste wijziging op {{mutated:date}})
@@ -276,6 +275,7 @@ NB: De locatie is nooit het adres van de patiënt. In dat geval, gebruik het adr
     type: 'checkbox',
     className: 'col s6 m6',
   },
+  { id: 'isAmbulant', show: 'isWzdAcco === true', label: 'Levert ambulante zorg?', type: 'checkbox', className: 'col s12' },
   { id: 'target' },
   ...CareForm,
 ];

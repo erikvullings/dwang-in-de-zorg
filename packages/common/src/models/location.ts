@@ -14,6 +14,8 @@ export interface ILocation extends IAddress, IQueryable {
   nmr?: number;
   /** Is de locatie een WZD accommodatie */
   isWzdAcco: boolean;
+  /** Levert de accomodatie ambulante zorg */
+  isAmbulant: boolean;
   /** Is de locatie een WVGGZ accommodatie */
   isWvggzAcco: boolean;
   /** Wordt op de locatie Wzd-zorg geleverd */

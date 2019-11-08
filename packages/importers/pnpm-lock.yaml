@@ -2,17 +2,17 @@ dependencies:
   axios: 0.19.0
   papaparse: 5.1.0
 devDependencies:
-  '@types/node': 12.7.11
+  '@types/node': 12.12.6
   '@types/papaparse': 5.0.1
 lockfileVersion: 5.1
 packages:
-  /@types/node/12.7.11:
+  /@types/node/12.12.6:
     dev: true
     resolution:
-      integrity: sha512-Otxmr2rrZLKRYIybtdG/sgeO+tHY20GxeDjcGmUnmmlCWyEnv2a2x1ZXBo3BTec4OiTXMQCiazB8NMBf0iRlFw==
+      integrity: sha512-FjsYUPzEJdGXjwKqSpE0/9QEh6kzhTAeObA54rn6j3rR4C/mzpI9L0KNfoeASSPMMdxIsoJuCLDWcM/rVjIsSA==
   /@types/papaparse/5.0.1:
     dependencies:
-      '@types/node': 12.7.11
+      '@types/node': 12.12.6
     dev: true
     resolution:
       integrity: sha512-neEiIoeNezVK5yAWuO0El6056BBt+SPy0BtDmggcy1fSdfxLltE4WXaSsnPI2V4SxoRGIEAtkZyeDRxHXhcAKQ==
@@ -52,7 +52,7 @@ packages:
     resolution:
       integrity: sha512-3jEYMiCc8qN7V5ffi2BTS2mRauKxCu5AIED6DxbjnHhIm7OY7fzKYkndfPlHWaaKUDCTml5XTU6V+hiuxGlZuw==
 specifiers:
-  '@types/node': ^12.7.11
+  '@types/node': ^12.12.6
   '@types/papaparse': ^5.0.1
   axios: ^0.19.0
   papaparse: ^5.1.0

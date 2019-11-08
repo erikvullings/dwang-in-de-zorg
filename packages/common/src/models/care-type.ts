@@ -1,6 +1,6 @@
 export type CareType =
-  | 'isAmbulantGeleverd'
-  | 'isKlinischGeleverd'
+  // | 'isAmbulantGeleverd'
+  // | 'isKlinischGeleverd'
   | 'isBejegening'
   | 'isVerzorging'
   | 'isVerpleging'
@@ -8,7 +8,6 @@ export type CareType =
   | 'isBegeleiding'
   | 'isBescherming'
   | 'isVochtVoedingMedicatie'
-  // | 'isMedischeControles'
   | 'isBeperkenBewegingsvrijheid'
   | 'isInsluiten'
   | 'isToezicht'

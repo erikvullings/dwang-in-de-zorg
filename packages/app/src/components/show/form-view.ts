@@ -7,10 +7,14 @@ import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
 import { DisplayForm } from '../../services/display-form';
 import { Auth } from '../../services/login-service';
 import { CircularSpinner } from '../ui/preloader';
+import { careProviderToCSV } from '../../utils';
 
 export const FormView: FactoryComponent = () => {
   const state = {
     filterValue: '',
+    isActive: false,
+    isWzd: false,
+    isWvggz: false,
     careProvider: {} as Partial<ICareProvider>,
     loaded: false,
   };
@@ -18,14 +22,14 @@ export const FormView: FactoryComponent = () => {
   return {
     oninit: () => {
       return new Promise(async (resolve, reject) => {
-        const event = await careProvidersSvc.load(m.route.param('id')).catch(r => reject(r));
-        state.careProvider = event ? deepCopy(event) : ({} as ICareProvider);
+        const cp = await careProvidersSvc.load(m.route.param('id')).catch(r => reject(r));
+        state.careProvider = cp ? deepCopy(cp) : ({} as ICareProvider);
         state.loaded = true;
         resolve();
       });
     },
     view: () => {
-      const { careProvider, loaded, filterValue } = state;
+      const { careProvider, loaded, filterValue, isActive, isWzd, isWvggz } = state;
       // console.log(JSON.stringify(careProvider, null, 2));
       if (!loaded) {
         return m(CircularSpinner, { className: 'center-align', style: 'margin-top: 20%;' });
@@ -52,16 +56,24 @@ export const FormView: FactoryComponent = () => {
               style: 'margin-right:100px',
               className: 'col s12',
             }),
-            // m(Select, {
-            //   placeholder: 'Select one',
-            //   label: 'Country',
-            //   checkedId: countryFilter,
-            //   options: countries,
-            //   iconName: 'public',
-            //   multiple: true,
-            //   onchange: f => (state.countryFilter = f),
-            //   className: 'col s12',
-            // }),
+            m(InputCheckbox, {
+              label: 'Toon alleen actieve locaties',
+              checkedId: isActive,
+              onchange: f => (state.isActive = f),
+              className: 'col s12',
+            }),
+            m(InputCheckbox, {
+              label: 'Toon alleen WZD locaties',
+              checkedId: isWzd,
+              onchange: f => (state.isWzd = f),
+              className: 'col s12',
+            }),
+            m(InputCheckbox, {
+              label: 'Toon alleen WVGGZ locaties',
+              checkedId: isWvggz,
+              onchange: f => (state.isWvggz = f),
+              className: 'col s12',
+            }),
             m(FlatButton, {
               label: 'Wis alle filters',
               iconName: 'clear_all',
@@ -69,6 +81,19 @@ export const FormView: FactoryComponent = () => {
               style: 'margin: 1em;',
               onclick: () => {
                 state.filterValue = '';
+              },
+            }),
+            m(FlatButton, {
+              label: 'Download als CSV',
+              iconName: 'cloud_download',
+              class: 'col s11',
+              style: 'margin: 0 1em;',
+              onclick: () => {
+                const csv = careProviderToCSV(careProvider);
+                const blob = new Blob([csv], {
+                  type: 'text/plain;charset=utf-8',
+                });
+                saveAs(blob, `${careProvider.naam}.csv`, { autoBom: true });
               },
             }),
           ]
@@ -99,7 +124,7 @@ export const FormView: FactoryComponent = () => {
                 ),
               ])
             : undefined,
-          m(DisplayForm, { careProvider, filterValue }),
+          m(DisplayForm, { careProvider, filterValue, isActive, isWzd, isWvggz }),
         ]),
       ]);
     },

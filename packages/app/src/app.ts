@@ -1,5 +1,3 @@
-// import Keycloak from 'keycloak-js';
-// import { PromiseType } from 'keycloak-js';
 import 'material-icons/iconfont/material-icons.css';
 import 'materialize-css/dist/css/materialize.min.css';
 import m from 'mithril';

@@ -22,25 +22,14 @@ class CareProvidersService extends RestService<Partial<ICareProvider>> {
     return this.list;
   }
 
-  public async loadFilteredList(): Promise<Array<Partial<ICareProvider>> | undefined> {
-    const filter = 'view?props=$loki,naam,kvk,locaties,owner,published,canEdit';
-    // http://localhost:3000/events/view?props=name,cmFunctions,incidentType,eventType
-    const result = await m.request<ICareProvider[]>({
-      method: 'GET',
-      url: this.baseUrl + filter,
-      withCredentials: this.withCredentials,
-    });
-    if (!result) {
-      console.warn('No result found at ' + this.baseUrl);
-    }
-    this.setList(result || []);
-    return this.list;
+  public async loadFilteredList() {
+    return super.loadFilteredList('view?props=$loki,meta,naam,kvk,wn,owner,published,canEdit');
   }
 
   public async search(query: string): Promise<Array<Partial<ICareProvider>> | undefined> {
     const cleaned = stripSpaces(query).toLowerCase();
     if (cleaned.length <= 2) {
-      this.setList([]);
+      this.setList(this.filteredList);
       m.redraw();
       return;
     }

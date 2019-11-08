@@ -221,12 +221,12 @@ export const EditForm = () => {
                     '.col.s12',
                     m(Chips, {
                       label: 'Eigenaar(s)',
-                      placeholder: '+email',
+                      placeholder: '+gebruikersnaam',
                       onchange: async chips => {
                         cp.owner = chips.map(({ tag }) => tag);
                         if (cp.owner.length === 0) {
                           M.toast({ html: 'Er moet minimaal één eigenaar zijn.', classes: 'red' });
-                          cp.owner.push(Auth.email);
+                          cp.owner.push(Auth.username);
                         }
                         await onsubmit();
                       },
@@ -242,7 +242,7 @@ export const EditForm = () => {
                     '.col.s12',
                     m(Chips, {
                       label: 'Wijzigingen toegestaan van',
-                      placeholder: '+email',
+                      placeholder: '+gebruikersnaam',
                       onchange: async chips => {
                         cp.canEdit = chips.map(({ tag }) => tag);
                         await onsubmit();
