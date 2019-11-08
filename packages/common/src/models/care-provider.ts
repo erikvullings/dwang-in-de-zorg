@@ -25,7 +25,7 @@ export interface ICareProvider extends ILokiObj, IAddress, IQueryable {
   canEdit: string[];
 
   naam: string;
-  kvk: number;
+  kvk: string;
   /** Number as used by the NHR */
   rechtsvorm: number;
   locaties: ILocation[];

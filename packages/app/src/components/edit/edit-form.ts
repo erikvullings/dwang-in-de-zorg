@@ -14,7 +14,8 @@ import {
 } from '../../../../common/dist';
 import { careProvidersSvc } from '../../services';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
-import { Auth, Login } from '../../services/login-service';
+import { kvkService } from '../../services/kvk-service';
+import { Auth } from '../../services/login-service';
 import { mutationsSvc } from '../../services/mutations-service';
 import { CareProviderForm } from '../../template/form';
 import { capitalizeFirstLetter } from '../../utils';
@@ -132,9 +133,39 @@ export const EditForm = () => {
     }
   };
 
+  const kvkToAddress = async (kvk: string, cp: Partial<ICareProvider>) => {
+    const result = await kvkService.searchKvK(kvk);
+    console.log(JSON.stringify(result, null, 2));
+    if (result) {
+      const { data: { items } } = result;
+      if (items.length > 0) {
+        items.forEach(item => {
+          const { addresses } = item;
+          if (addresses && addresses.length > 0) {
+            addresses.some(address => {
+              const { type } = address;
+              if (type === 'vestigingsadres') {
+                const { street, postalCode, city, houseNumber, houseNumberAddition, country } = address;
+                cp.str = street;
+                cp.pc = postalCode;
+                cp.wn = city;
+                cp.hn = houseNumber;
+                cp.toev = houseNumberAddition;
+                cp.land = country;
+                return true;
+              }
+              return false;
+            });
+          }
+        });
+      }
+    }
+  };
+
   const formChanged = (cp?: Partial<ICareProvider>, section?: string) => {
     const locaties = 'locaties';
     state.canSave = true;
+    if (!cp) { return; }
     if (section && section.toLowerCase() === locaties) {
       const i = m.route.param(locaties) ? +m.route.param(locaties) - 1 : 0;
       if (cp && cp.locaties && cp.locaties.length > i) {
@@ -153,6 +184,10 @@ export const EditForm = () => {
         }
         loc.mutated = Date.now();
         // console.log('Mutated on ' + new Date());
+      }
+    } else if (section && section.toLowerCase() === 'zorgaanbieder') {
+      if (cp.kvk && !cp.pc) {
+        kvkToAddress(cp.kvk, cp);
       }
     }
   };

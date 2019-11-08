@@ -11,7 +11,7 @@ export interface ILocation extends IAddress, IQueryable {
   /** Locatieomschrijving */
   omschr: string;
   /** Vestigingsnummer */
-  nmr?: number;
+  nmr?: string;
   /** Wordt op de locatie Wzd-zorg geleverd */
   isWzd?: boolean;
   /** Is de locatie een WZD accommodatie */

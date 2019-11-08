@@ -135,7 +135,7 @@ fs.readFile(filename, 'utf8', (err, csv) => {
         nmr: vestigingsnummer,
         str: lstraat,
         pc: lpostcode,
-        hn: +lhuisnummer,
+        hn: lhuisnummer,
         hl: lhuisletter,
         toev: lhuisnummerToevoeging,
         wn: lwoonplaatsnaam,
@@ -154,14 +154,14 @@ fs.readFile(filename, 'utf8', (err, csv) => {
         ],
       } as Partial<ILocation>;
       location.target = locationToQueryTarget(location);
-      if (+kvk === acc.kvk && naam === acc.naam) {
+      if (kvk === acc.kvk && naam === acc.naam) {
         // New location
         if (acc.locaties) {
           acc.locaties.push(location as ILocation);
         }
       } else {
         // Change of care provider
-        const found = careProviders.filter(cp => cp.kvk === +kvk && cp.naam === naam);
+        const found = careProviders.filter(cp => cp.kvk === kvk && cp.naam === naam);
         if (found.length > 0) {
           acc = found[0];
         } else if (naam) {
@@ -169,9 +169,9 @@ fs.readFile(filename, 'utf8', (err, csv) => {
           acc = {
             naam,
             published: true,
-            kvk: +kvk,
+            kvk,
             str: straat,
-            hn: +huisnummer,
+            hn: huisnummer,
             hl: huisletter,
             toev: huisnummerToevoeging,
             pc: postcode,
