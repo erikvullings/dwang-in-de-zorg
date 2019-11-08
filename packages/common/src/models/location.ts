@@ -12,16 +12,18 @@ export interface ILocation extends IAddress, IQueryable {
   omschr: string;
   /** Vestigingsnummer */
   nmr?: number;
-  /** Is de locatie een WZD accommodatie */
-  isWzdAcco: boolean;
-  /** Levert de accomodatie ambulante zorg */
-  isAmbulant: boolean;
-  /** Is de locatie een WVGGZ accommodatie */
-  isWvggzAcco: boolean;
   /** Wordt op de locatie Wzd-zorg geleverd */
   isWzd?: boolean;
+  /** Is de locatie een WZD accommodatie */
+  isWzdAcco: boolean;
+  /** Levert de WZD accomodatie ambulante zorg */
+  isWzdAmbu: boolean;
   /** Wordt op de locatie Wvggz zorg geleverd */
   isWvggz?: boolean;
+  /** Is de locatie een WVGGZ accommodatie */
+  isWvggzAcco: boolean;
+  /** Levert de WZD accomodatie ambulante zorg */
+  isWvggzAmbu: boolean;
   /** Welk type zorg wordt geleverd */
   zv?: CareType[];
   /** Een locatie heeft 1..n aantekeningen */

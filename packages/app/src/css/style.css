@@ -195,3 +195,12 @@ li.clickable {
 .repeat-list .pagination {
   margin: 0;
 }
+
+.row .col.indent1 {
+  margin-left: 2.3em;
+  width: 90%;
+}
+.row .col.indent2 {
+  margin-left: 4.6em;
+  width: 80%;
+}

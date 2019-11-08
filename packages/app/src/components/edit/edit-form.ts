@@ -14,7 +14,7 @@ import {
 } from '../../../../common/dist';
 import { careProvidersSvc } from '../../services';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
-import { Auth } from '../../services/login-service';
+import { Auth, Login } from '../../services/login-service';
 import { mutationsSvc } from '../../services/mutations-service';
 import { CareProviderForm } from '../../template/form';
 import { capitalizeFirstLetter } from '../../utils';
@@ -138,7 +138,20 @@ export const EditForm = () => {
     if (section && section.toLowerCase() === locaties) {
       const i = m.route.param(locaties) ? +m.route.param(locaties) - 1 : 0;
       if (cp && cp.locaties && cp.locaties.length > i) {
-        cp.locaties[i].mutated = Date.now();
+        const loc = cp.locaties[i];
+        if (loc.isWzd === false) {
+          loc.isWzdAcco = false;
+          loc.isWzdAmbu = false;
+        } else if (loc.isWzdAcco === false) {
+          loc.isWvggzAmbu = false;
+        }
+        if (loc.isWvggz === false) {
+          loc.isWvggzAcco = false;
+          loc.isWvggzAmbu = false;
+        } else if (loc.isWvggzAcco === false) {
+          loc.isWvggzAmbu = false;
+        }
+        loc.mutated = Date.now();
         // console.log('Mutated on ' + new Date());
       }
     }

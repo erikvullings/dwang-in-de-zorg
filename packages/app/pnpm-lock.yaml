@@ -11,7 +11,7 @@ dependencies:
   mithril: 2.0.4
   mithril-leaflet: 0.1.6_154c6bfd3ace91745ba245372494e571
   mithril-materialized: 0.15.4_f3d9df6f4766fd28b6cfb8072ccbc3ca
-  mithril-ui-form: 0.4.0_d40744477aa035f37064ed290ccab5fe
+  mithril-ui-form: 0.4.4_d40744477aa035f37064ed290ccab5fe
   rest-easy-loki: 0.5.0
 devDependencies:
   '@types/file-saver': 2.0.1
@@ -1319,7 +1319,7 @@ packages:
   /browserslist/4.7.2:
     dependencies:
       caniuse-lite: 1.0.30001008
-      electron-to-chromium: 1.3.305
+      electron-to-chromium: 1.3.306
       node-releases: 1.1.39
     dev: true
     hasBin: true
@@ -1525,7 +1525,7 @@ packages:
   /co-body/5.2.0:
     dependencies:
       inflation: 2.0.0
-      qs: 6.9.0
+      qs: 6.9.1
       raw-body: 2.4.1
       type-is: 1.6.18
     dev: false
@@ -1649,7 +1649,7 @@ packages:
   /concurrently/5.0.0:
     dependencies:
       chalk: 2.4.2
-      date-fns: 2.6.0
+      date-fns: 2.7.0
       lodash: 4.17.15
       read-pkg: 4.0.1
       rxjs: 6.5.3
@@ -1978,10 +1978,10 @@ packages:
     dev: true
     resolution:
       integrity: sha512-YTWYI9se1P55u58gL5GkQHW4P6VJBJ5iBT+B5a7i2Tjadhv52paJG0qHX4A0OR6/t52odI64KP2YvFpkDOi3eQ==
-  /date-fns/2.6.0:
+  /date-fns/2.7.0:
     dev: true
     resolution:
-      integrity: sha512-F55YxqRdEfP/eYQmQjLN798v0AwLjmZ8nMBjdQvNwEE3N/zWVrlkkqT+9seBlPlsbkybG4JmWg3Ee3dIV9BcGQ==
+      integrity: sha512-wxYp2PGoUDN5ZEACc61aOtYFvSsJUylIvCjpjDOqM1UDaKIIuMJ9fAnMYFHV3TQaDpfTVxhwNK/GiCaHKuemTA==
   /deasync/0.1.15:
     dependencies:
       bindings: 1.2.1
@@ -2205,10 +2205,10 @@ packages:
   /ee-first/1.1.1:
     resolution:
       integrity: sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
-  /electron-to-chromium/1.3.305:
+  /electron-to-chromium/1.3.306:
     dev: true
     resolution:
-      integrity: sha512-jBEhRZ3eeJWf3eAnGYB1vDy09uBQpZWshC5fxiiIRofA9L3vkpa3SxsXleVS2MvuYir15oTVxzWPsOwj7KBzUw==
+      integrity: sha512-frDqXvrIROoYvikSKTIKbHbzO6M3/qC6kCIt/1FOa9kALe++c4VAJnwjSFvf1tYLEUsP2n9XZ4XSCyqc3l7A/A==
   /elliptic/6.5.1:
     dependencies:
       bn.js: 4.11.8
@@ -2562,6 +2562,7 @@ packages:
       - node-pre-gyp
     dependencies:
       nan: 2.14.0
+    deprecated: 'One of your dependencies needs to upgrade to fsevents v2: 1) Proper nodejs v10+ support 2) No more fetching binaries from AWS, smaller package size'
     dev: true
     engines:
       node: '>=4.0'
@@ -3712,7 +3713,7 @@ packages:
       mithril: ^2.0.4
     resolution:
       integrity: sha512-r2UYWJvpnTGifCGs/YP27TnhBvcwqF7cv+ES6k1WfRTUWwkn6gug3SiJ8yh6/gA3sGCc3+mY28rZYHAC4JQ2mg==
-  /mithril-ui-form/0.4.0_d40744477aa035f37064ed290ccab5fe:
+  /mithril-ui-form/0.4.4_d40744477aa035f37064ed290ccab5fe:
     dependencies:
       leaflet: 1.5.1
       leaflet-draw: 1.0.4
@@ -3728,7 +3729,7 @@ packages:
       mithril: ^2.0.4
       mithril-materialized: ^0.15.0
     resolution:
-      integrity: sha512-pEEuU86GIupFs5zLNCQszoRQCgJFT/+qEn9mh6KZZmWcY5RiO9t8fxARTChgiLBDtwctzNL8U0yeE2CIKtG0xQ==
+      integrity: sha512-AP6gG/lZH2uvU1nG+X7uH5sy8CAJo5Y2qGpiz8kVz5BZxJ/rO7GhiH9t2W3ScI9TV14/SgHnsg0fDEBQwp7/OA==
   /mithril/2.0.4:
     dev: false
     hasBin: true
@@ -4164,7 +4165,7 @@ packages:
       postcss: 7.0.21
       postcss-value-parser: 3.3.1
       posthtml: 0.11.6
-      posthtml-parser: 0.4.1
+      posthtml-parser: 0.4.2
       posthtml-render: 1.1.5
       resolve: 1.12.0
       semver: 5.7.1
@@ -4645,13 +4646,12 @@ packages:
       node: '>=6.0.0'
     resolution:
       integrity: sha512-uIFtJElxJo29QC753JzhidoAhvp/e/Exezkdhfmt8AymWT6/5B7W1WmponYWkHk2eg6sONyTch0A3nkMPun3SQ==
-  /posthtml-parser/0.4.1:
+  /posthtml-parser/0.4.2:
     dependencies:
       htmlparser2: 3.10.1
-      object-assign: 4.1.1
     dev: true
     resolution:
-      integrity: sha512-h7vXIQ21Ikz2w5wPClPakNP6mJeJCK6BT0GpqnQrNNABdR7/TchNlFyryL1Bz6Ww53YWCKkr6tdZuHlxY1AVdQ==
+      integrity: sha512-BUIorsYJTvS9UhXxPTzupIztOMVNPa/HtAm9KHni9z6qEfiJ1bpOBL5DfUOL9XAc3XkLIEzBzpph+Zbm4AdRAg==
   /posthtml-render/1.1.5:
     dev: true
     engines:
@@ -4660,7 +4660,7 @@ packages:
       integrity: sha512-yvt54j0zCBHQVEFAuR+yHld8CZrCa/E1Z/OcFNCV1IEWTLVxT8O7nYnM4IIw1CD4r8kaRd3lc42+0lgCKgm87w==
   /posthtml/0.11.6:
     dependencies:
-      posthtml-parser: 0.4.1
+      posthtml-parser: 0.4.2
       posthtml-render: 1.1.5
     dev: true
     engines:
@@ -4738,12 +4738,12 @@ packages:
       node: '>=0.6'
     resolution:
       integrity: sha512-N5ZAX4/LxJmF+7wN74pUD6qAh9/wnvdQcjq9TZjevvXzSUo7bfmw91saqMjzGS2xq91/odN2dW/WOl7qQHNDGA==
-  /qs/6.9.0:
+  /qs/6.9.1:
     dev: false
     engines:
       node: '>=0.6'
     resolution:
-      integrity: sha512-27RP4UotQORTpmNQDX8BHPukOnBP3p1uUJY5UnDhaJB+rMt9iMsok724XL+UHU23bEFOHRMQ2ZhI99qOWUMGFA==
+      integrity: sha512-Cxm7/SS/y/Z3MHWSxXb8lIFqgqBowP5JMlTUFyJN88y0SGQhVmZnqFK/PeuMX9LzUyWsqqhNxIyg0jlzq946yA==
   /querystring-es3/0.2.1:
     dev: true
     engines:
@@ -6124,7 +6124,7 @@ specifiers:
   mithril: ^2.0.4
   mithril-leaflet: ^0.1.6
   mithril-materialized: ^0.15.4
-  mithril-ui-form: ^0.4.0
+  mithril-ui-form: ^0.4.4
   parcel-bundler: ^1.12.4
   rest-easy-loki: ^0.5.0
   rimraf: ^3.0.0

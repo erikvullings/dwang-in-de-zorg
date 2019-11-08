@@ -103,12 +103,6 @@ fs.readFile(filename, 'utf8', (err, csv) => {
         isaccommodatie,
         iswzd,
         iswvggz,
-        zvbejegening,
-        zvverzorging,
-        zvverpleging,
-        zvbehandeling,
-        zvbegeleiding,
-        zvbescherming,
         zvvochtvoedingmedicatie,
         // zvmedishcecontroles,
         zvbeperkenbewegingsvrijheid,
@@ -119,16 +113,9 @@ fs.readFile(filename, 'utf8', (err, csv) => {
         zvcontrolerenmiddelen,
         zvbeperkeneigenleven,
         zvbeperkenbezoek,
-        zvopnemen,
         zvtijdelijkverblijf,
       } = cur;
       const zorgvormen = {
-        isBejegening: ja(zvbejegening),
-        isVerzorging: ja(zvverzorging),
-        isVerpleging: ja(zvverpleging),
-        isBehandeling: ja(zvbehandeling),
-        isBegeleiding: ja(zvbegeleiding),
-        isBescherming: ja(zvbescherming),
         isVochtVoedingMedicatie: ja(zvvochtvoedingmedicatie),
         // isMedischeControles: ja(zvmedishcecontroles),
         isBeperkenBewegingsvrijheid: ja(zvbeperkenbewegingsvrijheid),
@@ -139,7 +126,6 @@ fs.readFile(filename, 'utf8', (err, csv) => {
         isControlerenMiddelen: ja(zvcontrolerenmiddelen),
         isBeperkenEigenLeven: ja(zvbeperkeneigenleven),
         isBeperkenBezoek: ja(zvbeperkenbezoek),
-        isOpnemen: ja(zvopnemen),
         isTijdelijkVerblijf: ja(zvtijdelijkverblijf),
       } as { [key: string]: boolean | undefined };
       const now = Date.now();

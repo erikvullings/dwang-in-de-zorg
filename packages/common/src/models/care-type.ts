@@ -1,12 +1,4 @@
 export type CareType =
-  // | 'isAmbulantGeleverd'
-  // | 'isKlinischGeleverd'
-  | 'isBejegening'
-  | 'isVerzorging'
-  | 'isVerpleging'
-  | 'isBehandeling'
-  | 'isBegeleiding'
-  | 'isBescherming'
   | 'isVochtVoedingMedicatie'
   | 'isBeperkenBewegingsvrijheid'
   | 'isInsluiten'
@@ -16,5 +8,4 @@ export type CareType =
   | 'isControlerenMiddelen'
   | 'isBeperkenEigenLeven'
   | 'isBeperkenBezoek'
-  | 'isOpnemen'
   | 'isTijdelijkVerblijf';

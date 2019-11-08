@@ -102,12 +102,12 @@ export const careOptions = [
   {
     id: 'isVochtVoedingMedicatie',
     label:
-      'Toedienen van vocht, voeding en medicatie, verrichten van medische controles of handelingen, therapeutische maatregelen',
+      'Toedienen van vocht, voeding en medicatie, alsmede het verrichten van medische controles of andere medische handelingen en therapeutische maatregelen, ter behandeling van een psychische stoornis, dan wel vanwege die stoornis, ter behandeling van een somatische aandoening.',
     show: ['isWvggz = true'],
   },
   { id: 'isBeperkenBewegingsvrijheid', label: 'Beperken van de bewegingsvrijheid', show: ['isWvggz = true'] },
   { id: 'isInsluiten', label: 'Insluiten', show: ['isWvggz = true'] },
-  { id: 'isToezicht', label: 'Uitoefenen van toezicht', show: ['isWvggz = true'] },
+  { id: 'isToezicht', label: 'Uitoefenen van toezicht op betrokkene', show: ['isWvggz = true'] },
   { id: 'isOnderzoekKledingLichaam', label: 'Onderzoek aan kleding of lichaam', show: ['isWvggz = true'] },
   {
     id: 'isOnderzoekWoonruimte',
@@ -116,22 +116,26 @@ export const careOptions = [
   },
   {
     id: 'isControlerenMiddelen',
-    label: 'Controleren op aanwezigheid van gedrag-beïnvloedende middelen',
+    label: 'Controleren op de aanwezigheid van gedrag-beïnvloedende middelen',
     show: ['isWvggz = true'],
   },
   {
     id: 'isBeperkenEigenLeven',
-    label: 'Beperken in de vrijheid het eigen leven in te richten',
+    label:
+      'Aanbrengen van beperkingen in de vrijheid het eigen leven in te richten, die tot gevolg hebben dat betrokkene iets moet doen of nalaten, waaronder het gebruik van communicatiemiddelenBeperken in de vrijheid het eigen leven in te richten',
     show: ['isWvggz = true'],
   },
-  { id: 'isBeperkenBezoek', label: 'Beperken van het recht op het ontvangen van bezoek', show: ['isWvggz = true'] },
+  {
+    id: 'isBeperkenBezoek',
+    label: 'Beperken van het recht op het ontvangen van bezoek',
+    show: ['isWvggz = true'],
+  },
   {
     id: 'isTijdelijkVerblijf',
     label:
       'Ontnemen van de vrijheid van betrokkene door hem over te brengen naar een plaats die geschikt is voor tijdelijk verblijf',
     show: ['isWvggz = true'],
   },
-  { id: 'isOpnemen', label: 'Opnemen in een accommodatie', show: ['isWvggz = true'] },
 ];
 
 const day = 24 * 3600000;
@@ -141,7 +145,7 @@ const now = Date.now() - 30 * day;
 export const CareForm: Form = [
   {
     id: 'zv',
-    label: 'Type zorg die wordt geleverd:',
+    label: 'Vormen van verplichte zorg die worden verleend:',
     type: 'options',
     options: careOptions,
     multiple: true,
@@ -259,23 +263,38 @@ NB: De locatie is nooit het adres van de patiënt. In dat geval, gebruik het adr
   { id: 'nmr', type: 'number', className: 'col s12 m4' },
   { id: 'omschr', label: 'Omschrijving', type: 'textarea' },
   ...LocationAddressForm,
-  { id: 'isWzd', label: 'Is het een WZD locatie?', type: 'checkbox', className: 'col s6 m6' },
+
+  { type: 'md', value: 'Selecteer onder welke wet(ten) gedwongen zorg wordt aangeboden in of vanuit deze locatie:' },
+  { id: 'isWzd', label: 'Wet zorg en dwang?', type: 'checkbox', className: 'col s12' },
   {
     id: 'isWzdAcco',
-    disabled: 'isWzd = false',
-    label: 'Is het een WZD accomodatie?',
+    show: 'isWzd = true',
+    label: 'Is gedwongen opname op grond van de Wzd mogelijk?',
     type: 'checkbox',
-    className: 'col s6 m6',
+    className: 'col s12 indent1',
   },
-  { id: 'isWvggz', label: 'Is het een WVGGZ locatie?', type: 'checkbox', className: 'col s6 m6' },
+  {
+    id: 'isWzdAmbu',
+    show: 'isWzdAcco = true',
+    label: 'Wordt in of vanuit deze accommodatie ook ambulante zorg verleend? ',
+    type: 'checkbox',
+    className: 'col s12 indent2',
+  },
+  { id: 'isWvggz', label: 'Wet verplichte ggz?', type: 'checkbox', className: 'col s12' },
   {
     id: 'isWvggzAcco',
-    disabled: '!isWvggz',
-    label: 'Is het een WVGGZ accomodatie?',
+    show: 'isWvggz = true',
+    label: 'Is gedwongen opname op grond van de Wvggz mogelijk?',
     type: 'checkbox',
-    className: 'col s6 m6',
+    className: 'col s12 indent1',
   },
-  { id: 'isAmbulant', show: 'isWzdAcco === true', label: 'Levert ambulante zorg?', type: 'checkbox', className: 'col s12' },
+  {
+    id: 'isWvggzAmbu',
+    show: 'isWvggzAcco = true',
+    label: 'Wordt in of vanuit deze accommodatie ook ambulante zorg verleend? ',
+    type: 'checkbox',
+    className: 'col s12 indent2',
+  },
   { id: 'target' },
   ...CareForm,
 ];
@@ -290,15 +309,16 @@ export const CareProviderForm: Form = [
   { id: 'kvk', label: 'KvK-nummer', type: 'number', required: true, className: 'col s12 m4' },
   { id: 'rechtsvorm', required: true, type: 'select', options: rechtsvorm, className: 'col s12' },
   ...AddressForm,
-  { type: 'md', value: 'Voeg op de volgende pagina uw locaties toe (zie menu links).' },
+  { type: 'md', value: 'Voeg via het menu links uw locaties toe.' },
 
   { id: 'Locaties', type: 'section' },
   {
     id: 'locaties',
-    label: 'Nieuwe locatie toevoegen',
+    label: 'Nieuwe locatie',
     type: LocationForm,
     repeat: true,
     pageSize: 1,
     propertyFilter: 'target',
+    filterLabel: 'Filter',
   },
 ] as Form;
