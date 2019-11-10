@@ -1,0 +1,47 @@
+{
+  "name": "dwang-in-de-zorg-servers",
+  "version": "0.0.1",
+  "description": "Wrapper around rest-easy-loki, including a KVK search service.",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rimraf ./dist",
+    "serve": "node-r dotenv/config ./dist/server.js",
+    "cleanup": "npm run clean",
+    "dev": "tsc-watch --outDir ./dist --onSuccess \"node -r dotenv/config ./dist/server.js\" --onFailure \"echo Beep! Compilation Failed\" --compiler typescript/bin/tsc",
+    "start": "npm run dev",
+    "build": "tsc",
+    "build:domain": "npm run clean && npm run build",
+    "keycloak": "docker-compose up -d -f ./docker/docker-compose.yaml"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erikvullings/dwang-in-de-zorg.git"
+  },
+  "keywords": [
+    "rest-easy-loki",
+    "REST",
+    "database",
+    "lokijs"
+  ],
+  "author": "Erik Vullings <erik.vullings@gmail.com> (http://www.tno.nl)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/erikvullings/dwang-in-de-zorg/issues"
+  },
+  "homepage": "https://github.com/erikvullings/dwang-in-de-zorg#readme",
+  "dependencies": {
+    "rest-easy-loki": "^0.5.1",
+    "koa-proxies": "0.9.0",
+    "dotenv": "^8.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^12.12.6",
+    "@types/koa": "2.0.52",
+    "@types/koa-compose": "^3.2.5",
+    "@types/koa-router": "^7.0.42",
+    "@types/koa-static": "^4.0.1",
+    "rimraf": "^3.0.0",
+    "tsc-watch": "^4.0.0",
+    "typescript": "^3.7.2"
+  }
+}

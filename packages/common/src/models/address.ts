@@ -2,7 +2,7 @@ export interface IAddress {
   /** straat */
   str: string;
   /** huisnummer */
-  hn: number;
+  hn: string;
   /** huisletter */
   hl?: string;
   /** huisnummerToevoeging */

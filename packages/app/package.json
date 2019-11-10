@@ -6,8 +6,8 @@
   "scripts": {
     "clean": "rimraf ./public ./.cache ./dist",
     "cleanup": "npm run clean",
-    "dev": "concurrently \"npm run serve\" \"parcel index.html\"",
-    "start": "concurrently \"npm run serve\" \"parcel index.html\"",
+    "dev": "parcel index.html",
+    "start": "parcel index.html",
     "build:domain": "npm run clean && parcel build index.html --out-dir ./public",
     "link": "npm link mithril-ui-form",
     "serve": "rest-easy-loki",
@@ -46,8 +46,7 @@
     "mithril": "^2.0.4",
     "mithril-leaflet": "^0.1.6",
     "mithril-materialized": "^0.15.4",
-    "mithril-ui-form": "^0.4.4",
-    "rest-easy-loki": "^0.5.0"
+    "mithril-ui-form": "^0.4.4"
   },
   "devDependencies": {
     "@types/file-saver": "^2.0.1",
@@ -56,7 +55,6 @@
     "@types/materialize-css": "^1.0.6",
     "@types/mithril": "^2.0.2",
     "autoprefixer": "^9.7.1",
-    "concurrently": "^5.0.0",
     "cssnano": "^4.1.10",
     "parcel-bundler": "^1.12.4",
     "rimraf": "^3.0.0",
