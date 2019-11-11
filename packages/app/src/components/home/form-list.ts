@@ -82,28 +82,27 @@ export const EventsList = () => {
             },
           },
           [
-            Auth.isAuthenticated
-              ? m(FlatButton, {
-                  label: 'Nieuwe zorgaanbieder',
-                  iconName: 'add',
-                  class: 'col s11 indigo darken-4 white-text',
-                  style: 'margin: 1em;',
-                  onclick: async () => {
-                    const kvk = Auth.username;
-                    const newCp = await kvkToAddress(kvk, {
-                      kvk,
-                      owner: [Auth.username],
-                      published: true,
-                    } as ICareProvider);
-                    if (newCp) {
-                      const cp = await careProvidersSvc.create(newCp);
-                      if (cp) {
-                        dashboardSvc.switchTo(Dashboards.EDIT, { id: cp.$loki });
-                      }
+            (Auth.isAdmin() || (Auth.isAuthenticated && careProvidersSvc.checkKvk(Auth.username))) &&
+              m(FlatButton, {
+                label: 'Nieuwe zorgaanbieder',
+                iconName: 'add',
+                class: 'col s11 indigo darken-4 white-text',
+                style: 'margin: 1em;',
+                onclick: async () => {
+                  const kvk = Auth.username;
+                  const newCp = await kvkToAddress(kvk, {
+                    kvk,
+                    owner: [Auth.username],
+                    published: true,
+                  } as ICareProvider);
+                  if (newCp) {
+                    const cp = await careProvidersSvc.create(newCp);
+                    if (cp) {
+                      dashboardSvc.switchTo(Dashboards.EDIT, { id: cp.$loki });
                     }
-                  },
-                })
-              : undefined,
+                  }
+                },
+              }),
             m('h5', { style: 'margin: 1.2em 0em 0 0.5em' }, 'Zoek zorgaanbieders'),
             m(TextInput, {
               placeholder: 'Naam, kvk, adres...',

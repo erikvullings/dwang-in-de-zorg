@@ -9,6 +9,11 @@ class CareProvidersService extends RestService<Partial<ICareProvider>> {
     super('zorgaanbieders', ChannelNames.CARE);
   }
 
+  /** Check if the KvK is already registered. */
+  public checkKvk(kvk: string | number) {
+    return this.filteredList.some(cp => cp.kvk === kvk);
+  }
+
   public async loadList(): Promise<Array<Partial<ICareProvider>> | undefined> {
     const result = await m.request<ICareProvider[]>({
       method: 'GET',
