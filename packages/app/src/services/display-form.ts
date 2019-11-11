@@ -18,24 +18,12 @@ const AddressView: FactoryComponent<{ address: Partial<IAddress> }> = () => {
   return {
     view: ({
       attrs: {
-        address: {
-          str: straat,
-          hn: huisnummer,
-          hl: huisletter,
-          toev: huisnummerToevoeging,
-          pc: postcode,
-          wn: woonplaatsnaam,
-          land: landnaam,
-          fland: landnaamBuitenEuropa,
-        },
+        address: { str: straat, hn: huisnummer, toev: huisnummerToevoeging, pc: postcode, wn: woonplaatsnaam },
       },
     }) => {
       return m(
         'span.col.s12',
-        `${p(straat)} ${p(huisnummer)}${p(huisletter)}${p(huisnummerToevoeging)}, ${p(postcode)}${p(
-          woonplaatsnaam,
-          `, ${woonplaatsnaam}, ${landnaam === 'other' ? p(landnaamBuitenEuropa) : p(landnaam)}`
-        )}`
+        `${p(straat)} ${p(huisnummer)}${p(huisnummerToevoeging)}, ${p(postcode)}, ${p(woonplaatsnaam)}`
       );
     },
   };
@@ -76,7 +64,7 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
     return '';
   };
 
-  const uniqueLocationIdentifier = (l: ILocation) => `${p(l.pc)}${p(l.hn)}${p(l.hl)}${p(l.toev)}`;
+  const uniqueLocationIdentifier = (l: ILocation) => `${p(l.pc)}${p(l.hn)}${p(l.toev)}`;
 
   return {
     view: ({ attrs: { careProvider: cp, filterValue, isActive, isWvggz, isWzd } }) => {
@@ -131,12 +119,10 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
           '.row',
           m('ul.nowrap', [
             m('li', [
-              m('span.col.s3', m('b', 'Locatie')),
-              m('span.col.s3', m('b', 'Adres')),
-              m('span.col.s1', { style: 'padding-right: 0;' }, m('b', 'WZD')),
-              m('span.col.s1', { style: 'padding-right: 0;' }, m('b', 'WVGGZ')),
-              m('span.col.s2', m('b', 'Actief')),
-              m('span.col.s2', m('b', 'Mutatie')),
+              m('span.col.s5', m('b', 'Locatie')),
+              m('span.col.s5', m('b', 'Adres')),
+              m('span.col.s1', { style: 'padding-right: 0;' }, m('b', 'Wet')),
+              m('span.col.s1', { style: 'padding-right: 0;' }, m('b', 'Actief')),
             ]),
             ...filteredLocations.map(l =>
               m(
@@ -145,21 +131,10 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
                   onclick: () => (state.showDetails = uniqueLocationIdentifier(l)),
                 },
                 [
-                  m('span.col.s3', `${p(l.naam)} ${p(l.nmr, `, #${l.nmr}`)}`),
-                  m('span.col.s3', `${p(l.str)} ${p(l.hn)}${p(l.hl)}${p(l.toev)}, ${p(l.pc)}, ${p(l.wn)}`),
-                  m('span.col.s1', `${l.isWzd ? 'ja' : ''}`),
-                  m('span.col.s1', `${l.isWvggz ? 'ja' : ''}`),
-                  m(
-                    'span.col.s2',
-                    `${
-                      isLocationActive(l)
-                        ? `Sinds ${getStartDate(l)}`
-                        : getStartDate(l)
-                        ? `Vanaf ${getStartDate(l)}`
-                        : ''
-                    }`
-                  ),
-                  m('span.col.s2', `${p(l.mutated, new Date(l.mutated).toLocaleDateString())}`),
+                  m('span.col.s5', `${p(l.naam)} ${p(l.nmr, `, #${l.nmr}`)}`),
+                  m('span.col.s5', `${p(l.str)} ${p(l.hn)}${p(l.toev)}, ${p(l.pc)}, ${p(l.wn)}`),
+                  m('span.col.s1', `${l.isWzd && l.isWvggz ? 'Beide' : l.isWzd ? 'Wzd' : l.isWvggz ? 'Wvggz' : '' }`),
+                  m('span.col.s1', `${isLocationActive(l) ? 'Ja' : 'Nee'}`),
                   showDetails === uniqueLocationIdentifier(l)
                     ? m('.col.s12.card.wrap', [
                         m(FlatButton, {

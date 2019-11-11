@@ -11,7 +11,7 @@ const sizeLimit = process.env.LOKI_SIZE_LIMIT || '250mb';
 
 const apiKey = process.env.KVK_API_KEY;
 const kvkDefaultQueryParams = `?user_key=${apiKey}&legalPerson=false&`;
-const kvkUri = `https://api.kvk.nl/api/v2/search/companies`;
+const kvkUri = `https://api.kvk.nl/api/v2/profile/companies`;
 
 export const startService = () => {
   db.startDatabase(dbName, () => {

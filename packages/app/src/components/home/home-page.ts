@@ -7,7 +7,7 @@ import logo from '../../assets/locatieregister.svg';
 import vws from '../../assets/logo_minvws.svg';
 import { careProvidersSvc } from '../../services';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
-import { careProvidersToCSV, padLeft } from '../../utils';
+import { careProvidersToCSV, padLeft, csvFilename } from '../../utils';
 
 export const HomePage = () => ({
   view: () => [
@@ -38,24 +38,16 @@ export const HomePage = () => ({
             m(Button, {
               style: 'margin-left: 10px;',
               className: 'btn-large',
-              label: 'CSV',
+              label: 'Download het register als CSV',
               iconName: 'cloud_download',
               onclick: async () => {
-                const now = new Date();
                 const careProviders = await careProvidersSvc.loadList();
                 const csv = careProvidersToCSV(careProviders);
                 if (csv) {
                   const blob = new Blob([csv], {
                     type: 'text/plain;charset=utf-8',
                   });
-                  saveAs(
-                    blob,
-                    `${now.getFullYear()}${padLeft(now.getMonth() + 1, '0')}${padLeft(
-                      now.getDate(),
-                      '0'
-                    )}_locatieregister.csv`,
-                    { autoBom: true }
-                  );
+                  saveAs(blob, csvFilename(), { autoBom: true });
                 }
               },
             }),

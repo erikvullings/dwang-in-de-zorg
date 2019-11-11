@@ -12,7 +12,6 @@ interface IImportedData {
   rechtsvorm?: string;
   straat: string;
   huisnummer: string;
-  huisletter?: string;
   huisnummerToevoeging?: string;
   postcode: string;
   woonplaatsnaam: string;
@@ -25,15 +24,16 @@ interface IImportedData {
   vestigingsnummer?: string;
   lstraat: string;
   lhuisnummer: string;
-  lhuisletter?: string;
   lhuisnummerToevoeging?: string;
   lpostcode: string;
   lwoonplaatsnaam: string;
   llandnaam: string;
   // RoWe: aanvullende adresinfo voor adressen van locatieadres
   laanvadresinfo?: string;
-  // RoWe: isAccommodatie + onder welke wetten wordt zorg geleverd
-  isaccommodatie?: string;
+  // is wvggz accommodatie + onder welke wetten wordt zorg geleverd
+  iswvggzacco?: string;
+  // is Wzd accommodatie + onder welke wetten wordt zorg geleverd
+  iswzdacco?: string;
   iswzd?: string;
   iswvggz?: string;
   // RoWe: deze velden alleen voor eerste imports
@@ -62,6 +62,8 @@ interface IImportedData {
 
 const ja = (value?: string) => (value ? value === 'ja' : undefined);
 
+const jaNee = (value?: string) => (value && value === 'ja' ? 'ja' : 'nee');
+
 fs.readFile(filename, 'utf8', (err, csv) => {
   if (err) {
     throw err;
@@ -80,7 +82,6 @@ fs.readFile(filename, 'utf8', (err, csv) => {
         kvk,
         straat,
         huisnummer,
-        huisletter,
         huisnummerToevoeging,
         postcode,
         woonplaatsnaam,
@@ -93,14 +94,14 @@ fs.readFile(filename, 'utf8', (err, csv) => {
         vestigingsnummer,
         lstraat,
         lhuisnummer,
-        lhuisletter,
         lhuisnummerToevoeging,
         lpostcode,
         lwoonplaatsnaam,
         llandnaam,
         // RoWe: extra velden
         laanvadresinfo,
-        isaccommodatie,
+        iswvggzacco,
+        iswzdacco,
         iswzd,
         iswvggz,
         zvvochtvoedingmedicatie,
@@ -136,14 +137,15 @@ fs.readFile(filename, 'utf8', (err, csv) => {
         str: lstraat,
         pc: lpostcode,
         hn: lhuisnummer,
-        hl: lhuisletter,
         toev: lhuisnummerToevoeging,
         wn: lwoonplaatsnaam,
         land: llandnaam || 'netherlands',
         aanv: laanvadresinfo,
-        isWvggzAcco: ja(isaccommodatie),
+        isWvggzAcco: jaNee(iswvggzacco),
+        isWzdAcco: jaNee(iswzdacco),
         isWzd: ja(iswzd),
         isWvggz: ja(iswvggz),
+        isBopz: true,
         zv: Object.keys(zorgvormen).filter(key => zorgvormen[key]),
         aant: [
           {
@@ -167,17 +169,16 @@ fs.readFile(filename, 'utf8', (err, csv) => {
         } else if (naam) {
           // New provider
           acc = {
+            owner: [kvk],
             naam,
             published: true,
             kvk,
             str: straat,
             hn: huisnummer,
-            hl: huisletter,
             toev: huisnummerToevoeging,
             pc: postcode,
             wn: woonplaatsnaam,
-            land: landnaam || 'netherlands',
-            // RoWe: aanvullende adresinfo
+            land: landnaam || 'Nederland',
             aanv: zaanvadresinfo,
             locaties: [location],
           } as Partial<ICareProvider>;

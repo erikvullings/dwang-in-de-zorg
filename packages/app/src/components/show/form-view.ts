@@ -6,13 +6,13 @@ import { careProvidersSvc } from '../../services';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
 import { DisplayForm } from '../../services/display-form';
 import { Auth } from '../../services/login-service';
-import { CircularSpinner } from '../ui/preloader';
 import { careProviderToCSV } from '../../utils';
+import { CircularSpinner } from '../ui/preloader';
 
 export const FormView: FactoryComponent = () => {
   const state = {
     filterValue: '',
-    isActive: false,
+    isActive: true,
     isWzd: false,
     isWvggz: false,
     careProvider: {} as Partial<ICareProvider>,
@@ -58,19 +58,19 @@ export const FormView: FactoryComponent = () => {
             }),
             m(InputCheckbox, {
               label: 'Toon alleen actieve locaties',
-              checkedId: isActive,
+              checked: isActive,
               onchange: f => (state.isActive = f),
               className: 'col s12',
             }),
             m(InputCheckbox, {
               label: 'Toon alleen WZD locaties',
-              checkedId: isWzd,
+              checked: isWzd,
               onchange: f => (state.isWzd = f),
               className: 'col s12',
             }),
             m(InputCheckbox, {
               label: 'Toon alleen WVGGZ locaties',
-              checkedId: isWvggz,
+              checked: isWvggz,
               onchange: f => (state.isWvggz = f),
               className: 'col s12',
             }),
@@ -84,7 +84,7 @@ export const FormView: FactoryComponent = () => {
               },
             }),
             m(FlatButton, {
-              label: 'Download als CSV',
+              label: 'Download selectie als CSV',
               iconName: 'cloud_download',
               class: 'col s11',
               style: 'margin: 0 1em;',
@@ -108,18 +108,6 @@ export const FormView: FactoryComponent = () => {
                     iconName: 'edit',
                     className: 'right hide-on-small-only',
                     onclick: () => dashboardSvc.switchTo(Dashboards.EDIT, { id: careProvider.$loki }),
-                  })
-                ),
-                m(
-                  'li',
-                  m(InputCheckbox, {
-                    className: 'left margin-top7',
-                    checked: careProvider.published,
-                    onchange: async checked => {
-                      careProvider.published = checked;
-                      await careProvidersSvc.save(careProvider);
-                    },
-                    label: 'Publiceer uw wijzigingen',
                   })
                 ),
               ])

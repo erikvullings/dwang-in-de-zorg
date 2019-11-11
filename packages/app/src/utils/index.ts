@@ -1,4 +1,5 @@
 import { IActivity, ICareProvider, ILocation } from '../../../common/dist';
+import { kvkService } from '../services/kvk-service';
 
 /**
  * Create a GUID
@@ -183,7 +184,6 @@ export const locationToCSV = (careProviderData: string) => ({
   nmr: vestigingsnummer,
   str: straat,
   hn: huisnummer,
-  hl: huisletter,
   toev: huisnummerToevoeging,
   pc: postcode,
   wn: woonplaatsnaam,
@@ -192,12 +192,14 @@ export const locationToCSV = (careProviderData: string) => ({
   aanv: aanvullendeAdresinformatie,
   isWzd,
   isWzdAcco,
+  isWzdAmbu,
   isWvggz,
   isWvggzAcco,
+  isWvggzAmbu,
   zv: zorgvorm = [],
   aant: aantekeningen = [],
 }: ILocation) => {
-  const land = landnaam ? landnaam === 'netherlands' ? 'NL' : landnaam : landnaamBuitenEuropa;
+  const land = landnaam ? (landnaam === 'netherlands' ? 'NL' : landnaam) : landnaamBuitenEuropa;
   const locationData =
     careProviderData +
     [
@@ -206,16 +208,17 @@ export const locationToCSV = (careProviderData: string) => ({
       p(vestigingsnummer),
       p(straat),
       p(huisnummer),
-      p(huisletter),
       p(huisnummerToevoeging),
       p(postcode),
       p(woonplaatsnaam),
       p(land),
       p(aanvullendeAdresinformatie),
       p(isWzd, 'ja'),
-      p(isWzdAcco, 'ja'),
+      p(isWzdAcco),
+      p(isWzdAmbu),
       p(isWvggz, 'ja'),
-      p(isWvggzAcco, 'ja'),
+      p(isWvggzAcco),
+      p(isWvggzAmbu),
       p(zorgvorm.indexOf('isVochtVoedingMedicatie') >= 0, 'ja'),
       p(zorgvorm.indexOf('isBeperkenBewegingsvrijheid') >= 0, 'ja'),
       p(zorgvorm.indexOf('isInsluiten') >= 0, 'ja'),
@@ -240,7 +243,6 @@ export const careProviderToCSV = (
     rechtsvorm,
     str: straat,
     hn: huisnummer,
-    hl: huisletter,
     toev: huisnummerToevoeging,
     pc: postcode,
     wn: woonplaatsnaam,
@@ -258,7 +260,6 @@ export const careProviderToCSV = (
       'rechtsvorm',
       'straat',
       'huisnummer',
-      'huisletter',
       'huisnummerToevoeging',
       'postcode',
       'woonplaatsnaam',
@@ -269,15 +270,17 @@ export const careProviderToCSV = (
       'vestigingsnummer',
       'lstraat',
       'lhuisnummer',
-      'lhuisletter',
       'lhuisnummerToevoeging',
       'lpostcode',
       'lwoonplaatsnaam',
       'llandnaam',
       'laanvadresinfo',
-      'isAccommodatie',
       'isWzd',
+      'isWzdAccommodatie',
+      'isWzdAmbulant',
       'isWvggz',
+      'isWvggzAccommodatie',
+      'isWvggzAmbulant',
       'zvbejegening',
       'zvverzorging',
       'zvverpleging',
@@ -299,7 +302,7 @@ export const careProviderToCSV = (
       'aantekeningingang',
       'aantekeningeinde',
     ].join(';') + ';';
-  const land = landnaam ? landnaam === 'netherlands' ? 'NL' : landnaam : landnaamBuitenEuropa;
+  const land = landnaam ? (landnaam === 'netherlands' ? 'NL' : landnaam) : landnaamBuitenEuropa;
   const careProviderData =
     [
       p(naam),
@@ -307,7 +310,6 @@ export const careProviderToCSV = (
       p(rechtsvorm),
       p(straat),
       p(huisnummer),
-      p(huisletter),
       p(huisnummerToevoeging),
       p(postcode),
       p(woonplaatsnaam),
@@ -321,3 +323,77 @@ export const careProviderToCSV = (
 
 export const careProvidersToCSV = (cps?: Array<Partial<ICareProvider>>) =>
   cps && cps.map((cp, i) => careProviderToCSV(cp, i === 0)).join('\r\n');
+
+/** Create a filename for the CSV */
+export const csvFilename = (name = '') => {
+  const now = new Date();
+  return `${now.getFullYear()}${padLeft(now.getMonth() + 1, '0')}${padLeft(now.getDate(), '0')}${
+    name ? `_${name}` : ''
+  }_locatieregister.csv`;
+};
+
+/** Convert the KVK information to a care provider or location */
+export const kvkToAddress = async (kvk: string, addr: Partial<ICareProvider> | Partial<ILocation>, branch?: string) => {
+  const result = branch ? await kvkService.searchBranch(kvk, branch) : await kvkService.searchKvK(kvk);
+  console.log(JSON.stringify(result, null, 2));
+  if (result) {
+    const {
+      data: { items },
+    } = result;
+    if (items.length > 0) {
+      items.forEach(item => {
+        const { addresses } = item;
+        addr.noMail = item.hasNonMailingIndication;
+        if (!branch) {
+          const cp = addr as Partial<ICareProvider>;
+          cp.naam = item.tradeNames.currentStatutoryNames[0];
+          cp.rechtsvorm = item.legalForm;
+        }
+        if (addresses && addresses.length > 0) {
+          addresses.some(address => {
+            const { type } = address;
+            if (type === 'vestigingsadres') {
+              const {
+                street,
+                postalCode,
+                city,
+                houseNumber,
+                houseNumberAddition,
+                country,
+                rijksdriehoekX,
+                rijksdriehoekY,
+                gpsLatitude,
+                gpsLongitude,
+                bagid,
+              } = address;
+              addr.str = street;
+              addr.pc = postalCode;
+              addr.wn = city;
+              addr.hn = houseNumber;
+              addr.toev = houseNumberAddition;
+              addr.land = country;
+              if (rijksdriehoekX) {
+                addr.x = rijksdriehoekX;
+              }
+              if (rijksdriehoekY) {
+                addr.y = rijksdriehoekY;
+              }
+              if (gpsLatitude) {
+                addr.lat = gpsLatitude;
+              }
+              if (gpsLongitude) {
+                addr.lon = gpsLongitude;
+              }
+              if (bagid) {
+                addr.bag = bagid;
+              }
+              return true;
+            }
+            return false;
+          });
+        }
+      });
+    }
+  }
+  return addr;
+};

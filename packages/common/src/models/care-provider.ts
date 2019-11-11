@@ -2,10 +2,15 @@ import { IAddress } from './address';
 import { ILocation } from './location';
 
 export interface ILokiObj {
+  /** Unique identifier */
   $loki: number;
+  /** Meta data */
   meta: {
+    /** Created date as number since 1 Jan 1970 */
     created: number; // Date().getTime()
+    /** Revision number, is increased on each save */
     revision: number;
+    /** Updated date as number since 1 Jan 1970 */
     updated: number; // Date().getTime()
     version: number;
   };
@@ -23,10 +28,12 @@ export interface ICareProvider extends ILokiObj, IAddress, IQueryable {
   published: boolean;
   /** List of emails of the persons who can edit this document */
   canEdit: string[];
-
+  /** Name of the care provider */
   naam: string;
+  /** KVK number as string */
   kvk: string;
-  /** Number as used by the NHR */
-  rechtsvorm: number;
+  /** Text as used by the NHR */
+  rechtsvorm: string;
+  /** Branches or 'vestigingen' in NHR */
   locaties: ILocation[];
 }

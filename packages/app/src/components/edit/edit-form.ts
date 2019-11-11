@@ -14,11 +14,10 @@ import {
 } from '../../../../common/dist';
 import { careProvidersSvc } from '../../services';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
-import { kvkService } from '../../services/kvk-service';
 import { Auth } from '../../services/login-service';
 import { mutationsSvc } from '../../services/mutations-service';
 import { CareProviderForm } from '../../template/form';
-import { capitalizeFirstLetter } from '../../utils';
+import { capitalizeFirstLetter, kvkToAddress } from '../../utils';
 import { CircularSpinner } from '../ui/preloader';
 
 interface ILocationVM extends ILocation, IActivity {
@@ -133,67 +132,50 @@ export const EditForm = () => {
     }
   };
 
-  const kvkToAddress = async (kvk: string, cp: Partial<ICareProvider>) => {
-    const result = await kvkService.searchKvK(kvk);
-    console.log(JSON.stringify(result, null, 2));
-    if (result) {
-      const { data: { items } } = result;
-      if (items.length > 0) {
-        items.forEach(item => {
-          const { addresses } = item;
-          if (addresses && addresses.length > 0) {
-            addresses.some(address => {
-              const { type } = address;
-              if (type === 'vestigingsadres') {
-                const { street, postalCode, city, houseNumber, houseNumberAddition, country } = address;
-                cp.str = street;
-                cp.pc = postalCode;
-                cp.wn = city;
-                cp.hn = houseNumber;
-                cp.toev = houseNumberAddition;
-                cp.land = country;
-                return true;
-              }
-              return false;
-            });
-          }
-        });
-      }
-    }
-  };
-
   const formChanged = (cp?: Partial<ICareProvider>, section?: string) => {
     const locaties = 'locaties';
     state.canSave = true;
-    if (!cp) { return; }
+    if (!cp) {
+      return;
+    }
     if (section && section.toLowerCase() === locaties) {
       const i = m.route.param(locaties) ? +m.route.param(locaties) - 1 : 0;
       if (cp && cp.locaties && cp.locaties.length > i) {
         const loc = cp.locaties[i];
+        console.log(JSON.stringify(loc, null, 2));
+        if (cp.kvk && loc.nmr && (!loc.pc || !loc.wn)) {
+          kvkToAddress(cp.kvk, loc, loc.nmr);
+        }
         if (loc.isWzd === false) {
-          loc.isWzdAcco = false;
-          loc.isWzdAmbu = false;
-        } else if (loc.isWzdAcco === false) {
-          loc.isWvggzAmbu = false;
+          loc.isWzdAcco = 'nee';
+          loc.isWzdAmbu = 'nee';
+        } else if (loc.isWzdAcco === 'nee') {
+          loc.isWvggzAmbu = 'nee';
         }
         if (loc.isWvggz === false) {
-          loc.isWvggzAcco = false;
-          loc.isWvggzAmbu = false;
-        } else if (loc.isWvggzAcco === false) {
-          loc.isWvggzAmbu = false;
+          loc.isWvggzAcco = 'nee';
+          loc.isWvggzAmbu = 'nee';
+        } else if (loc.isWvggzAcco === 'nee') {
+          loc.isWvggzAmbu = 'nee';
         }
         loc.mutated = Date.now();
         // console.log('Mutated on ' + new Date());
       }
-    } else if (section && section.toLowerCase() === 'zorgaanbieder') {
-      if (cp.kvk && !cp.pc) {
-        kvkToAddress(cp.kvk, cp);
-      }
     }
+  };
+
+  const onUnload = (e: BeforeUnloadEvent) => {
+    if (!state.canSave) {
+      return undefined;
+    }
+    const confirmationMessage = 'It looks like you have been editing something. ' + 'If you leave before saving, your changes will be lost.';
+    (e || window.event).returnValue = confirmationMessage; // Gecko + IE
+    return confirmationMessage; // Gecko + Webkit, Safari, Chrome etc.
   };
 
   return {
     oninit: () => {
+      window.addEventListener('beforeunload', onUnload);
       return new Promise(async (resolve, reject) => {
         const cp = await careProvidersSvc.load(m.route.param('id')).catch(r => reject(r));
         state.originalCareProvider = cp ? deepCopy(cp) : ({} as ICareProvider);
@@ -203,8 +185,9 @@ export const EditForm = () => {
         resolve();
       });
     },
+    onremove: () => window.removeEventListener('beforeunload', onUnload),
     view: () => {
-      const { cp, form, context, loaded } = state;
+      const { cp, form, context, loaded, canSave } = state;
       if (!loaded) {
         return m(CircularSpinner, { className: 'center-align', style: 'margin-top: 20%;' });
       }
@@ -242,25 +225,34 @@ export const EditForm = () => {
             ),
             m('.buttons', [
               m(Button, {
-                label: 'Toon registratie',
-                iconName: 'visibility',
+                label: 'Wijzigingen annuleren',
+                disabled: !canSave,
+                iconName: 'clear_all',
                 className: 'right col s12',
-                onclick: () => dashboardSvc.switchTo(Dashboards.READ, { id: cp.$loki }),
+                onclick: async () => {
+                  const newCp = await careProvidersSvc.load(cp.$loki);
+                  if (newCp) {
+                    state.originalCareProvider = deepCopy(newCp);
+                    state.cp = careProviderToViewModel(newCp);
+                    state.canSave = false;
+                  }
+                },
               }),
               m(Button, {
-                label: 'Bewaar registratie',
+                label: 'Bewaar wijzigingen',
                 iconName: 'save',
-                class: `green col s12 ${state.canSave ? '' : 'disabled'}`,
+                class: `green col s12 ${canSave ? '' : 'disabled'}`,
                 onclick: async () => {
                   await onsubmit();
                 },
               }),
-              m(Button, {
-                modalId: 'delete-cp',
-                label: 'Verwijder registratie',
-                iconName: 'delete',
-                class: 'red col s12',
-              }),
+              Auth.isAdmin() &&
+                m(Button, {
+                  modalId: 'delete-cp',
+                  label: 'Verwijder registratie',
+                  iconName: 'delete',
+                  class: 'red col s12',
+                }),
             ]),
             Auth.isOwner(cp)
               ? m(
