@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "clean": "rimraf ./dist",
+    "process": "node ./dist/importer.js",
     "cleanup": "npm run clean",
     "dev": "tsc -b -w",
     "start": "tsc -b -w"
