@@ -56,13 +56,13 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
     [] as Form
   );
 
-  const getStartDate = (l: ILocation) => {
-    if (l.aant) {
-      const di = l.aant[l.aant.length - 1].di;
-      return di ? new Date(di).toLocaleDateString() : '';
-    }
-    return '';
-  };
+  // const getStartDate = (l: ILocation) => {
+  //   if (l.aant) {
+  //     const di = l.aant[l.aant.length - 1].di;
+  //     return di ? new Date(di).toLocaleDateString() : '';
+  //   }
+  //   return '';
+  // };
 
   const uniqueLocationIdentifier = (l: ILocation) => `${p(l.pc)}${p(l.hn)}${p(l.toev)}`;
 
