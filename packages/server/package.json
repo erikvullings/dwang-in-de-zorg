@@ -1,5 +1,5 @@
 {
-  "name": "dwang-in-de-zorg-servers",
+  "name": "dwang-in-de-zorg-server",
   "version": "0.0.1",
   "description": "Wrapper around rest-easy-loki, including a KVK search service.",
   "main": "index.js",
@@ -9,7 +9,7 @@
     "cleanup": "npm run clean",
     "dev": "tsc-watch --outDir ./dist --onSuccess \"node -r dotenv/config ./dist/server.js\" --onFailure \"echo Beep! Compilation Failed\" --compiler typescript/bin/tsc",
     "start": "npm run dev",
-    "build": "tsc",
+    "build": "tsc -b",
     "build:domain": "npm run clean && npm run build",
     "keycloak": "docker-compose up -d -f ./docker/docker-compose.yaml"
   },

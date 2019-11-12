@@ -1,0 +1,17 @@
+---
+version: "3"
+services:
+  locatieregister:
+    image: minvws/locatieregister:latest
+    container_name: lr
+    environment:
+      - LOKI_KEYCLOAK=http://localhost:8765
+      - LOKI_REALM=vws
+      - LOKI_CLIENTID=locatieregister
+      # - KVK_API_KEY=""
+    expose:
+      - 3030
+    ports:
+      - "3030:3030"
+    # volumes:
+    #   - ./l3-realm.json:/opt/jboss/keycloak/l3-realm.json
