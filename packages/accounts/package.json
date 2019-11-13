@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "clean": "rimraf ./dist",
-    "create": "node ./dist/create.js",
+    "create ": "node ./dist/create.js",
     "cleanup": "npm run clean",
     "dev": "tsc -b -w",
     "start": "tsc -b -w"

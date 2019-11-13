@@ -23,5 +23,6 @@ npm start
 ```bash
 set USERS="./users.csv" # Point to file with usernames and pwd, relative to current working direcotry
 set ADMIN_PWD="" # Specify the Keycloak admin pwd
+set USERS_ENABLED="true" # To enable the created user accounts.
 npm run create
 ```

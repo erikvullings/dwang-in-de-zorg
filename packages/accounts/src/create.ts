@@ -41,7 +41,7 @@ const create = async () => {
       const { naam, kvk, pwd } = cur;
       const user = {
         firstName: 'Beheerder',
-        enabled: true,
+        enabled: process.env.USERS_ENABLED === 'true',
         lastName: naam,
         username: kvk,
         credentials: [{ type: 'password', value: pwd, temporary: true }],
