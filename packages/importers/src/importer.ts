@@ -344,13 +344,4 @@ fs.readFile(filename, 'utf8', (err, csv) => {
       });
   });
 
-  // console.log(JSON.stringify(cps, null, 2));
-
-  // cps.forEach(async cp => {
-  //   await axios.post('http://localhost:3030/zorgaanbieders', cp).catch(e => {
-  //     console.error(e.message);
-  //     console.log(cp.naam);
-  //     console.log(JSON.stringify(cp).length);
-  //   });
-  // });
 });

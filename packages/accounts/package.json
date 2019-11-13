@@ -1,0 +1,25 @@
+{
+  "name": "dwang-in-de-zorg-user-account-creator",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Script to create a bunch of users from an Excel spreadsheet containing username and pwd.",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rimraf ./dist",
+    "create": "node ./dist/create.js",
+    "cleanup": "npm run clean",
+    "dev": "tsc -b -w",
+    "start": "tsc -b -w"
+  },
+  "keywords": [],
+  "author": "Erik Vullings <erik.vullings@gmail.com> (http://www.tno.nl)",
+  "license": "MIT",
+  "dependencies": {
+    "keycloak-admin": "1.13.0",
+    "papaparse": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^12.12.6",
+    "@types/papaparse": "^5.0.1"
+  }
+}
