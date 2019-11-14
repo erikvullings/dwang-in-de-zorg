@@ -142,15 +142,20 @@ const pointRegex = /POINT\(([\d.]+) ([\d.]+)\)/;
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
+let i = 1;
+
 const pdokLocationSvc = async (pc: string, hn: string, toev: string = '') => {
   const pdokUrl = `https://geodata.nationaalgeoregister.nl/locatieserver/v3/free?q=${pc.replace(
     / /g,
     ''
   )} ${hn} ${toev}`;
-  await sleep(10);
-  const searchResult = await axios
-    .get<IPdokSearchResult>(pdokUrl)
-    .catch(e => console.error(e));
+  await sleep(100);
+  console.log(`${i++}. Resolving ${pc}, ${hn}, ${toev}`);
+  const searchResult = await axios.get<IPdokSearchResult>(pdokUrl).catch(_ => {
+    console.error(`${i++}. Error resolving ${pc}, ${hn}, ${toev}!`);
+    return undefined;
+  });
+  console.log(`${i++}. Resolving ${pc}, ${hn}, ${toev}`);
   if (
     searchResult &&
     searchResult.data &&
@@ -183,136 +188,11 @@ const pdokLocationSvc = async (pc: string, hn: string, toev: string = '') => {
   return undefined;
 };
 
-fs.readFile(filename, 'utf8', (err, csv) => {
-  if (err) {
-    throw err;
-  }
-  const data = Papa.parse(csv.replace(/^\uFEFF/, ''), {
-    delimiter: ';',
-    header: true,
-    trimHeaders: true,
-    transform: v => v.trim()
-  }).data as IImportedData[];
-  const careProviders = [] as Array<Partial<ICareProvider>>;
-  data.reduce((acc, cur) => {
-    const {
-      naam,
-      kvk,
-      rechtsvorm,
-      straat,
-      huisnummer,
-      huisnummertoevoeging,
-      postcode,
-      woonplaatsnaam,
-      landnaam,
-      aantekeningingang,
-      aantekeningeinde,
-      zaanvadresinfo,
-      locatienaam,
-      lomschrijving,
-      vestigingsnummer,
-      lstraat,
-      lhuisnummer,
-      lhuisnummertoevoeging,
-      lpostcode,
-      lwoonplaatsnaam,
-      llandnaam,
-      laanvadresinfo,
-      iswzdacco,
-      iswvggzacco,
-      iswzd,
-      iswvggz,
-      zvvochtvoedingmedicatie,
-      zvbeperkenbewegingsvrijheid,
-      zvinsluiten,
-      zvtoezicht,
-      zvonderzoekkledinglichaam,
-      zvonderzoekwoonruimte,
-      zvcontrolerenmiddelen,
-      zvbeperkeneigenleven,
-      zvbeperkenbezoek,
-      zvtijdelijkverblijf
-    } = cur;
-    const zorgvormen = {
-      isVochtVoedingMedicatie: ja(zvvochtvoedingmedicatie),
-      isBeperkenBewegingsvrijheid: ja(zvbeperkenbewegingsvrijheid),
-      isInsluiten: ja(zvinsluiten),
-      isToezicht: ja(zvtoezicht),
-      isOnderzoekKledingLichaam: ja(zvonderzoekkledinglichaam),
-      isOnderzoekWoonruimte: ja(zvonderzoekwoonruimte),
-      isControlerenMiddelen: ja(zvcontrolerenmiddelen),
-      isBeperkenEigenLeven: ja(zvbeperkeneigenleven),
-      isBeperkenBezoek: ja(zvbeperkenbezoek),
-      isTijdelijkVerblijf: ja(zvtijdelijkverblijf)
-    } as { [key: string]: boolean | undefined };
-    const now = Date.now();
-    const location = {
-      mutated: now,
-      naam: locatienaam,
-      omschr: lomschrijving,
-      nmr: vestigingsnummer,
-      str: lstraat,
-      pc: lpostcode,
-      hn: lhuisnummer,
-      toev: lhuisnummertoevoeging,
-      wn: lwoonplaatsnaam,
-      land: llandnaam || 'netherlands',
-      aanv: laanvadresinfo,
-      isWvggzAcco: jaNee(iswvggzacco),
-      isWzdAcco: jaNee(iswzdacco),
-      isWzd: ja(iswzd),
-      isWvggz: ja(iswvggz),
-      isBopz: true,
-      zv: Object.keys(zorgvormen).filter(key => zorgvormen[key]),
-      aant: [
-        {
-          dc: now,
-          di: new Date(aantekeningingang).valueOf(),
-          de: aantekeningeinde
-            ? new Date(aantekeningeinde).valueOf()
-            : undefined
-        }
-      ]
-    } as Partial<ILocation>;
-    location.target = locationToQueryTarget(location);
-    if (kvk === acc.kvk && naam === acc.naam) {
-      // New location
-      if (acc.locaties) {
-        acc.locaties.push(location as ILocation);
-      }
-    } else {
-      // Change of care provider
-      const found = careProviders.filter(
-        cp => cp.kvk === kvk && cp.naam === naam
-      );
-      if (found.length > 0) {
-        acc = found[0];
-      } else if (naam) {
-        // New provider
-        acc = {
-          owner: [kvk],
-          naam,
-          published: true,
-          kvk,
-          rechtsvorm: rechtsvormConverter(rechtsvorm),
-          str: straat,
-          hn: huisnummer,
-          toev: huisnummertoevoeging,
-          pc: postcode,
-          wn: woonplaatsnaam,
-          land: landnaam || 'Nederland',
-          aanv: zaanvadresinfo,
-          locaties: [location]
-        } as Partial<ICareProvider>;
-        toQueryTarget(acc);
-        careProviders.push(acc);
-      }
-    }
-    return acc;
-  }, {} as Partial<ICareProvider>);
-  const cps = removeEmpty(careProviders) as Array<Partial<ICareProvider>>;
+const capitalizeFirstLetter = (s: string) =>
+  s && s.length > 0 ? s.charAt(0).toUpperCase() + s.slice(1) : s;
 
-  cps.forEach(async cp => {
+const resolveLocations = async (cps: Array<Partial<ICareProvider>>) => {
+  for (const cp of cps) {
     const { pc, hn, toev, locaties } = cp;
     if (pc && hn) {
       const coordinatesCP = await pdokLocationSvc(pc, hn, toev);
@@ -321,7 +201,7 @@ fs.readFile(filename, 'utf8', (err, csv) => {
       }
     }
     if (locaties && locaties.length > 0) {
-      locaties.forEach(async loc => {
+      for (const loc of locaties) {
         const { pc: postcode, hn: huisnummer, toev: toevoeging } = loc;
         if (postcode && huisnummer) {
           const coordinatesLoc = await pdokLocationSvc(
@@ -333,15 +213,153 @@ fs.readFile(filename, 'utf8', (err, csv) => {
             Object.assign(loc, coordinatesLoc);
           }
         }
-      });
+      }
     }
-    await axios
-      .post('http://localhost:3030/api/zorgaanbieders', cp)
-      .catch(e => {
-        console.error(e.message);
-        console.log(cp.naam);
-        console.log(JSON.stringify(cp).length);
-      });
-  });
+  }
+  return cps;
+};
 
-});
+const publishCps = async (cps: Array<Partial<ICareProvider>>) => {
+  for (const cp of cps) {
+    await axios.post('http://localhost:3030/api/zorgaanbieders', cp).catch(e => {
+      console.error(e.message);
+      console.log(cp.naam);
+      console.log(JSON.stringify(cp).length);
+    });
+  }
+};
+
+const processCsv = () => {
+  fs.readFile(filename, 'utf8', async (err, csv) => {
+    if (err) {
+      throw err;
+    }
+    const data = Papa.parse(csv.replace(/^\uFEFF/, ''), {
+      delimiter: ';',
+      header: true,
+      trimHeaders: true,
+      transform: v => v.trim()
+    }).data as IImportedData[];
+    const careProviders = [] as Array<Partial<ICareProvider>>;
+    data.reduce((acc, cur) => {
+      const {
+        naam,
+        kvk,
+        rechtsvorm,
+        straat,
+        huisnummer,
+        huisnummertoevoeging,
+        postcode,
+        woonplaatsnaam,
+        landnaam,
+        aantekeningingang,
+        aantekeningeinde,
+        zaanvadresinfo,
+        locatienaam,
+        lomschrijving,
+        vestigingsnummer,
+        lstraat,
+        lhuisnummer,
+        lhuisnummertoevoeging,
+        lpostcode,
+        lwoonplaatsnaam,
+        llandnaam,
+        laanvadresinfo,
+        iswzdacco,
+        iswvggzacco,
+        iswzd,
+        iswvggz,
+        zvvochtvoedingmedicatie,
+        zvbeperkenbewegingsvrijheid,
+        zvinsluiten,
+        zvtoezicht,
+        zvonderzoekkledinglichaam,
+        zvonderzoekwoonruimte,
+        zvcontrolerenmiddelen,
+        zvbeperkeneigenleven,
+        zvbeperkenbezoek,
+        zvtijdelijkverblijf
+      } = cur;
+      const zorgvormen = {
+        isVochtVoedingMedicatie: ja(zvvochtvoedingmedicatie),
+        isBeperkenBewegingsvrijheid: ja(zvbeperkenbewegingsvrijheid),
+        isInsluiten: ja(zvinsluiten),
+        isToezicht: ja(zvtoezicht),
+        isOnderzoekKledingLichaam: ja(zvonderzoekkledinglichaam),
+        isOnderzoekWoonruimte: ja(zvonderzoekwoonruimte),
+        isControlerenMiddelen: ja(zvcontrolerenmiddelen),
+        isBeperkenEigenLeven: ja(zvbeperkeneigenleven),
+        isBeperkenBezoek: ja(zvbeperkenbezoek),
+        isTijdelijkVerblijf: ja(zvtijdelijkverblijf)
+      } as { [key: string]: boolean | undefined };
+      const now = Date.now();
+      const location = {
+        mutated: now,
+        naam: capitalizeFirstLetter(locatienaam),
+        omschr: lomschrijving,
+        nmr: vestigingsnummer,
+        str: lstraat,
+        pc: lpostcode,
+        hn: lhuisnummer,
+        toev: lhuisnummertoevoeging,
+        wn: lwoonplaatsnaam,
+        land: llandnaam || 'netherlands',
+        aanv: laanvadresinfo,
+        isWvggzAcco: jaNee(iswvggzacco),
+        isWzdAcco: jaNee(iswzdacco),
+        isWzd: ja(iswzd),
+        isWvggz: ja(iswvggz),
+        isBopz: true,
+        zv: Object.keys(zorgvormen).filter(key => zorgvormen[key]),
+        aant: [
+          {
+            dc: now,
+            di: new Date(aantekeningingang).valueOf(),
+            de: aantekeningeinde
+              ? new Date(aantekeningeinde).valueOf()
+              : undefined
+          }
+        ]
+      } as Partial<ILocation>;
+      location.target = locationToQueryTarget(location);
+      if (kvk === acc.kvk && naam === acc.naam) {
+        // New location
+        if (acc.locaties) {
+          acc.locaties.push(location as ILocation);
+        }
+      } else {
+        // Change of care provider
+        const found = careProviders.filter(
+          cp => cp.kvk === kvk && cp.naam === naam
+        );
+        if (found.length > 0) {
+          acc = found[0];
+        } else if (naam) {
+          // New provider
+          acc = {
+            owner: [kvk],
+            naam,
+            published: true,
+            kvk,
+            rechtsvorm: rechtsvormConverter(rechtsvorm),
+            str: straat,
+            hn: huisnummer,
+            toev: huisnummertoevoeging,
+            pc: postcode,
+            wn: woonplaatsnaam,
+            land: landnaam || 'Nederland',
+            aanv: zaanvadresinfo,
+            locaties: [location]
+          } as Partial<ICareProvider>;
+          toQueryTarget(acc);
+          careProviders.push(acc);
+        }
+      }
+      return acc;
+    }, {} as Partial<ICareProvider>);
+    const cps = removeEmpty(careProviders) as Array<Partial<ICareProvider>>;
+    await resolveLocations(cps);
+    await publishCps(cps);
+  });
+};
+processCsv();
