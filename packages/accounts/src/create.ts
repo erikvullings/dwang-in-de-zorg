@@ -16,6 +16,7 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 const create = async () => {
   const kcAdminClient = new KcAdminClient({
     // Mount the pod:
+    // oc login https://k8s-test.overheid.standaardplatform.rijksapps.nl:8443
     // locally kubectl -n vws-locr-tst port-forward pod/jboss-keycloak-deployment-765d77d4f6-swtsj 8080
     baseUrl: 'http://localhost:8080/auth',
     // baseUrl: 'http://localhost:8765/auth',
@@ -31,7 +32,7 @@ const create = async () => {
     process.exit(1);
    });
 
-  fs.readFile(filename, 'utf8', (err, csv) => {
+  fs.readFile(filename, 'utf8', async (err, csv) => {
     if (err) {
       throw err;
     }
@@ -42,7 +43,7 @@ const create = async () => {
       transform: v => v.trim()
     }).data as IImportedData[];
 
-    data.forEach(async cur => {
+    for (const cur of data) {
       const { naam, kvk, pwd } = cur;
       const user = {
         firstName: 'Beheerder',
@@ -59,7 +60,7 @@ const create = async () => {
         console.error(e.response.data.errorMessage + `: ${user.username}!`);
       });
       await sleep(10);
-    });
+    }
   });
 };
 
