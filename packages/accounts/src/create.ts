@@ -11,14 +11,19 @@ interface IImportedData {
   pwd: string;
 }
 
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 const create = async () => {
   const kcAdminClient = new KcAdminClient({
-    baseUrl: 'http://localhost:8765/auth',
+    // Mount the pod:
+    // locally kubectl -n vws-locr-tst port-forward pod/jboss-keycloak-deployment-765d77d4f6-swtsj 8080
+    baseUrl: 'http://localhost:8080/auth',
+    // baseUrl: 'http://localhost:8765/auth',
     realmName: 'master',
   });
   await kcAdminClient.auth({
     username: 'admin',
-    password: process.env.ADMIN_PWD || 'admin',
+    password: process.env.ADMIN_PWD || 'aaquaekecigaiNool4chee2fe5oo',
     grantType: 'password',
     clientId: 'admin-cli',
   }).catch(e => {
@@ -53,6 +58,7 @@ const create = async () => {
       }).catch(e => {
         console.error(e.response.data.errorMessage + `: ${user.username}!`);
       });
+      await sleep(10);
     });
   });
 };
