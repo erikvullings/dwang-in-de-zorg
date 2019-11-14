@@ -41,9 +41,11 @@ interface IImportedData {
   // RoWe: aanvullende adresinfo voor adressen van locatieadres
   laanvadresinfo?: string;
   // is wvggz accommodatie + onder welke wetten wordt zorg geleverd
-  iswvggzacco?: string;
+  iswvggzaco?: string;
   // is Wzd accommodatie + onder welke wetten wordt zorg geleverd
   iswzdacco?: string;
+  iswzdamb?: string;
+  isawvggzmb?: string;
   iswzd?: string;
   iswvggz?: string;
   // RoWe: deze velden alleen voor eerste imports
@@ -140,7 +142,7 @@ const rechtsvormConverter = (
 /** Extracts two numbers from a geopoint */
 const pointRegex = /POINT\(([\d.]+) ([\d.]+)\)/;
 
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+// const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 let i = 1;
 
@@ -149,7 +151,7 @@ const pdokLocationSvc = async (pc: string, hn: string, toev: string = '') => {
     / /g,
     ''
   )} ${hn} ${toev}`;
-  await sleep(100);
+  // await sleep(10);
   console.log(`${i++}. Resolving ${pc}, ${hn}, ${toev}`);
   const searchResult = await axios.get<IPdokSearchResult>(pdokUrl).catch(_ => {
     console.error(`${i++}. Error resolving ${pc}, ${hn}, ${toev}!`);
@@ -266,9 +268,7 @@ const processCsv = () => {
         llandnaam,
         laanvadresinfo,
         iswzdacco,
-        iswvggzacco,
-        iswzd,
-        iswvggz,
+        iswvggzaco,
         zvvochtvoedingmedicatie,
         zvbeperkenbewegingsvrijheid,
         zvinsluiten,
@@ -305,10 +305,10 @@ const processCsv = () => {
         wn: lwoonplaatsnaam,
         land: llandnaam || 'netherlands',
         aanv: laanvadresinfo,
-        isWvggzAcco: jaNee(iswvggzacco),
+        isWzd: ja(iswzdacco),
         isWzdAcco: jaNee(iswzdacco),
-        isWzd: ja(iswzd),
-        isWvggz: ja(iswvggz),
+        isWvggz: ja(iswvggzaco),
+        isWvggzAcco: jaNee(iswvggzaco),
         isBopz: true,
         zv: Object.keys(zorgvormen).filter(key => zorgvormen[key]),
         aant: [
