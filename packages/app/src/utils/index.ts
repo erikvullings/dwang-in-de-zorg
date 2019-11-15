@@ -198,12 +198,8 @@ export const locationToCSV = (careProviderData: string) => ({
   isWvggzAmbu,
   zv: zorgvorm = [],
   aant: aantekeningen = [],
-  lat,
-  lon,
-  x,
-  y
 }: ILocation) => {
-  const land = landnaam ? (landnaam === 'netherlands' ? 'NL' : landnaam) : landnaamBuitenEuropa;
+  const land = landnaam ? (landnaam === 'Nederland' ? 'NL' : landnaam) : landnaamBuitenEuropa;
   const locationData =
     careProviderData +
     [
@@ -217,10 +213,6 @@ export const locationToCSV = (careProviderData: string) => ({
       p(woonplaatsnaam),
       p(land),
       p(aanvullendeAdresinformatie),
-      lat,
-      lon,
-      x,
-      y,
       p(isWzd, 'ja'),
       p(isWzdAcco),
       p(isWzdAmbu),
@@ -257,10 +249,6 @@ export const careProviderToCSV = (
     land: landnaam,
     fland: landnaamBuitenEuropa,
     aanv: aanvullendeAdresinformatie,
-    lat,
-    lon,
-    x,
-    y,
     locaties = [],
   }: Partial<ICareProvider>,
   includeHeader = true
@@ -277,10 +265,6 @@ export const careProviderToCSV = (
       'woonplaatsnaam',
       'landnaam',
       'zaanvadresinfo',
-      'lat',
-      'lon',
-      'rd_x',
-      'rd_y',
       'locatienaam',
       'lomschrijving',
       'vestigingsnummer',
@@ -291,10 +275,6 @@ export const careProviderToCSV = (
       'lwoonplaatsnaam',
       'llandnaam',
       'laanvadresinfo',
-      'llat',
-      'llon',
-      'lrd_x',
-      'lrd_y',
       'isWzd',
       'isWzdAccommodatie',
       'isWzdAmbulant',
@@ -314,7 +294,7 @@ export const careProviderToCSV = (
       'aantekeningingang',
       'aantekeningeinde',
     ].join(';') + ';';
-  const land = landnaam ? (landnaam === 'netherlands' ? 'NL' : landnaam) : landnaamBuitenEuropa;
+  const land = landnaam ? (landnaam === 'Netherlands' ? 'NL' : landnaam) : landnaamBuitenEuropa;
   const careProviderData =
     [
       p(naam),
@@ -327,10 +307,6 @@ export const careProviderToCSV = (
       p(woonplaatsnaam),
       p(land),
       p(aanvullendeAdresinformatie),
-      lat,
-      lon,
-      x,
-      y
     ].join(';') + ';';
   const locToCSV = locationToCSV(careProviderData);
   const locations = locaties.map(locToCSV);
