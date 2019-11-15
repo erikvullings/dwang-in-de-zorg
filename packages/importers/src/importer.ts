@@ -144,24 +144,19 @@ const pointRegex = /POINT\(([\d.]+) ([\d.]+)\)/;
 
 // const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-let i = 1;
-
 const pdokLocationSvc = async (pc: string, hn: string, toev: string = '') => {
   const pdokUrl = `https://geodata.nationaalgeoregister.nl/locatieserver/v3/free?q=${pc.replace(
     / /g,
     ''
   )} ${hn} ${toev}`;
   // await sleep(10);
-  console.log(`${i++}. Resolving ${pc}, ${hn}, ${toev}`);
   const searchResult = await axios.get<IPdokSearchResult>(pdokUrl).catch(_ => {
-    console.error(`${i++}. Error resolving ${pc}, ${hn}, ${toev}!`);
+    console.error(`Error resolving ${pc}, ${hn}${toev ? `, ${toev}` : ''}!`);
     return undefined;
   });
-  console.log(`${i++}. Resolving ${pc}, ${hn}, ${toev}`);
   if (
     searchResult &&
     searchResult.data &&
-    searchResult.data.response &&
     searchResult.data.response
   ) {
     const {
@@ -169,24 +164,24 @@ const pdokLocationSvc = async (pc: string, hn: string, toev: string = '') => {
         response: { docs = [] }
       }
     } = searchResult;
-    if (docs.length > 0) {
-      const found = docs[0];
+    const found = docs.filter(doc => doc.bron === 'BAG' && doc.type === 'adres');
 
-      if (found.bron === 'BAG' && found.type === 'adres') {
-        const { centroide_ll, centroide_rd } = found;
-        const ll = pointRegex.exec(centroide_ll);
-        const rd = pointRegex.exec(centroide_rd);
-        if (ll && rd) {
-          return {
-            lat: +ll[1],
-            lon: +ll[2],
-            x: +rd[1],
-            y: +rd[2]
-          };
-        }
+    if (found.length > 0) {
+      const best = found[0];
+      const { centroide_ll, centroide_rd } = best;
+      const ll = pointRegex.exec(centroide_ll);
+      const rd = pointRegex.exec(centroide_rd);
+      if (ll && rd) {
+        return {
+          lat: +ll[1],
+          lon: +ll[2],
+          x: +rd[1],
+          y: +rd[2]
+        };
       }
     }
   }
+  console.error(`Error resolving ${pc}, ${hn}${toev ? `, ${toev}` : ''}!`);
   return undefined;
 };
 
@@ -303,7 +298,7 @@ const processCsv = () => {
         hn: lhuisnummer,
         toev: lhuisnummertoevoeging,
         wn: lwoonplaatsnaam,
-        land: llandnaam || 'netherlands',
+        land: llandnaam || 'Nederland',
         aanv: laanvadresinfo,
         isWzd: ja(iswzdacco),
         isWzdAcco: jaNee(iswzdacco),
