@@ -1,5 +1,6 @@
-import { IActivity, ICareProvider, ILocation } from '../../../common/dist';
+import { IActivity, ICareProvider, ILocation, isLocationActive } from '../../../common/dist';
 import { kvkService } from '../services/kvk-service';
+import { careOptions } from '../template/form';
 
 /**
  * Create a GUID
@@ -126,22 +127,6 @@ export const formatOptional = (
 
 /** Print optional */
 export const p = (val: string | number | Date | boolean | undefined, output?: string) => (val ? output || val : '');
-
-/** Print a list: a, b and c */
-export const l = (val: undefined | string | string[]) => {
-  if (!val) {
-    return '';
-  }
-  if (val instanceof Array) {
-    if (val.length === 1) {
-      return val[0];
-    }
-    const [last, oneButLast, ...items] = val.reverse();
-    return [...items, `${oneButLast} en ${last}`].filter(Boolean).join(', ');
-  } else {
-    return val;
-  }
-};
 
 export const debounce = (func: (...args: any) => void, timeout: number) => {
   let timer: number;
@@ -388,4 +373,70 @@ export const kvkToAddress = async (kvk: string, addr: Partial<ICareProvider> | P
     }
   }
   return addr;
+};
+
+export const generateLocationReport = (loc: ILocation) => {
+  const {
+    naam,
+    omschr,
+    str,
+    hn,
+    toev,
+    pc,
+    wn,
+    land,
+    aanv,
+    fland,
+    mutated,
+    isWzd,
+    isWzdAcco,
+    isWzdAmbu,
+    isWvggz,
+    isWvggzAcco,
+    isWvggzAmbu,
+    zv,
+    aant,
+  } = loc;
+  const zorgvorm = zv
+    ? '- ' +
+      careOptions
+        .filter(o => (zv as string[]).indexOf(o.id))
+        .map(o => o.label)
+        .join('\n- ')
+    : undefined;
+  const last = aant && aant.length > 0 && aant[aant.length - 1];
+  const actief =
+    isLocationActive(loc) && last && last.di
+      ? `Deze locatie is actief sinds ${new Date(last.di).toLocaleDateString()}` +
+        (last.de ? ` tot en met ${new Date(last.de).toLocaleDateString()}.` : '.')
+      : 'Deze locatie is momenteel niet actief.';
+  return `
+#### Locatie ${p(naam, `"${naam}"`)}
+
+${p(actief)}
+
+${p(mutated, `Laatste wijziging aan de registratie vond plaats op ${new Date(mutated).toLocaleDateString()}.`)}
+
+${p(omschr)}
+
+##### Bezoekadres
+
+${str} ${hn} ${p(toev)}<br>${pc} ${wn}, ${p(land || fland)}<br>${p(aanv)}
+
+##### Wetten die van toepassing zijn op deze locatie
+
+${p(
+  isWzd,
+  `- Wzd ${isWzdAcco ? 'accommodatie' : 'locatie'}${p(isWzdAmbu, ', waar ook ambulante zorg geleverd wordt')}.`
+)}
+${p(
+  isWvggz,
+  `- Wvggz ${isWvggzAcco ? 'accommodatie' : 'locatie'}${p(isWvggzAmbu, ', waar ook ambulante zorg geleverd wordt')}.`
+)}
+
+##### Vormen van verplichte zorg die worden verleend
+
+${p(zorgvorm)}
+
+`;
 };

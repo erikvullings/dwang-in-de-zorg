@@ -1,9 +1,10 @@
 import m, { Attributes, FactoryComponent } from 'mithril';
 import { FlatButton, Pagination } from 'mithril-materialized';
-import { Form, labelResolver, LayoutForm } from 'mithril-ui-form';
+import { Form, labelResolver, SlimdownView } from 'mithril-ui-form';
 import { IAddress, ICareProvider, ILocation, isLocationActive } from '../../../common/dist';
+import { CircularSpinner } from '../components/ui/preloader';
 import { CareProviderForm, LocationForm } from '../template/form';
-import { p, range, slice, targetFilter } from '../utils';
+import { generateLocationReport, p, range, slice, targetFilter } from '../utils';
 import { Dashboards, dashboardSvc } from './dashboard-service';
 
 export interface IFormattedEvent extends Attributes {
@@ -43,31 +44,13 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
     showDetails?: string;
   };
 
-  const ignoredIdsInCareForm = ['active', 'nonactive', 'di', 'de'];
-
-  const abbreviatedCareForm = LocationForm.reduce(
-    (acc, cur) => {
-      const { id } = cur;
-      if (!id || ignoredIdsInCareForm.indexOf(id) < 0) {
-        acc.push(cur);
-      }
-      return acc;
-    },
-    [] as Form
-  );
-
-  // const getStartDate = (l: ILocation) => {
-  //   if (l.aant) {
-  //     const di = l.aant[l.aant.length - 1].di;
-  //     return di ? new Date(di).toLocaleDateString() : '';
-  //   }
-  //   return '';
-  // };
-
   const uniqueLocationIdentifier = (l: ILocation) => `${p(l.pc)}${p(l.hn)}${p(l.toev)}`;
 
   return {
     view: ({ attrs: { careProvider: cp, filterValue, isActive, isWvggz, isWzd } }) => {
+      if (!cp) {
+        m(CircularSpinner, { className: 'center-align', style: 'margin-top: 20%;' });
+      }
       const { naam, kvk, locaties = [], $loki } = cp;
       const { showDetails, resolveObj } = state;
 
@@ -133,7 +116,7 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
                 [
                   m('span.col.s5', `${p(l.naam)} ${p(l.nmr, `, #${l.nmr}`)}`),
                   m('span.col.s5', `${p(l.str)} ${p(l.hn)}${p(l.toev)}, ${p(l.pc)}, ${p(l.wn)}`),
-                  m('span.col.s1', `${l.isWzd && l.isWvggz ? 'Beide' : l.isWzd ? 'Wzd' : l.isWvggz ? 'Wvggz' : '' }`),
+                  m('span.col.s1', `${l.isWzd && l.isWvggz ? 'Beide' : l.isWzd ? 'Wzd' : l.isWvggz ? 'Wvggz' : ''}`),
                   m('span.col.s1', `${isLocationActive(l) ? 'Ja' : 'Nee'}`),
                   showDetails === uniqueLocationIdentifier(l)
                     ? m('.col.s12.card.wrap', [
@@ -145,11 +128,7 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
                             e.stopPropagation();
                           },
                         }),
-                        m(LayoutForm, {
-                          form: abbreviatedCareForm,
-                          obj: l,
-                          disabled: true,
-                        }),
+                        m(SlimdownView, { className: 'col s12 location', md: generateLocationReport(l) }),
                       ])
                     : undefined,
                 ]

@@ -202,5 +202,12 @@ li.clickable {
 }
 .row .col.indent2 {
   margin-left: 4em;
-  width: 80%;
+  /* width: 80%; */
+}
+
+.markdown.location {
+  color: black;
+  font-weight: normal;
+  margin-top: -1em;
+  margin-bottom: 1em;
 }
