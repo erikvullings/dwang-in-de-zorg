@@ -58,7 +58,7 @@ export class RestService<T extends { $loki?: number }> {
           body: fd || item,
           withCredentials: this.withCredentials,
         })
-        .catch(e => console.error(e));
+        .catch((e: ErrorEvent) => console.error(e));
       // this.setCurrent(data);
       this.current = item;
       this.updateItemInList(item);
@@ -155,5 +155,6 @@ export class RestService<T extends { $loki?: number }> {
 
   private removeItemFromList(id?: string | number) {
     this.setList([...this.list.filter(i => i.$loki !== id)]);
+    this.filteredList = this.filteredList.filter(i => i.$loki !== id);
   }
 }
