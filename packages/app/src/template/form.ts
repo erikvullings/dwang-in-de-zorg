@@ -206,6 +206,7 @@ export const CareForm: Form = [
     id: 'zv',
     label: 'Vormen van verplichte zorg die worden verleend:',
     type: 'options',
+    show: 'isWvggz = true',
     options: careOptions,
     multiple: true,
     checkboxClass: 'col s12',

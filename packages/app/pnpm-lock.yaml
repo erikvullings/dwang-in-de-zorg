@@ -23,7 +23,7 @@ devDependencies:
   '@types/materialize-css': 1.0.6
   '@types/mithril': 2.0.2
   autoprefixer: 9.7.2
-  core-js: 3.4.1
+  core-js: 2.6.10
   cssnano: 4.1.10
   parcel-bundler: 1.12.4
   rimraf: 3.0.0
@@ -1593,11 +1593,6 @@ packages:
     dev: true
     resolution:
       integrity: sha512-I39t74+4t+zau64EN1fE5v2W31Adtc/REhzWN+gWRRXg6WH5qAsZm62DHpQ1+Yhe4047T55jvzz7MUqF/dBBlA==
-  /core-js/3.4.1:
-    dev: true
-    requiresBuild: true
-    resolution:
-      integrity: sha512-KX/dnuY/J8FtEwbnrzmAjUYgLqtk+cxM86hfG60LGiW3MmltIc2yAmDgBgEkfm0blZhUrdr1Zd84J2Y14mLxzg==
   /core-util-is/1.0.2:
     dev: true
     resolution:
@@ -5458,7 +5453,7 @@ specifiers:
   '@types/mithril': ^2.0.2
   autoprefixer: ^9.7.2
   base64-js: ^1.3.1
-  core-js: 3.4.1
+  core-js: 2.6.10
   cssnano: ^4.1.10
   deep-object-diff: ^1.1.0
   file-saver: ^2.0.2
