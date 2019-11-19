@@ -1,9 +1,8 @@
 dependencies:
-  axios: 0.19.0
   keycloak-admin: 1.13.0
   papaparse: 5.1.0
 devDependencies:
-  '@types/node': 12.12.7
+  '@types/node': 12.12.9
   '@types/papaparse': 5.0.1
 lockfileVersion: 5.1
 packages:
@@ -11,13 +10,13 @@ packages:
     dev: false
     resolution:
       integrity: sha512-orGL5LXERPYsLov6CWs3Fh6203+dXzJkR7OnddIr2514Hsecwc8xRpzCapshBbKFImCsvS/mk6+FWiN5LyZJAQ==
-  /@types/node/12.12.7:
+  /@types/node/12.12.9:
     dev: true
     resolution:
-      integrity: sha512-E6Zn0rffhgd130zbCbAr/JdXfXkoOUFAKNs/rF8qnafSJ8KYaA/j3oz7dcwal+lYjLA7xvdd5J4wdYpCTlP8+w==
+      integrity: sha512-kV3w4KeLsRBW+O2rKhktBwENNJuqAUQHS3kf4ia2wIaF/MN6U7ANgTsx7tGremcA0Pk3Yh0Hl0iKiLPuBdIgmw==
   /@types/papaparse/5.0.1:
     dependencies:
-      '@types/node': 12.12.7
+      '@types/node': 12.12.9
     dev: true
     resolution:
       integrity: sha512-neEiIoeNezVK5yAWuO0El6056BBt+SPy0BtDmggcy1fSdfxLltE4WXaSsnPI2V4SxoRGIEAtkZyeDRxHXhcAKQ==
@@ -28,13 +27,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-0BfJq4NSfQXd+SkFdrvFbG7addhYSBA2mQwISr46pD6E5iqkWg02RAs8vyTT/j0RTnoYmeXauBuSv1qKwR179g==
-  /axios/0.19.0:
-    dependencies:
-      follow-redirects: 1.5.10
-      is-buffer: 2.0.4
-    dev: false
-    resolution:
-      integrity: sha512-1uvKqKQta3KBxIz14F2v06AEHZ/dIoeKfbTRkK1E5oqjDnuEerLmYTgJB5AiQZHJcljpg1TuRzdjDR06qNk0DQ==
   /bluebird/3.7.1:
     dev: false
     resolution:
@@ -109,6 +101,5 @@ packages:
 specifiers:
   '@types/node': ^12.12.6
   '@types/papaparse': ^5.0.1
-  axios: ^0.19.0
   keycloak-admin: 1.13.0
   papaparse: ^5.1.0

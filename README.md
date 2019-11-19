@@ -33,6 +33,20 @@ npm i
 npm start
 ```
 
+## Building a standalone Docker container
+
+During development, I run the backend server on localhost:3030. This is specified in the `packages/app/.env` setting via the `SERVER="http://localhost:3030"` command, as Parcel uses this information and makes it available in the build client. However, during production, the location of the server is based on the location of the application, so if the locations runs at `locatieregister.dwangindezorg.nl`, then the API is found at `locatieregister.dwangindezorg.nl/api`. In order to make this work, the `.env` variable is cleared (commented out).
+
+So after you have commented out the `SERVER` variable in the `packages/app/.env` file, you can now safely run
+
+```bash
+npm run docker:local    # to build it
+npm run docker:run      # to run it locally and test it
+### And if you are happy
+docker rm lr            # to remove the container you just created
+npm run docker:publish  # to publish it to docker to the minvws organisation
+```
+
 ### Environment settings
 
 - LOKI_PORT: to change the output port, default 3000, e.g. `set LOKI_PORT=80` to serve it at [http://localhost](http://localhost).
