@@ -18,13 +18,13 @@ export interface ILocation extends IAddress, IQueryable {
   isWzd?: boolean;
   /** Is de locatie een WZD accommodatie */
   isWzdAcco: YesNo;
-  /** Levert de WZD accomodatie ambulante zorg */
+  /** Levert de WZD accommodatie ambulante zorg */
   isWzdAmbu: YesNo;
   /** Wordt op de locatie Wvggz zorg geleverd */
   isWvggz?: boolean;
   /** Is de locatie een WVGGZ accommodatie */
   isWvggzAcco: YesNo;
-  /** Levert de WZD accomodatie ambulante zorg */
+  /** Levert de WZD accommodatie ambulante zorg */
   isWvggzAmbu: YesNo;
   /** Welk type zorg wordt geleverd */
   zv?: CareType[];

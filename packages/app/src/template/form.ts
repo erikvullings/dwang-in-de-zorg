@@ -336,7 +336,7 @@ NB: De locatie is nooit het adres van de patiënt. In dat geval, gebruik het adr
     value: 'nee',
     options: [
       { id: 'nee', label: 'Nee: Wzd locatie' },
-      { id: 'ja', label: 'Ja: Wzd accomodatie' },
+      { id: 'ja', label: 'Ja: Wzd accommodatie' },
     ],
     show: 'isWzd = true',
     className: 'input-field col s12 indent1',
@@ -361,7 +361,7 @@ NB: De locatie is nooit het adres van de patiënt. In dat geval, gebruik het adr
     value: 'nee',
     options: [
       { id: 'nee', label: 'Nee: Wvggz locatie' },
-      { id: 'ja', label: 'Ja: Wvggz accomodatie' },
+      { id: 'ja', label: 'Ja: Wvggz accommodatie' },
     ],
     show: 'isWvggz = true',
     className: 'input-field col s12 indent1',
