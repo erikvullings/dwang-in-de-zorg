@@ -47,42 +47,101 @@ const rechtsvorm = [
   { id: 'Maatschap', label: 'Maatschap' },
   { id: 'Vennootschap onder firma', label: 'Vennootschap onder firma' },
   { id: 'NV/BV in oprichting op B-formulier', label: 'NV/BV in oprichting op B-formulier' },
-  { id: 'Commanditaire vennootschap met één beherende vennoot', label: 'Commanditaire vennootschap met één beherende vennoot' },
-  { id: 'Commanditaire vennootschap met meer dan een beherende vennoot', label: 'Commanditaire vennootschap met meer dan een beherende vennoot' },
+  {
+    id: 'Commanditaire vennootschap met één beherende vennoot',
+    label: 'Commanditaire vennootschap met één beherende vennoot',
+  },
+  {
+    id: 'Commanditaire vennootschap met meer dan een beherende vennoot',
+    label: 'Commanditaire vennootschap met meer dan een beherende vennoot',
+  },
   { id: 'NV/BV in oprichting op B-formulier', label: 'NV/BV in oprichting op B-formulier' },
   { id: 'Rechtspersoon in oprichting', label: 'Rechtspersoon in oprichting' },
   { id: 'Besloten vennootschap met gewone structuur', label: 'Besloten vennootschap met gewone structuur' },
-  { id: 'Besloten vennootschap blijkens statuten structuurvennootschap', label: 'Besloten vennootschap blijkens statuten structuurvennootschap' },
-  { id: 'Naamloze vennootschap met gewone structuur', label: 'Naamloze vennootschap met gewone structuur' },
-  { id: 'Naamloze vennootschap blijkens statuten structuurvennootschap', label: 'Naamloze vennootschap blijkens statuten structuurvennootschap' },
-  { id: 'Naamloze vennootschap beleggingsmaatschappij met veranderlijk kapitaal', label: 'Naamloze vennootschap beleggingsmaatschappij met veranderlijk kapitaal' },
   {
-    id: 'Naamloze vennootschap beleggingsmaatschappij met veranderlijk kapitaal blijkens statuten structuurvennootschaeggingsmaatschappij met veranderlijk kapitaal blijkens statuten structuurvennootschap',
-    label: 'Naamloze vennootschap beleggingsmaatschappij met veranderlijk kapitaal blijkens statuten structuurvennootschaeggingsmaatschappij met veranderlijk kapitaal blijkens statuten structuurvennootschap',
+    id: 'Besloten vennootschap blijkens statuten structuurvennootschap',
+    label: 'Besloten vennootschap blijkens statuten structuurvennootschap',
+  },
+  { id: 'Naamloze vennootschap met gewone structuur', label: 'Naamloze vennootschap met gewone structuur' },
+  {
+    id: 'Naamloze vennootschap blijkens statuten structuurvennootschap',
+    label: 'Naamloze vennootschap blijkens statuten structuurvennootschap',
+  },
+  {
+    id: 'Naamloze vennootschap beleggingsmaatschappij met veranderlijk kapitaal',
+    label: 'Naamloze vennootschap beleggingsmaatschappij met veranderlijk kapitaal',
+  },
+  {
+    id:
+      'Naamloze vennootschap beleggingsmaatschappij met veranderlijk kapitaal blijkens statuten structuurvennootschaeggingsmaatschappij met veranderlijk kapitaal blijkens statuten structuurvennootschap',
+    label:
+      'Naamloze vennootschap beleggingsmaatschappij met veranderlijk kapitaal blijkens statuten structuurvennootschaeggingsmaatschappij met veranderlijk kapitaal blijkens statuten structuurvennootschap',
   },
   { id: 'Coöperatie ua met gewone structuur', label: 'Coöperatie ua met gewone structuur' },
-  { id: 'Coöperatie ua blijkens statuten structuurcoöperatie', label: 'Coöperatie ua blijkens statuten structuurcoöperatie' },
+  {
+    id: 'Coöperatie ua blijkens statuten structuurcoöperatie',
+    label: 'Coöperatie ua blijkens statuten structuurcoöperatie',
+  },
   { id: 'Coöperatie wa met gewone structuur', label: 'Coöperatie wa met gewone structuur' },
-  { id: 'Coöperatie wa blijkens statuten structuurcoöperatie', label: 'Coöperatie wa blijkens statuten structuurcoöperatie' },
+  {
+    id: 'Coöperatie wa blijkens statuten structuurcoöperatie',
+    label: 'Coöperatie wa blijkens statuten structuurcoöperatie',
+  },
   { id: 'Coöperatie ba met gewone structuur', label: 'Coöperatie ba met gewone structuur' },
-  { id: 'Coöperatie ba blijkens statuten structuurcoöperatie', label: 'Coöperatie ba blijkens statuten structuurcoöperatie' },
+  {
+    id: 'Coöperatie ba blijkens statuten structuurcoöperatie',
+    label: 'Coöperatie ba blijkens statuten structuurcoöperatie',
+  },
   { id: 'Vereniging met volledige rechtbevoegdheid', label: 'Vereniging met volledige rechtbevoegdheid' },
   { id: 'Vereniging met beperkte rechtsbevoegdheid', label: 'Vereniging met beperkte rechtsbevoegdheid' },
   // { i'Kerkgenootschap' 73, label: 'Kerkgenootschap' },
   { id: 'Stichting', label: 'Stichting' },
-  { id: 'Onderlinge waarborgmaatschappij ua met gewone structuur', label: 'Onderlinge waarborgmaatschappij ua met gewone structuur' },
-  { id: 'Onderlinge waarborgmaatschappij ua blijkens statuten structuur-onderlinge', label: 'Onderlinge waarborgmaatschappij ua blijkens statuten structuur-onderlinge' },
-  { id: 'Onderlinge waarborgmaatschappij wa met gewone structuur', label: 'Onderlinge waarborgmaatschappij wa met gewone structuur' },
-  { id: 'Onderlinge waarborgmaatschappij wa blijkens statuten structuur-onderlinge', label: 'Onderlinge waarborgmaatschappij wa blijkens statuten structuur-onderlinge' },
-  { id: 'Onderlinge waarborgmaatschappij ba met gewone structuur', label: 'Onderlinge waarborgmaatschappij ba met gewone structuur' },
-  { id: 'Onderlinge waarborgmaatschappij ba blijkens statuten structuur-onderlinge', label: 'Onderlinge waarborgmaatschappij ba blijkens statuten structuur-onderlinge' },
-  { id: 'Buitenlandse rechtsvorm met hoofdvestiging in Nederland', label: 'Buitenlandse rechtsvorm met hoofdvestiging in Nederland' },
+  {
+    id: 'Onderlinge waarborgmaatschappij ua met gewone structuur',
+    label: 'Onderlinge waarborgmaatschappij ua met gewone structuur',
+  },
+  {
+    id: 'Onderlinge waarborgmaatschappij ua blijkens statuten structuur-onderlinge',
+    label: 'Onderlinge waarborgmaatschappij ua blijkens statuten structuur-onderlinge',
+  },
+  {
+    id: 'Onderlinge waarborgmaatschappij wa met gewone structuur',
+    label: 'Onderlinge waarborgmaatschappij wa met gewone structuur',
+  },
+  {
+    id: 'Onderlinge waarborgmaatschappij wa blijkens statuten structuur-onderlinge',
+    label: 'Onderlinge waarborgmaatschappij wa blijkens statuten structuur-onderlinge',
+  },
+  {
+    id: 'Onderlinge waarborgmaatschappij ba met gewone structuur',
+    label: 'Onderlinge waarborgmaatschappij ba met gewone structuur',
+  },
+  {
+    id: 'Onderlinge waarborgmaatschappij ba blijkens statuten structuur-onderlinge',
+    label: 'Onderlinge waarborgmaatschappij ba blijkens statuten structuur-onderlinge',
+  },
+  {
+    id: 'Buitenlandse rechtsvorm met hoofdvestiging in Nederland',
+    label: 'Buitenlandse rechtsvorm met hoofdvestiging in Nederland',
+  },
   { id: 'Nevenvestiging met hoofdvestiging in buitenland', label: 'Nevenvestiging met hoofdvestiging in buitenland' },
   { id: 'Europees economisch samenwerkingsverband (EESV)', label: 'Europees economisch samenwerkingsverband (EESV)' },
-  { id: 'Buitenlandse EG-vennootschap met onderneming in Nederland', label: 'Buitenlandse EG-vennootschap met onderneming in Nederland' },
-  { id: 'Buitenlandse EG-vennootschap met hoofdnederzetting in Nederland', label: 'Buitenlandse EG-vennootschap met hoofdnederzetting in Nederland' },
-  { id: 'Buitenlandse op EG-vennootschap lijkende vennootschap met onderneming in Nederland', label: 'Buitenlandse op EG-vennootschap lijkende vennootschap met onderneming in Nederland' },
-  { id: 'Buitenlandse op EG-vennootschap lijkende vennootschap met hoofdnederzetting in Nederland', label: 'Buitenlandse op EG-vennootschap lijkende vennootschap met hoofdnederzetting in Nederland' },
+  {
+    id: 'Buitenlandse EG-vennootschap met onderneming in Nederland',
+    label: 'Buitenlandse EG-vennootschap met onderneming in Nederland',
+  },
+  {
+    id: 'Buitenlandse EG-vennootschap met hoofdnederzetting in Nederland',
+    label: 'Buitenlandse EG-vennootschap met hoofdnederzetting in Nederland',
+  },
+  {
+    id: 'Buitenlandse op EG-vennootschap lijkende vennootschap met onderneming in Nederland',
+    label: 'Buitenlandse op EG-vennootschap lijkende vennootschap met onderneming in Nederland',
+  },
+  {
+    id: 'Buitenlandse op EG-vennootschap lijkende vennootschap met hoofdnederzetting in Nederland',
+    label: 'Buitenlandse op EG-vennootschap lijkende vennootschap met hoofdnederzetting in Nederland',
+  },
 ];
 
 const ActivityForm: Form = [
@@ -122,7 +181,7 @@ export const careOptions = [
   {
     id: 'isBeperkenEigenLeven',
     label:
-      'Aanbrengen van beperkingen in de vrijheid het eigen leven in te richten, die tot gevolg hebben dat betrokkene iets moet doen of nalaten, waaronder het gebruik van communicatiemiddelenBeperken in de vrijheid het eigen leven in te richten',
+      'Aanbrengen van beperkingen in de vrijheid het eigen leven in te richten, die tot gevolg hebben dat betrokkene iets moet doen of nalaten, waaronder het gebruik van communicatiemiddelen',
     show: ['isWvggz = true'],
   },
   {
@@ -150,6 +209,7 @@ export const CareForm: Form = [
     options: careOptions,
     multiple: true,
     checkboxClass: 'col s12',
+    checkAllOptions: 'Alle opties selecteren|Alle opties wissen',
   },
   { id: 'active', type: 'md', show: 'isActief', value: 'Deze locatie is momenteel actief.' },
   {
@@ -205,7 +265,12 @@ const AddressForm: Form = [
     className: 'col s12 m6',
   },
   { id: 'aanv', label: 'Aanvullende adresinformatie', type: 'textarea' },
-  { show: 'noMail = true', disabled: true, label: 'Adresgegevens mogen niet gebruikt worden voor mail/contact', type: 'md' },
+  {
+    show: 'noMail = true',
+    disabled: true,
+    label: 'Adresgegevens mogen niet gebruikt worden voor mail/contact',
+    type: 'md',
+  },
 ];
 
 const LocationAddressForm: Form = [
@@ -252,7 +317,11 @@ export const LocationForm: Form = [
 
 NB: De locatie is nooit het adres van de patiënt. In dat geval, gebruik het adres van waaruit de zorg geleverd wordt.`,
   },
-  { type: 'md', show: 'mutated', value: 'De laatste wijziging van de locatiegegevens vond plaats op {{mutated:date}}.' },
+  {
+    type: 'md',
+    show: 'mutated',
+    value: 'De laatste wijziging van de locatiegegevens vond plaats op {{mutated:date}}.',
+  },
   { id: 'nmr', label: 'nmr', type: 'text', className: 'col s12 m4' },
   { id: 'naam', type: 'text', required: true, className: 'col s12 m8' },
   { id: 'omschr', label: 'Locatieomschrijving', type: 'textarea' },
@@ -265,7 +334,10 @@ NB: De locatie is nooit het adres van de patiënt. In dat geval, gebruik het adr
     label: 'Is gedwongen opname op grond van de Wzd mogelijk?',
     type: 'radio',
     value: 'nee',
-    options: [{ id: 'nee', label: 'Nee: Wzd locatie' }, { id: 'ja', label: 'Ja: Wzd accomodatie' }],
+    options: [
+      { id: 'nee', label: 'Nee: Wzd locatie' },
+      { id: 'ja', label: 'Ja: Wzd accomodatie' },
+    ],
     show: 'isWzd = true',
     className: 'input-field col s12 indent1',
   },
@@ -275,7 +347,10 @@ NB: De locatie is nooit het adres van de patiënt. In dat geval, gebruik het adr
     label: 'Wordt in of vanuit deze accommodatie ook ambulante zorg verleend? ',
     value: 'nee',
     type: 'radio',
-    options: [{ id: 'nee', label: 'Nee' }, { id: 'ja', label: 'Ja' }],
+    options: [
+      { id: 'nee', label: 'Nee' },
+      { id: 'ja', label: 'Ja' },
+    ],
     className: 'col s12 indent2',
   },
   { id: 'isWvggz', label: 'Wet verplichte ggz?', type: 'checkbox', className: 'col s12' },
@@ -284,7 +359,10 @@ NB: De locatie is nooit het adres van de patiënt. In dat geval, gebruik het adr
     label: 'Is gedwongen opname op grond van de Wvggz mogelijk?',
     type: 'radio',
     value: 'nee',
-    options: [{ id: 'nee', label: 'Nee: Wvggz locatie' }, { id: 'ja', label: 'Ja: Wvggz accomodatie' }],
+    options: [
+      { id: 'nee', label: 'Nee: Wvggz locatie' },
+      { id: 'ja', label: 'Ja: Wvggz accomodatie' },
+    ],
     show: 'isWvggz = true',
     className: 'input-field col s12 indent1',
   },
@@ -294,7 +372,10 @@ NB: De locatie is nooit het adres van de patiënt. In dat geval, gebruik het adr
     label: 'Wordt in of vanuit deze accommodatie ook ambulante zorg verleend? ',
     value: 'nee',
     type: 'radio',
-    options: [{ id: 'nee', label: 'Nee' }, { id: 'ja', label: 'Ja' }],
+    options: [
+      { id: 'nee', label: 'Nee' },
+      { id: 'ja', label: 'Ja' },
+    ],
     className: 'col s12 indent2',
   },
   { id: 'target' },
@@ -310,7 +391,13 @@ export const CareProviderForm: Form = [
   { id: 'kvk', label: 'KvK-nummer', disabled: true, type: 'number', required: true, className: 'col s12 m4' },
   { id: 'naam', label: 'Zorgaanbieder', disabled: 'kvk', type: 'text', required: true, className: 'col s12 m8' },
   { id: 'rechtsvorm', disabled: 'kvk', required: true, type: 'select', options: rechtsvorm, className: 'col s12' },
-  { id: 'published', label: 'Is publiek zichtbaar in het register', required: true, type: 'checkbox', className: 'col s12' },
+  {
+    id: 'published',
+    label: 'Is publiek zichtbaar in het register',
+    required: true,
+    type: 'checkbox',
+    className: 'col s12',
+  },
   ...AddressForm,
   { type: 'md', value: 'Voeg via het menu links uw locaties toe.' },
 

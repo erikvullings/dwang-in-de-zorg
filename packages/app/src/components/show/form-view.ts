@@ -25,6 +25,10 @@ export const FormView: FactoryComponent = () => {
         const cp = await careProvidersSvc.load(m.route.param('id')).catch(r => reject(r));
         state.careProvider = cp ? deepCopy(cp) : ({} as ICareProvider);
         state.loaded = true;
+        if (cp) {
+          window.localStorage.setItem('last_visited', `${cp.$loki}`);
+          window.localStorage.setItem('last_visited_name', `${cp.naam}`);
+        }
         resolve();
       });
     },

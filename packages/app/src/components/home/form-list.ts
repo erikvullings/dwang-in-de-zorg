@@ -49,6 +49,9 @@ export const EventsList = () => {
   const search = debounce((query: string) => careProvidersSvc.search(query), 400);
   const paginationSize = 20;
 
+  const visitCareProvider = (id?: string | number) =>
+    id && m.route.set(dashboardSvc.route(Dashboards.READ).replace(':id', `${id}`));
+
   return {
     oninit: () => careProvidersSvc.loadFilteredList(),
     view: () => {
@@ -71,7 +74,8 @@ export const EventsList = () => {
         filteredCareProviders.filter(slice((curPage - 1) * paginationSize, curPage * paginationSize));
 
       const maxPages = Math.ceil(filteredCareProviders.length / paginationSize);
-
+      const lastVisited = window.localStorage.getItem('last_visited');
+      const lastVisitedName = window.localStorage.getItem('last_visited_name') || '';
       // console.log(JSON.stringify(filteredCareProviders, null, 2));
       return m('.row', { style: 'margin-top: 1em;' }, [
         m(
@@ -116,11 +120,17 @@ export const EventsList = () => {
               style: 'margin-right:100px',
               className: 'col s12',
             }),
+            m('.option-buttons',
+            lastVisited && m(FlatButton, {
+              label: lastVisitedName,
+              iconName: 'link',
+              class: 'col s12',
+              onclick: () => visitCareProvider(lastVisited),
+            }),
             m(FlatButton, {
               label: AppState.searchQuery ? 'Download selectie als CSV' : 'Download register als CSV',
               iconName: 'cloud_download',
-              class: 'col s11',
-              style: 'margin: 0 1em;',
+              class: 'col s12',
               onclick: async () => {
                 const cps = AppState.searchQuery ? filteredCareProviders : await careProvidersSvc.loadList();
                 const csv = careProvidersToCSV(cps);
@@ -131,7 +141,7 @@ export const EventsList = () => {
                   saveAs(blob, csvFilename(AppState.searchQuery), { autoBom: true });
                 }
               },
-            }),
+            })),
           ]
         ),
         m(
@@ -151,7 +161,7 @@ export const EventsList = () => {
                   m(
                     'li.clickable',
                     {
-                      onclick: () => m.route.set(dashboardSvc.route(Dashboards.READ).replace(':id', `${cp.$loki}`)),
+                      onclick: () => cp && visitCareProvider(cp.$loki),
                     },
                     [m('span.col.s7', cp.naam), m('span.col.s3', cp.wn), m('span.col.s2', cp.kvk)]
                   )

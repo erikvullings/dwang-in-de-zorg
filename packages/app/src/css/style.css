@@ -211,3 +211,12 @@ li.clickable {
   margin-top: -1em;
   margin-bottom: 1em;
 }
+.option-buttons > a {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  height: 32.4px;
+  margin-left: 10px;
+  line-height: 32.4px;
+  font-size: 13px;
+}
