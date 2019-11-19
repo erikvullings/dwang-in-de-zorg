@@ -7,7 +7,7 @@ import logo from '../../assets/locatieregister.svg';
 import vws from '../../assets/logo_minvws.svg';
 import { careProvidersSvc } from '../../services';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
-import { careProvidersToCSV, padLeft, csvFilename } from '../../utils';
+import { careProvidersToCSV, csvFilename } from '../../utils';
 
 export const HomePage = () => ({
   view: () => [
@@ -17,7 +17,7 @@ export const HomePage = () => ({
         'nav',
         m('.nav-wrapper', [
           m(
-            'a.brand-logo[href=#]',
+            'a.brand-logo',
             { style: 'margin: 0 10px 0 20px; left: 20px' },
             m(`img[width=48][height=48][src=${logo}]`, { style: 'margin-top: 5px; margin-left: -5px;' })
           ),
@@ -101,10 +101,7 @@ export const HomePage = () => ({
     m(
       'footer.page-footer',
       { style: 'height: 60px; padding: 5px 0;' },
-      m(
-        '.container.center-align',
-        m('.clearfix', m('.white-text', '©2019 VWS, 19 november 2019'))
-      )
+      m('.container.center-align', m('.clearfix', m('.white-text', '©2019 VWS, 19 november 2019')))
     ),
   ],
 });
