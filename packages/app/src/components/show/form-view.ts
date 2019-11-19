@@ -12,7 +12,9 @@ import { CircularSpinner } from '../ui/preloader';
 export const FormView: FactoryComponent = () => {
   const state = {
     filterValue: '',
-    isActive: true,
+    // Voor 2020
+    // isActive: true,
+    isActive: false,
     isWzd: false,
     isWvggz: false,
     careProvider: {} as Partial<ICareProvider>,
