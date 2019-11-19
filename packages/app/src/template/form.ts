@@ -344,7 +344,7 @@ NB: De locatie is nooit het adres van de patiënt. In dat geval, gebruik het adr
   {
     id: 'isWzdAmbu',
     show: 'isWzdAcco = ja',
-    label: 'Wordt in of vanuit deze accommodatie ook ambulante zorg verleend? ',
+    label: 'Wordt in of vanuit deze accommodatie ook ambulante gedwongen zorg verleend? ',
     value: 'nee',
     type: 'radio',
     options: [
@@ -369,7 +369,7 @@ NB: De locatie is nooit het adres van de patiënt. In dat geval, gebruik het adr
   {
     id: 'isWvggzAmbu',
     show: 'isWvggzAcco = ja',
-    label: 'Wordt in of vanuit deze accommodatie ook ambulante zorg verleend? ',
+    label: 'Wordt in of vanuit deze accommodatie ook ambulante gedwongen zorg verleend? ',
     value: 'nee',
     type: 'radio',
     options: [
