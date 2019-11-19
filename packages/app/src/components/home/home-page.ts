@@ -59,11 +59,9 @@ export const HomePage = () => ({
         '.section.white',
         m('.row.container.center', [
           m(SlimdownView, {
-            md: `## Locatieregister
+            md: `## Locatieregister Wvggz/Wzd
 
-De Wet zorg en dwang regelt de rechten van mensen met een verstandelijke beperking en mensen met een psychogeriatrische aandoening (zoals dementie) die onvrijwillige zorg krijgen. Daarnaast regelt deze wet ook de onvrijwillige opname. De Wzd gaat op 1 januari 2020 in.
-
-Zorgaanbieders dienen hier alle locaties te registreren alwaar zij deze vorm van zorg geven, en actief de status bij te houden.`,
+            Het register bevat locaties van zorgaanbieders waarin of van waaruit gedwongen zorg wordt verleend onder de Wet verplichte ggz of de Wet zorg en dwang. Deze wetten bepalen vanaf 1 januari 2020 waar en wanneer gedwongen zorg mag worden toegepast. Het is de verantwoordelijkheid van een zorgaanbieder om locaties te registreren.`,
           }),
           m('.row', [
             m(
@@ -81,7 +79,7 @@ Zorgaanbieders dienen hier alle locaties te registreren alwaar zij deze vorm van
                 m('h5.center', 'Registreren en muteren'),
                 m(
                   'p.light',
-                  'In slechts enkele minuten kunt u uw instelling aanmaken, locaties toevoegen, en de status aanpassen.'
+                  'In slechts enkele minuten kunt u uw zorginstelling aanmaken, locaties toevoegen, en de status aanpassen.'
                 ),
               ])
             ),
@@ -105,7 +103,7 @@ Zorgaanbieders dienen hier alle locaties te registreren alwaar zij deze vorm van
       { style: 'height: 60px; padding: 5px 0;' },
       m(
         '.container.center-align',
-        m('.clearfix', [m('.white-text', 'Footer text'), m('span', '©2019 VWS, v0.1, Oktober 2019')])
+        m('.clearfix', m('.white-text', '©2019 VWS, 19 november 2019'))
       )
     ),
   ],

@@ -37,6 +37,8 @@ npm start
 
 During development, I run the backend server on localhost:3030. This is specified in the `packages/app/.env` setting via the `SERVER="http://localhost:3030"` command, as Parcel uses this information and makes it available in the build client. However, during production, the location of the server is based on the location of the application, so if the locations runs at `locatieregister.dwangindezorg.nl`, then the API is found at `locatieregister.dwangindezorg.nl/api`. In order to make this work, the `.env` variable is cleared (commented out).
 
+Please note that the `home-page.ts` also contains a footer text with a reference to the release date. It would be good to update that too.
+
 So after you have commented out the `SERVER` variable in the `packages/app/.env` file, you can now safely run
 
 ```bash
