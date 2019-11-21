@@ -6,11 +6,12 @@ import { Roles } from '../../models/roles';
 import { careProvidersSvc } from '../../services/care-providers-service';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
 import { Auth } from '../../services/login-service';
-import { debounce, range, slice, careProvidersToCSV, csvFilename, kvkToAddress } from '../../utils';
+import { careProvidersToCSV, csvFilename, debounce, kvkToAddress, range, slice } from '../../utils';
 import { CircularSpinner } from '../ui/preloader';
 
 export const EventsList = () => {
   const state = {
+    newKvk: '',
     searchValue: '',
   };
 
@@ -29,22 +30,22 @@ export const EventsList = () => {
       ? -1
       : 0;
 
-  /**
-   * Function to filter case-insensitive name and description.
-   * @param filterValue Filter text
-   */
-  const cpFilter = (filterValue?: string) => {
-    if (!filterValue) {
-      return () => true;
-    }
-    const fv = stripSpaces(filterValue.toLowerCase()) as string;
-    return (content: Partial<ICareProvider>) =>
-      (content.target && content.target.indexOf(fv) >= 0) ||
-      (content.locaties &&
-        content.locaties.some(loc => {
-          return loc.target && loc.target.indexOf(fv) >= 0;
-        }));
-  };
+  // /**
+  //  * Function to filter case-insensitive name and description.
+  //  * @param filterValue Filter text
+  //  */
+  // const cpFilter = (filterValue?: string) => {
+  //   if (!filterValue) {
+  //     return () => true;
+  //   }
+  //   const fv = stripSpaces(filterValue.toLowerCase()) as string;
+  //   return (content: Partial<ICareProvider>) =>
+  //     (content.target && content.target.indexOf(fv) >= 0) ||
+  //     (content.locaties &&
+  //       content.locaties.some(loc => {
+  //         return loc.target && loc.target.indexOf(fv) >= 0;
+  //       }));
+  // };
 
   const search = debounce((query: string) => careProvidersSvc.search(query), 400);
   const paginationSize = 20;
@@ -66,6 +67,7 @@ export const EventsList = () => {
         cp => cp.published || (Auth.isAuthenticated && (Auth.roles.indexOf(Roles.ADMIN) >= 0 || Auth.canEdit(cp)))
       );
 
+      const { newKvk: newKvK } = state;
       const route = dashboardSvc.route(Dashboards.SEARCH);
       const page = m.route.param('page') ? +m.route.param('page') : 1;
       const curPage = filteredCareProviders && (page - 1) * paginationSize < filteredCareProviders.length ? page : 1;
@@ -75,7 +77,11 @@ export const EventsList = () => {
 
       const maxPages = Math.ceil(filteredCareProviders.length / paginationSize);
       const lastVisited = window.localStorage.getItem('last_visited');
-      const lastVisitedName = window.localStorage.getItem('last_visited_name') || '';
+      const lastVisitedName = (window.localStorage.getItem('last_visited_name') || '').replace(/undefined/i, '');
+
+      const canCreateNewCareProvider = Auth.isAdmin()
+        ? newKvK && careProvidersSvc.checkKvk(newKvK)
+        : Auth.isAuthenticated && !careProvidersSvc.checkKvk(Auth.username);
       // console.log(JSON.stringify(filteredCareProviders, null, 2));
       return m('.row', { style: 'margin-top: 1em;' }, [
         m(
@@ -86,14 +92,15 @@ export const EventsList = () => {
             },
           },
           [
-            (Auth.isAdmin() || (Auth.isAuthenticated && careProvidersSvc.checkKvk(Auth.username))) &&
+            (Auth.isAdmin() || canCreateNewCareProvider) &&
               m(FlatButton, {
                 label: 'Nieuwe zorgaanbieder',
                 iconName: 'add',
+                disabled: canCreateNewCareProvider,
                 class: 'col s11 indigo darken-4 white-text',
                 style: 'margin: 1em;',
                 onclick: async () => {
-                  const kvk = Auth.username;
+                  const kvk = Auth.isAdmin() ? newKvK : Auth.username;
                   const newCp = await kvkToAddress(kvk, {
                     kvk,
                     owner: [Auth.username],
@@ -106,6 +113,15 @@ export const EventsList = () => {
                     }
                   }
                 },
+              }),
+            Auth.isAdmin() &&
+              m(TextInput, {
+                placeholder: 'KvK nieuwe zorgaanbieder',
+                iconName: 'create',
+                style: 'margin-top: -1em',
+                className: 'col s12',
+                initialValue: newKvK,
+                onchange: v => (state.newKvk = v),
               }),
             m('h5', { style: 'margin: 1.2em 0em 0 0.5em' }, 'Zoek zorgaanbieders'),
             m(TextInput, {
@@ -120,28 +136,32 @@ export const EventsList = () => {
               style: 'margin-right:100px',
               className: 'col s12',
             }),
-            m('.option-buttons',
-            lastVisited && m(FlatButton, {
-              label: lastVisitedName,
-              iconName: 'link',
-              class: 'col s12',
-              onclick: () => visitCareProvider(lastVisited),
-            }),
-            m(FlatButton, {
-              label: AppState.searchQuery ? 'Download selectie als CSV' : 'Download register als CSV',
-              iconName: 'cloud_download',
-              class: 'col s12',
-              onclick: async () => {
-                const cps = AppState.searchQuery ? filteredCareProviders : await careProvidersSvc.loadList();
-                const csv = careProvidersToCSV(cps);
-                if (csv) {
-                  const blob = new Blob([csv], {
-                    type: 'text/plain;charset=utf-8',
-                  });
-                  saveAs(blob, csvFilename(AppState.searchQuery), { autoBom: true });
-                }
-              },
-            })),
+            m(
+              '.option-buttons',
+              lastVisited &&
+                lastVisitedName &&
+                m(FlatButton, {
+                  label: lastVisitedName,
+                  iconName: 'link',
+                  class: 'col s12',
+                  onclick: () => visitCareProvider(lastVisited),
+                }),
+              m(FlatButton, {
+                label: AppState.searchQuery ? 'Download selectie als CSV' : 'Download register als CSV',
+                iconName: 'cloud_download',
+                class: 'col s12',
+                onclick: async () => {
+                  const cps = AppState.searchQuery ? filteredCareProviders : await careProvidersSvc.loadList();
+                  const csv = careProvidersToCSV(cps);
+                  if (csv) {
+                    const blob = new Blob([csv], {
+                      type: 'text/plain;charset=utf-8',
+                    });
+                    saveAs(blob, csvFilename(AppState.searchQuery), { autoBom: true });
+                  }
+                },
+              })
+            ),
           ]
         ),
         m(
