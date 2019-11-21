@@ -85,7 +85,7 @@ const careProviderFromViewModel = (cp: Partial<ICareProvider>) => {
 
 const close = async (e?: UIEvent) => {
   // log('closing...');
-  m.route.set('/');
+  dashboardSvc.switchTo(Dashboards.SEARCH);
   if (e) {
     e.preventDefault();
   }
