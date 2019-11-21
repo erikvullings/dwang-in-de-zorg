@@ -2,6 +2,7 @@ import m from 'mithril';
 import { ICareProvider, stripSpaces } from '../../../common/dist';
 import { AppState } from '../models/app-state';
 import { ChannelNames } from '../models/channels';
+import { Auth } from './login-service';
 import { RestService } from './rest-service';
 
 class CareProvidersService extends RestService<Partial<ICareProvider>> {
@@ -11,6 +12,9 @@ class CareProvidersService extends RestService<Partial<ICareProvider>> {
 
   /** Check if the KvK is already registered. */
   public checkKvk(kvk: string | number) {
+    if ((kvk as string).length < 6) {
+      return false;
+    }
     return this.filteredList.some(cp => cp.kvk === kvk);
   }
 
@@ -53,7 +57,8 @@ class CareProvidersService extends RestService<Partial<ICareProvider>> {
     if (!result) {
       console.warn('No result found at ' + this.baseUrl);
     }
-    this.setList(result || []);
+    const list = Auth.isAdmin() ? result || [] : (result || []).filter(cp => cp.published || Auth.canEdit(cp));
+    this.setList(list);
     return this.list;
   }
 }
