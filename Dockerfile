@@ -46,4 +46,4 @@ WORKDIR /home/node/app
 COPY --from=builder /home/node/server ./
 COPY --from=builder /home/node/app/public ./public
 EXPOSE 3030
-CMD ["node", "dist/server.js"]
+CMD ["node",  "-r", "dotenv/config", "dist/server.js"]
