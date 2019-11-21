@@ -137,6 +137,7 @@ export const Auth = {
       .init({
         onLoad: 'login-required',
         redirectUri: window.location.href.replace('?', '') + '?',
+        promiseType: 'native',
       })
       .success((authenticated: boolean) => {
           authSuccessHandler(authenticated);
