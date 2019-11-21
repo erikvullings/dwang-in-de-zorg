@@ -1,9 +1,11 @@
 import m from 'mithril';
 import { SlimdownView } from 'mithril-ui-form';
 
-const md = `#### PRAKTISCHE HANDLEIDING ZORGAANBIEDERS
+const md = `#### INFORMATIE VOOR ZORGAANBIEDERS
 
 De initiële beheerder van een zorgaanbieder's registratie wordt uitgenodigd per brief naar een bij de KvK geregistreerd adres. In de brief bevinden zich een gebruikersnaam (KvK nummer) en een wachtwoord. Hiermee kan men inloggen op deze website, en wijzigingen doorvoeren. Ook is het mogelijk om iemand anders te machtigen die een account heeft. Zie daartoe hieronder.
+
+Indien u nog niet in het register staat, kunt u een email met naam en KvK nummer sturen naar [locatieregister@minvws.nl](mailto:locatieregister@minvws.nl). Binnen twee werkdagen wordt uw account aangemaakt.
 
 ##### Account aanmaken
 
@@ -17,15 +19,21 @@ Klik rechtsboven op inloggen en log in met uw emailadres en wachtwoord.
 
 Bent u uw wachtwoord vergeten? Klik in het inlogscherm op “forgot password” en vul het e-mailadres van uw account in. Volg de instructies van de mail om een nieuw wachtwoord in te stellen.
 
+##### Hoe kom ik erachter wie de beheerder van het account van de zorgaanbieder is?
+
+Als uw zorgaanbieder in het locatieregister geregistreerd is, maar u weet niet wie er in uw organisatie beheerder is van het account van uw organisatie, dan kunt u contact opnemen met [locatieregister@minvws.nl](mailto:locatieregister@minvws.nl).
+
 ##### Iemand anders machtigen
 
 De initiële beheerder, oftewel eigenaar, kan anderen machtigen om wijzigingen in de registratie door te voeren. Ga daartoe naar het register, log in, en selecteer uw eigen zorgaanbieder. Kies “Bewerk registratie”, en voeg de gebruikersnaam (niet de email, aangezien het hier een openbaar register betreft) van de nieuwe administrator toe bij  “Eigenaar(s)” of “Wijzigingen toestaan van”. Eigenaren kunnen, net als gewone gemachtigden, de registratie wijzigen. Zij zijn echter de enigen die ook anderen kunnen machtigen.
 
 ##### Locatie toevoegen
 
-U voegt een locatie toe aan het register door op ‘Nieuwe locatie toevoegen’ te klikken. Als u het vestigingsnummer van een locatie toevoegt, dan worden de adresgegevens automatisch uit het handelsregister van de KvK opgenomen.
+Klik op “bewerk zorgaanbieder” rechtsboven op de pagina van uw organisatie. Klik vervolgens in het menu links op “locaties”. U voegt een locatie toe aan het register door op “nieuwe locatie” te klikken. Als u het vestigingsnummer van een locatie toevoegt, dan worden de adresgegevens automatisch uit het handelsregister van de KvK opgenomen.
 
 U bent verplicht om de velden met een * in te vullen.
+
+Let op. Zodra u een locatie heef opgeslagen kan deze niet meer worden verwijderd.
 
 ##### Locatie op inactief zetten
 
@@ -33,7 +41,7 @@ Klik op “bewerk zorgaanbieder” rechtsboven op de pagina van uw organisatie. 
 
 ##### Locatie verwijderen
 
-Klik op “bewerk zorgaanbieder” rechtsboven op de pagina van uw organisatie. Klik vervolgens in het menu links op “locaties”. Zoek de te verwijderen locatie op en klik rechtsonderaan op de locatiepagina op het rode prullenbakje.
+Klik op “bewerk zorgaanbieder” rechtsboven op de pagina van uw organisatie. Klik vervolgens in het menu links op “locaties”. Zoek de te verwijderen locatie op en klik op het rode prullenbakje rechtsonder op de locatiepagina.
 
 ##### Overzicht locaties van één zorgaanbieder
 
@@ -41,7 +49,7 @@ U kunt in het linker menu filteren op adres, naam of nummer.
 
 ##### Toevoegen of wijzigen van meerdere locaties
 
-Op dit moment is het niet mogelijk om in het register gegevens van meerdere locaties tegelijkertijd te wijzigen of toe te voegen. Veranderingen kunt per locatie in het register doorvoeren. Mocht u de gegevens van grote hoeveelheden locaties willen toevoegen of wijzigen, dan kunt u een bericht sturen aan emailadres ??? om te bespreken of een andere oplossing mogelijk is.
+Op dit moment is het niet mogelijk om in het register gegevens van meerdere locaties tegelijkertijd te wijzigen of toe te voegen. Veranderingen kunt u per locatie in het register doorvoeren. Mocht u de gegevens van grote hoeveelheden locaties willen toevoegen of wijzigen, dan kunt u een bericht sturen aan [locatieregister@minvws.nl](mailto:locatieregister@minvws.nl) om te bespreken of een andere oplossing mogelijk is.
 
 ##### Koppeling handelsregister KvK
 
@@ -53,7 +61,7 @@ Mocht er een urgente situatie zijn, waardoor het niet mogelijk is om te wachten 
 
 U kunt de zorgaanbieder niet verwijderen, neem hiervoor contact op met het locatieregister.
 
-#### PRAKTISCHE HANDLEIDING RAADPLEGERS
+#### INFORMATIE VOOR RAADPLEGERS
 
 ##### Locatie of zorgaanbieder zoeken
 
@@ -71,7 +79,7 @@ Indien u een gedeelte van het register wilt downloaden kunt u dit doen door deze
 
 ##### Historie van een locatie
 
-De historie van een locatie kunt u inzien door te klikken op de desbetreffende locatie. Hier vindt u de datum van de laatste wijziging van de locatiegegevens. Voor een uitgebreider historisch overzicht van de locatie kunt u contact opnemen met het locatieregister.`;
+De historie van een locatie kunt u inzien door te klikken op de desbetreffende locatie. Hier vindt u de datum van de laatste wijziging van de locatiegegevens. Voor een uitgebreider historisch overzicht van de locatie kunt u contact opnemen met het [locatieregister](mailto:locatieregister@minvws.nl).`;
 
 export const AboutPage = () => ({
   view: () =>
