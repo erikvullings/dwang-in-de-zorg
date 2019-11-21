@@ -78,7 +78,7 @@ De vormen van verplichte zorg in de Wvggz zijn:
 <li>Ontnemen van de vrijheid van betrokkene door hem over te brengen naar een plaats die geschikt is voor tijdelijk verblijf.</li>
 </ol>
 
-Bij alle Wvggz-accommodaties die automatisch zijn opgenomen in het register omdat zij een bopz-aanmerking hadden, zijn de volgende vormen van verplichte zorg in het locatieregister geselecteerd: 1, 2, 3 en 10. Deze vormen van verplichte zorg corresponderen met de middelen en maatregelen in de bopz. Een zorgaanbieder mag in het register alle vormen van zorg selecteren die hij kan aanbieden op die locatie, ook als deze zorg op dit moment (nog) niet wordt verleend.
+Bij alle Wvggz-accommodaties die automatisch zijn opgenomen in het register omdat zij een bopz-aanmerking hadden, zijn de volgende vormen van verplichte zorg in het locatieregister geselecteerd: a, b, c en j. Deze vormen van verplichte zorg corresponderen met de middelen en maatregelen in de bopz. Een zorgaanbieder mag in het register alle vormen van zorg selecteren die hij kan aanbieden op die locatie, ook als deze zorg op dit moment (nog) niet wordt verleend.
 
 <sup>1</sup> Zie artikel 1 van de Regeling verplichte geestelijke gezondheidszorg, artikel 1 van de Regeling zorg en dwang, en artikel 1, eerste lid, onder j, van de Handelsregisterwet 2007.<br>
 <sup>2</sup> BAG: Basisregistratie adressen en gebouwen.
