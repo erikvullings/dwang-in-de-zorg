@@ -1,6 +1,6 @@
 import m from 'mithril';
 import { FlatButton, Pagination, TextInput } from 'mithril-materialized';
-import { ICareProvider, stripSpaces } from '../../../../common/dist';
+import { ICareProvider } from '../../../../common/dist';
 import { AppState } from '../../models/app-state';
 import { Roles } from '../../models/roles';
 import { careProvidersSvc } from '../../services/care-providers-service';
