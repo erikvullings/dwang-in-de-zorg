@@ -104,7 +104,7 @@ export const EventsList = () => {
                   const newCp = await kvkToAddress(kvk, {
                     kvk,
                     owner: [Auth.username],
-                    published: true,
+                    published: false,
                   } as ICareProvider);
                   if (newCp) {
                     const cp = await careProvidersSvc.create(newCp);
