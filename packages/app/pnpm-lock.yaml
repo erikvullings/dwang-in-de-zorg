@@ -15,7 +15,6 @@ dependencies:
   regenerator-runtime: 0.13.3
 devDependencies:
   '@babel/core': 7.7.2
-  '@babel/polyfill': 7.7.0
   '@babel/preset-env': 7.7.1_@babel+core@7.7.2
   '@types/file-saver': 2.0.1
   '@types/leaflet': 1.5.5
@@ -23,7 +22,7 @@ devDependencies:
   '@types/materialize-css': 1.0.6
   '@types/mithril': 2.0.2
   autoprefixer: 9.7.2
-  core-js: 2.6.10
+  core-js: 3.4.1
   cssnano: 4.1.10
   parcel-bundler: 1.12.4
   rimraf: 3.0.0
@@ -704,13 +703,6 @@ packages:
       '@babel/core': ^7.0.0-0
     resolution:
       integrity: sha512-RrThb0gdrNwFAqEAAx9OWgtx6ICK69x7i9tCnMdVrxQwSDp/Abu9DXFU5Hh16VP33Rmxh04+NGW28NsIkFvFKA==
-  /@babel/polyfill/7.7.0:
-    dependencies:
-      core-js: 2.6.10
-      regenerator-runtime: 0.13.3
-    dev: true
-    resolution:
-      integrity: sha512-/TS23MVvo34dFmf8mwCisCbWGrfhbiWZSwBo6HkADTBhUa2Q/jWltyY/tpofz/b6/RIhqaqQcquptCirqIhOaQ==
   /@babel/preset-env/7.7.1_@babel+core@7.7.2:
     dependencies:
       '@babel/core': 7.7.2
@@ -1095,7 +1087,7 @@ packages:
   /autoprefixer/9.7.2:
     dependencies:
       browserslist: 4.7.3
-      caniuse-lite: 1.0.30001010
+      caniuse-lite: 1.0.30001011
       chalk: 2.4.2
       normalize-range: 0.1.2
       num2fraction: 1.2.2
@@ -1289,8 +1281,8 @@ packages:
       integrity: sha512-Z942RysHXmJrhqk88FmKBVq/v5tqmSkDz7p54G/MGyjMnCFFnC79XWNbg+Vta8W6Wb2qtSZTSxIGkJrRpCFEiA==
   /browserslist/4.7.3:
     dependencies:
-      caniuse-lite: 1.0.30001010
-      electron-to-chromium: 1.3.306
+      caniuse-lite: 1.0.30001011
+      electron-to-chromium: 1.3.309
       node-releases: 1.1.40
     dev: true
     hasBin: true
@@ -1373,16 +1365,16 @@ packages:
   /caniuse-api/3.0.0:
     dependencies:
       browserslist: 4.7.3
-      caniuse-lite: 1.0.30001010
+      caniuse-lite: 1.0.30001011
       lodash.memoize: 4.1.2
       lodash.uniq: 4.5.0
     dev: true
     resolution:
       integrity: sha512-bsTwuIg/BZZK/vreVTYYbSWoe2F+71P7K5QGEX+pT250DZbfU1MQ5prOKpPR+LL6uWKK3KMwMCAS74QB3Um1uw==
-  /caniuse-lite/1.0.30001010:
+  /caniuse-lite/1.0.30001011:
     dev: true
     resolution:
-      integrity: sha512-RA5GH9YjFNea4ZQszdWgh2SC+dpLiRAg4VDQS2b5JRI45OxmbGrYocYHTa9x0bKMQUE7uvHkNPNffUr+pCxSGw==
+      integrity: sha512-h+Eqyn/YA6o6ZTqpS86PyRmNWOs1r54EBDcd2NTwwfsXQ8re1B38SnB+p2RKF8OUsyEIjeDU8XGec1RGO/wYCg==
   /caseless/0.12.0:
     dev: true
     resolution:
@@ -1593,6 +1585,11 @@ packages:
     dev: true
     resolution:
       integrity: sha512-I39t74+4t+zau64EN1fE5v2W31Adtc/REhzWN+gWRRXg6WH5qAsZm62DHpQ1+Yhe4047T55jvzz7MUqF/dBBlA==
+  /core-js/3.4.1:
+    dev: true
+    requiresBuild: true
+    resolution:
+      integrity: sha512-KX/dnuY/J8FtEwbnrzmAjUYgLqtk+cxM86hfG60LGiW3MmltIc2yAmDgBgEkfm0blZhUrdr1Zd84J2Y14mLxzg==
   /core-util-is/1.0.2:
     dev: true
     resolution:
@@ -2043,10 +2040,10 @@ packages:
     dev: true
     resolution:
       integrity: sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
-  /electron-to-chromium/1.3.306:
+  /electron-to-chromium/1.3.309:
     dev: true
     resolution:
-      integrity: sha512-frDqXvrIROoYvikSKTIKbHbzO6M3/qC6kCIt/1FOa9kALe++c4VAJnwjSFvf1tYLEUsP2n9XZ4XSCyqc3l7A/A==
+      integrity: sha512-NZd91XD15v2UPLjYXoN/gLnkwIUQjdH4SQLpRCCQiYJH6BBkfgp5pWemBJPr1rZ2dl8Ee3o91O9Sa1QuAfZmog==
   /elliptic/6.5.1:
     dependencies:
       bn.js: 4.11.8
@@ -2077,13 +2074,13 @@ packages:
     dev: true
     resolution:
       integrity: sha512-D9f7V0JSRwIxlRI2mjMqufDrRDnx8p+eEOz7aUM9SuvF8gsBzra0/6tbjl1m8eQHrZlYj6PxqE00hZ1SAIKPLw==
-  /envinfo/7.4.0:
+  /envinfo/7.5.0:
     dev: true
     engines:
       node: '>=4'
     hasBin: true
     resolution:
-      integrity: sha512-FdDfnWnCVjxTTpWE3d6Jgh5JDIA3Cw7LCgpM/pI7kK1ORkjaqI2r6NqQ+ln2j0dfpgxY00AWieSvtkiZQKIItA==
+      integrity: sha512-jDgnJaF/Btomk+m3PZDTTCb5XIIIX3zYItnCRfF73zVgvinLoRomuhi75Y4su0PtQxWz4v66XnLLckyvyJTOIQ==
   /error-ex/1.3.2:
     dependencies:
       is-arrayish: 0.2.1
@@ -2111,7 +2108,7 @@ packages:
     dependencies:
       is-callable: 1.1.4
       is-date-object: 1.0.1
-      is-symbol: 1.0.2
+      is-symbol: 1.0.3
     dev: true
     engines:
       node: '>= 0.4'
@@ -2897,14 +2894,14 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha512-gi4iHK53LR2ujhLVVj+37Ykh9GLqYHX6JOVXbLAucaG/Cqw9xwdFOjDM2qeifLs1sF1npXXFvDu0r5HNgCMrzQ==
-  /is-symbol/1.0.2:
+  /is-symbol/1.0.3:
     dependencies:
       has-symbols: 1.0.1
     dev: true
     engines:
       node: '>= 0.4'
     resolution:
-      integrity: sha512-HS8bZ9ox60yCJLH9snBpIwv9pYUAkcuLhSA1oero1UB5y9aiQpRA8y2ex945AOtCZL1lJDeIk3G5LthswI46Lw==
+      integrity: sha512-OwijhaRSgqvhm/0ZdAcXNZt9lYdKFpcRDT5ULUuYXPoT794UNOdU+gpT6Rzo7b4V2HUl/op6GqY894AZwv9faQ==
   /is-typedarray/1.0.0:
     dev: true
     resolution:
@@ -3686,7 +3683,7 @@ packages:
       deasync: 0.1.16
       dotenv: 5.0.1
       dotenv-expand: 5.1.0
-      envinfo: 7.4.0
+      envinfo: 7.5.0
       fast-glob: 2.2.7
       filesize: 3.6.1
       get-port: 3.2.0
@@ -5444,7 +5441,6 @@ packages:
       integrity: sha512-/4ld+4VV5RnrynMhPZJ/ZpOCGSCeghMykZ3BhdFBDa9Wy/RH6uEGNWDJog+aUlq+9OM1CFTgtYRW5Is1Po9NOA==
 specifiers:
   '@babel/core': 7.7.2
-  '@babel/polyfill': 7.7.0
   '@babel/preset-env': 7.7.1
   '@types/file-saver': ^2.0.1
   '@types/leaflet': ^1.5.5
@@ -5453,7 +5449,7 @@ specifiers:
   '@types/mithril': ^2.0.2
   autoprefixer: ^9.7.2
   base64-js: ^1.3.1
-  core-js: 2.6.10
+  core-js: ^3.4.1
   cssnano: ^4.1.10
   deep-object-diff: ^1.1.0
   file-saver: ^2.0.2
