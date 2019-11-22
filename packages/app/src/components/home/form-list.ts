@@ -19,7 +19,7 @@ import { CircularSpinner } from '../ui/preloader';
 export const FormList = () => {
   const state = {
     newKvK: '',
-    searchValue: ''
+    searchQuery: ''
   };
 
   const sortByName:
@@ -73,7 +73,7 @@ export const FormList = () => {
             (Auth.roles.indexOf(Roles.ADMIN) >= 0 || Auth.canEdit(cp)))
       );
 
-      const { newKvK } = state;
+      const { newKvK, searchQuery } = state;
       const route = dashboardSvc.route(Dashboards.SEARCH);
       const page = m.route.param('page') ? +m.route.param('page') : 1;
       const curPage =
@@ -150,11 +150,12 @@ export const FormList = () => {
               placeholder: 'Naam, kvk, adres...',
               id: 'search',
               iconName: 'search',
-              initialValue: AppState.searchQuery,
+              initialValue: searchQuery,
               onkeyup: (_: KeyboardEvent, v?: string) => {
-                AppState.searchQuery = v ? v : '';
-                search(AppState.searchQuery);
+                state.searchQuery = v ? v : '';
+                search(v);
               },
+              onchange: v => (state.searchQuery = v),
               style: 'margin-right:100px',
               className: 'col s12'
             }),
@@ -169,13 +170,13 @@ export const FormList = () => {
                   onclick: () => visitCareProvider(lastVisited)
                 }),
               m(FlatButton, {
-                label: AppState.searchQuery
+                label: searchQuery
                   ? 'Download selectie als CSV'
                   : 'Download register als CSV',
                 iconName: 'cloud_download',
                 class: 'col s12',
                 onclick: async () => {
-                  const cps = AppState.searchQuery
+                  const cps = searchQuery
                     ? filteredCareProviders
                     : await careProvidersSvc.loadList();
                   const csv = careProvidersToCSV(cps);
@@ -183,7 +184,7 @@ export const FormList = () => {
                     const blob = new Blob([csv], {
                       type: 'text/plain;charset=utf-8'
                     });
-                    saveAs(blob, csvFilename(AppState.searchQuery), {
+                    saveAs(blob, csvFilename(searchQuery), {
                       autoBom: true
                     });
                   }

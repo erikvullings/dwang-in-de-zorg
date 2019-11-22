@@ -101,9 +101,6 @@ a,
   padding-left: 150px;
   height: 85vh;
 }
-#search:not(:focus) {
-  color: white;
-}
 
 @media only screen and (max-width : 992px) {
   .contentarea {
