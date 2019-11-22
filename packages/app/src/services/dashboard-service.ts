@@ -2,7 +2,7 @@ import m, { ComponentTypes, RouteDefs } from 'mithril';
 import { AboutPage } from '../components/about/about-page';
 import { HelpPage } from '../components/about/help-page';
 import { EditForm } from '../components/edit/edit-form';
-import { EventsList } from '../components/home/form-list';
+import { FormList } from '../components/home/form-list';
 import { HomePage } from '../components/home/home-page';
 import { Layout } from '../components/layout';
 import { FormView } from '../components/show/form-view';
@@ -71,7 +71,7 @@ export const dashboardSvc: DashboardService = new DashboardService(Layout, [
     icon: 'home',
     route: '/zoeken',
     visible: true,
-    component: EventsList,
+    component: FormList,
   },
   {
     id: Dashboards.READ,

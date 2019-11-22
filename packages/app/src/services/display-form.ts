@@ -1,9 +1,9 @@
 import m, { Attributes, FactoryComponent } from 'mithril';
 import { FlatButton, Pagination } from 'mithril-materialized';
-import { Form, labelResolver, SlimdownView } from 'mithril-ui-form';
+import { labelResolver, SlimdownView } from 'mithril-ui-form';
 import { IAddress, ICareProvider, ILocation, isLocationActive } from '../../../common/dist';
 import { CircularSpinner } from '../components/ui/preloader';
-import { CareProviderForm, LocationForm } from '../template/form';
+import { CareProviderForm } from '../template/form';
 import { generateLocationReport, p, range, slice, targetFilter } from '../utils';
 import { Dashboards, dashboardSvc } from './dashboard-service';
 
