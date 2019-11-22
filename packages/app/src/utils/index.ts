@@ -151,6 +151,17 @@ export const p = (
   output?: string
 ) => (val ? output || val : '');
 
+const escapeQuotes = (s: string) => /"/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+
+/** Print optional, escape double quotes */
+export const pe = (
+  val: string | number | Date | boolean | undefined,
+  output?: string
+) => {
+  const res = p(val, output);
+  return typeof res === 'string' ? escapeQuotes(res) : res;
+};
+
 export const debounce = (func: (...args: any) => void, timeout: number) => {
   let timer: number;
   return (...args: any) => {
@@ -220,8 +231,8 @@ export const locationToCSV = (careProviderData: string) => ({
   const locationData =
     careProviderData +
     [
-      p(locatienaam),
-      p(locatieomschrijving),
+      pe(locatienaam),
+      pe(locatieomschrijving),
       p(vestigingsnummer),
       p(straat),
       p(huisnummer),
@@ -229,7 +240,7 @@ export const locationToCSV = (careProviderData: string) => ({
       p(postcode),
       p(woonplaatsnaam),
       p(land),
-      p(aanvullendeAdresinformatie),
+      pe(aanvullendeAdresinformatie),
       p(isWzd, 'ja'),
       p(isWzdAcco),
       p(isWzdAmbu),
@@ -318,7 +329,7 @@ export const careProviderToCSV = (
     : landnaamBuitenEuropa;
   const careProviderData =
     [
-      p(naam),
+      pe(naam),
       p(kvk),
       p(rechtsvorm),
       p(straat),
@@ -327,7 +338,7 @@ export const careProviderToCSV = (
       p(postcode),
       p(woonplaatsnaam),
       p(land),
-      p(aanvullendeAdresinformatie)
+      pe(aanvullendeAdresinformatie)
     ].join(';') + ';';
   const locToCSV = locationToCSV(careProviderData);
   const locations = locaties.map(locToCSV);
