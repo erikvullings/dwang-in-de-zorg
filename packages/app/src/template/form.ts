@@ -323,7 +323,7 @@ NB: De locatie is nooit het adres van de patiënt. In dat geval, gebruik het adr
     show: 'mutated',
     value: 'De laatste wijziging van de locatiegegevens vond plaats op {{mutated:date}}.',
   },
-  { id: 'nmr', label: 'nmr', type: 'text', className: 'col s12 m4' },
+  { id: 'nmr', label: 'Vestigingsnummer', type: 'text', className: 'col s12 m4' },
   { id: 'naam', type: 'text', required: true, className: 'col s12 m8' },
   { id: 'omschr', label: 'Locatieomschrijving', type: 'textarea' },
   ...LocationAddressForm,
