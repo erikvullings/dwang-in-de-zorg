@@ -16,8 +16,8 @@ interface IImportedData {
   naam: string;
   kvk: string;
   rechtsvorm?:
-    | 'publiekrechtelijkeRechtspersoon'
-    | 'beslotenVennootschap'
+    | 'publiekrechtelijkerechtspersoon'
+    | 'beslotenvennootschap'
     | 'stichting'
     | 'cooperatie';
   straat: string;
@@ -120,15 +120,15 @@ const jaNee = (value?: string) => (value && value === 'ja' ? 'ja' : 'nee');
 
 const rechtsvormConverter = (
   value?:
-    | 'publiekrechtelijkeRechtspersoon'
-    | 'beslotenVennootschap'
+    | 'publiekrechtelijkerechtspersoon'
+    | 'beslotenvennootschap'
     | 'stichting'
     | 'cooperatie'
 ) => {
   switch (value) {
-    case 'publiekrechtelijkeRechtspersoon':
+    case 'publiekrechtelijkerechtspersoon':
       return 'Publiekrechtelijke rechtspersoon';
-    case 'beslotenVennootschap':
+    case 'beslotenvennootschap':
       return 'Besloten vennootschap met gewone structuur';
     case 'stichting':
       return 'Stichting';
@@ -150,8 +150,10 @@ const pdokLocationSvc = async (pc: string, hn: string, toev: string = '') => {
     ''
   )} ${hn} ${toev}`;
   // await sleep(10);
+  console.log(`PDOK resolving ${pc}, ${hn}${toev ? `, ${toev}` : ''}`);
   const searchResult = await axios.get<IPdokSearchResult>(pdokUrl).catch(_ => {
-    console.error(`Error resolving ${pc}, ${hn}${toev ? `, ${toev}` : ''}!`);
+    console.error(`Error resolving ${pc}, ${hn}${toev ? `, ${toev}` : ''} !`);
+    console.error('');
     return undefined;
   });
   if (
@@ -218,7 +220,10 @@ const resolveLocations = async (cps: Array<Partial<ICareProvider>>) => {
 
 const publishCps = async (cps: Array<Partial<ICareProvider>>) => {
   for (const cp of cps) {
-    await axios.post('http://localhost:3030/api/zorgaanbieders', cp).catch(e => {
+    await axios.post('http://localhost:3030/api/zorgaanbieders', cp)
+    .then(function (response) {
+        console.log(`Publishing  ${cp.naam}:  ${response}`);
+    }).catch(e => {
       console.error(e.message);
       console.log(cp.naam);
       console.log(JSON.stringify(cp).length);
