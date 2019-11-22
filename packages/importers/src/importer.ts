@@ -41,7 +41,7 @@ interface IImportedData {
   // RoWe: aanvullende adresinfo voor adressen van locatieadres
   laanvadresinfo?: string;
   // is wvggz accommodatie + onder welke wetten wordt zorg geleverd
-  iswvggzaco?: string;
+  iswvggzacco?: string;
   // is Wzd accommodatie + onder welke wetten wordt zorg geleverd
   iswzdacco?: string;
   iswzdamb?: string;
@@ -263,7 +263,7 @@ const processCsv = () => {
         llandnaam,
         laanvadresinfo,
         iswzdacco,
-        iswvggzaco,
+        iswvggzacco,
         zvvochtvoedingmedicatie,
         zvbeperkenbewegingsvrijheid,
         zvinsluiten,
@@ -302,8 +302,8 @@ const processCsv = () => {
         aanv: laanvadresinfo,
         isWzd: ja(iswzdacco),
         isWzdAcco: jaNee(iswzdacco),
-        isWvggz: ja(iswvggzaco),
-        isWvggzAcco: jaNee(iswvggzaco),
+        isWvggz: ja(iswvggzacco),
+        isWvggzAcco: jaNee(iswvggzacco),
         isBopz: true,
         zv: Object.keys(zorgvormen).filter(key => zorgvormen[key]),
         aant: [
