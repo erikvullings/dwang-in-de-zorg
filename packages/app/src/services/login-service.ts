@@ -121,6 +121,7 @@ export const Auth = {
           token: Auth.token,
           refreshToken: Auth.refreshToken,
           checkLoginIframe: false,
+          promiseType: 'native',
         })
         .then((authenticated: boolean) => {
           authSuccessHandler(authenticated);
