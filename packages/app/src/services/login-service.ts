@@ -23,7 +23,7 @@ const authSuccessHandler = (authenticated: boolean) => {
 };
 
 export const Auth = {
-  keycloak: {} as KeycloakInstance<'native'>,
+  keycloak: {} as KeycloakInstance<'legacy'>,
   isAuthenticated: false,
   name: '',
   username: '',
@@ -121,12 +121,12 @@ export const Auth = {
           token: Auth.token,
           refreshToken: Auth.refreshToken,
           checkLoginIframe: false,
-          promiseType: 'native',
+          // promiseType: 'native',
         })
-        .then((authenticated: boolean) => {
+        .success((authenticated: boolean) => {
           authSuccessHandler(authenticated);
         })
-        .catch(authErrorHandler);
+        .error(authErrorHandler);
     }
   },
   async login() {
@@ -138,12 +138,12 @@ export const Auth = {
       .init({
         onLoad: 'login-required',
         redirectUri: window.location.href.replace('?', '') + '?',
-        promiseType: 'native',
+        // promiseType: 'native',
       })
-      .then((authenticated: boolean) => {
+      .success((authenticated: boolean) => {
           authSuccessHandler(authenticated);
       })
-      .catch(authErrorHandler);
+      .error(authErrorHandler);
   },
   logout() {
     Auth.cleanTokens();
