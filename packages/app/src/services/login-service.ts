@@ -10,7 +10,7 @@ const tokenKey = 'token';
 const refreshTokenKey = 'refresh-token';
 
 const authErrorHandler = (error: KeycloakError) => {
-  console.log('Failed login via Keycloak');
+  console.warn('Failed login via Keycloak');
   alert('Failed to initialize: ' + error);
 };
 

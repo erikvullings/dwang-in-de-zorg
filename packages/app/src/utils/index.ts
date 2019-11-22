@@ -312,7 +312,7 @@ export const csvFilename = (name = '') => {
 /** Convert the KVK information to a care provider or location */
 export const kvkToAddress = async (kvk: string, addr: Partial<ICareProvider> | Partial<ILocation>, branch?: string) => {
   const result = branch ? await kvkService.searchBranch(kvk, branch) : await kvkService.searchKvK(kvk);
-  console.log(JSON.stringify(result, null, 2));
+  // console.log(JSON.stringify(result, null, 2));
   if (result) {
     const {
       data: { items },
