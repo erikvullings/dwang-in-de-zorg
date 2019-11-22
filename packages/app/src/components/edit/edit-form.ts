@@ -1,4 +1,4 @@
-import { detailedDiff } from 'deep-object-diff';
+import { diff } from 'deep-diff';
 import M from 'materialize-css';
 import m from 'mithril';
 import { Button, Chips, ModalPanel } from 'mithril-materialized';
@@ -7,9 +7,7 @@ import {
   IActivity,
   ICareProvider,
   ILocation,
-  IMutation,
   isLocationActive,
-  removeEmptyKeys,
   toQueryTarget,
 } from '../../../../common/dist';
 import { careProvidersSvc } from '../../services';
@@ -119,13 +117,13 @@ export const EditForm = () => {
     if (cp) {
       // console.log(JSON.stringify(cp, null, 2));
       const restoredCP = toQueryTarget(careProviderFromViewModel(cp));
-      const mutation = removeEmptyKeys(detailedDiff(originalCareProvider, restoredCP) as IMutation);
-      // console.log(JSON.stringify(originalCareProvider!.locaties![0], null, 2));
-      // console.log(JSON.stringify(restoredCP!.locaties![0], null, 2));
-      mutation.editor = Auth.email;
-      mutation.docId = cp.$loki!;
-      await careProvidersSvc.save(restoredCP);
+      const mutation = {
+        editor: Auth.email,
+        docId: cp.$loki!,
+        diff: diff(originalCareProvider, restoredCP),
+      };
       // console.log(JSON.stringify(mutation, null, 2));
+      await careProvidersSvc.save(restoredCP);
       await mutationsSvc.save(mutation);
       state.originalCareProvider = deepCopy(careProvidersSvc.getCurrent());
       state.cp = careProviderToViewModel(careProvidersSvc.getCurrent());
@@ -142,7 +140,7 @@ export const EditForm = () => {
       const i = m.route.param(locaties) ? +m.route.param(locaties) - 1 : 0;
       if (cp && cp.locaties && cp.locaties.length > i) {
         const loc = cp.locaties[i];
-        console.log(JSON.stringify(loc, null, 2));
+        // console.log(JSON.stringify(loc, null, 2));
         if (cp.kvk && loc.nmr && (!loc.pc || !loc.wn)) {
           kvkToAddress(cp.kvk, loc, loc.nmr);
         }
