@@ -45,11 +45,11 @@ In de praktijk kan het dus voorkomen dat op één terrein van een zorgaanbieder 
 
 ###### Ambulante zorg
 
-In de Wzd en de Wvggz is geregeld dat gedwongen zorg ook ambulant kan worden verleend, bijvoorbeeld bij een betrokkene thuis of in een polikliniek. De locatie die dan moet worden opgenomen is de locatie waarin of van waaruit de zorg wordt verleend door een hulpverlener. Het thuisadres van een betrokkene zelf is nooit een locatie en hoeft dus niet geregistreerd te worden.  
+In de Wzd en de Wvggz is geregeld dat gedwongen zorg ook ambulant kan worden verleend, bijvoorbeeld bij een betrokkene thuis of in een polikliniek. De locatie die dan moet worden opgenomen is de locatie waarin of van waaruit de zorg wordt verleend door een hulpverlener. Het thuisadres van een betrokkene zelf is nooit een locatie en hoeft dus niet geregistreerd te worden.
 
 Als bijvoorbeeld een FACT-team verplichte zorg verleent bij mensen thuis of in een RIBW, dan is de centrale werkplek van de hulpverleners in het FACT-team (dus van waaruit de zorg wordt gecoördineerd) de locatie die wordt opgenomen in het register. Dat zou bijvoorbeeld een locatie in een ggz-instelling kunnen zijn, of een coördinatiepunt van onvrijwillige thuiszorg op grond van de Wzd.
 
-Het kan ook zijn dat voor een cliënt die verblijft in een Wzd-accommodatie, verplichte zorg onder de Wvggz nodig is. Het kan zijn dat hulpverleners van een GGZ-instelling dan naar de cliënt toe gaan om de Wvggz-zorg te verlenen. In dit geval moet de plek van waaruit de GGZ-hulpverleners ambulant werken in het locatieregister zijn opgenomen als locatie. Net als wanneer de cliënt thuis woont, hoeft de ambulante Wvggz-zorgaanbieder niet de Wzd-accommodatie waar de cliënt verblijft te registreren. Daar gaat de Wzd-zorgaanbieder over. 
+Het kan ook zijn dat voor een cliënt die verblijft in een Wzd-accommodatie, verplichte zorg onder de Wvggz nodig is. Het kan zijn dat hulpverleners van een GGZ-instelling dan naar de cliënt toe gaan om de Wvggz-zorg te verlenen. In dit geval moet de plek van waaruit de GGZ-hulpverleners ambulant werken in het locatieregister zijn opgenomen als locatie. Net als wanneer de cliënt thuis woont, hoeft de ambulante Wvggz-zorgaanbieder niet de Wzd-accommodatie waar de cliënt verblijft te registreren. Daar gaat de Wzd-zorgaanbieder over.
 
 ###### Overgang van de Wet bopz
 
