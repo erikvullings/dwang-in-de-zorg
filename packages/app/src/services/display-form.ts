@@ -51,7 +51,7 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
       if (!cp) {
         m(CircularSpinner, { className: 'center-align', style: 'margin-top: 20%;' });
       }
-      const { naam, kvk, locaties = [], $loki } = cp;
+      const { naam, kvk, aanv, locaties = [], $loki } = cp;
       const { showDetails, resolveObj } = state;
 
       const careProvider = resolveObj<ICareProvider>(cp) as ICareProvider;
@@ -83,6 +83,7 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
           m('span.col.s12', 'KvK nummer: ' + kvk),
           m('span.col.s12', 'Rechtsvorm: ' + p(rechtsvorm)),
           m(AddressView, { address: cp }),
+          aanv && m('span.col.s12', `Aanvullende adresinformatie: ${aanv}`),
         ]),
         m(
           '.row',
