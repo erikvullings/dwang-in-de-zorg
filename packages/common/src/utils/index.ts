@@ -68,7 +68,7 @@ export const removeEmpty = <T>(obj: { [key: string]: any }): T => {
 };
 
 export const isLocationActive = (loc: ILocation) => {
-  if (!loc.aant) {
+  if (!loc.aant || !(loc.isWvggz || loc.isWzd)) {
     return false;
   }
   const { di: datumIngang, de: datumEinde } = loc.aant[loc.aant.length - 1];
