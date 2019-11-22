@@ -10,6 +10,6 @@ import { Auth } from './services/login-service';
 const restoreSession = async () => {
   await Auth.refreshLogin();
 };
-restoreSession();
+setTimeout(restoreSession, 500);
 
 m.route(document.body, dashboardSvc.defaultRoute, dashboardSvc.routingTable);
