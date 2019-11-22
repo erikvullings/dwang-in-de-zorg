@@ -1,8 +1,8 @@
-import m from "mithril";
-import { IMutation } from "../../../common/dist";
-import { AppState } from "../models/app-state";
-import { TopicNames } from "../models/channels";
-import { IChannelDefinition, messageBus } from "./message-bus-service";
+import m from 'mithril';
+import { IMutation } from '../../../common/dist';
+import { AppState } from '../models/app-state';
+import { TopicNames } from '../models/channels';
+import { IChannelDefinition, messageBus } from './message-bus-service';
 
 const log = console.log;
 const error = console.error;
