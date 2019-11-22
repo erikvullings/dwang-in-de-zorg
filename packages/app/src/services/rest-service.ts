@@ -1,7 +1,8 @@
-import m from 'mithril';
-import { AppState } from '../models/app-state';
-import { TopicNames } from '../models/channels';
-import { IChannelDefinition, messageBus } from './message-bus-service';
+import m from "mithril";
+import { IMutation } from "../../../common/dist";
+import { AppState } from "../models/app-state";
+import { TopicNames } from "../models/channels";
+import { IChannelDefinition, messageBus } from "./message-bus-service";
 
 const log = console.log;
 const error = console.error;
@@ -38,7 +39,7 @@ export class RestService<T extends { $loki?: number }> {
         method: 'POST',
         url: this.baseUrl,
         body: fd || item,
-        withCredentials: this.withCredentials,
+        withCredentials: this.withCredentials
       });
       this.setCurrent(result);
       this.addItemToList(this.current);
@@ -50,7 +51,6 @@ export class RestService<T extends { $loki?: number }> {
 
   public async update(item: T, fd?: FormData) {
     try {
-      console.debug('put');
       await m
         .request({
           method: 'PUT',
@@ -66,6 +66,25 @@ export class RestService<T extends { $loki?: number }> {
     } catch (err) {
       return error(err.message);
     }
+  }
+
+  public async patch(item: T, fd?: IMutation) {
+    const result = await m
+      .request<T>({
+        method: 'PATCH',
+        url: this.baseUrl + item.$loki,
+        body: fd || item,
+        withCredentials: this.withCredentials,
+      })
+      .catch((e: ErrorEvent) => {
+        error(e);
+        return this.load(item.$loki);
+      });
+    if (result) {
+      this.current = result;
+      this.updateItemInList(result);
+    }
+    return this.current;
   }
 
   public async delete(id = this.current.$loki) {
@@ -112,7 +131,10 @@ export class RestService<T extends { $loki?: number }> {
     return this.list;
   }
 
-  public async loadFilteredList(filter: string, refresh = false): Promise<T[] | undefined> {
+  public async loadFilteredList(
+    filter: string,
+    refresh = false
+  ): Promise<T[] | undefined> {
     if (!refresh && this.filteredList && this.filteredList.length > 0) {
       this.list = this.filteredList;
       return this.list;

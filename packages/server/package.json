@@ -30,12 +30,12 @@
   },
   "homepage": "https://github.com/erikvullings/dwang-in-de-zorg#readme",
   "dependencies": {
-    "rest-easy-loki": "^0.5.1",
+    "rest-easy-loki": "^0.6.0",
     "koa-proxies": "0.9.0",
     "dotenv": "^8.2.0"
   },
   "devDependencies": {
-    "@types/node": "^12.12.6",
+    "@types/node": "^12.12.11",
     "@types/koa": "2.0.52",
     "@types/koa-compose": "^3.2.5",
     "@types/koa-router": "^7.0.42",

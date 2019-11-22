@@ -1,19 +1,19 @@
-import { diff } from 'deep-diff';
 import M from 'materialize-css';
 import m from 'mithril';
 import { Button, Chips, ModalPanel } from 'mithril-materialized';
 import { deepCopy, LayoutForm } from 'mithril-ui-form';
+import { createPatch } from 'rfc6902';
 import {
   IActivity,
   ICareProvider,
   ILocation,
+  IMutation,
   isLocationActive,
   toQueryTarget,
 } from '../../../../common/dist';
 import { careProvidersSvc } from '../../services';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
 import { Auth } from '../../services/login-service';
-import { mutationsSvc } from '../../services/mutations-service';
 import { CareProviderForm } from '../../template/form';
 import { capitalizeFirstLetter, kvkToAddress } from '../../utils';
 import { CircularSpinner } from '../ui/preloader';
@@ -120,11 +120,10 @@ export const EditForm = () => {
       const mutation = {
         editor: Auth.email,
         docId: cp.$loki!,
-        diff: diff(originalCareProvider, restoredCP),
-      };
-      // console.log(JSON.stringify(mutation, null, 2));
-      await careProvidersSvc.save(restoredCP);
-      await mutationsSvc.save(mutation);
+        saveChanges: 'mutaties',
+        patch: createPatch(originalCareProvider, restoredCP),
+      } as IMutation;
+      await careProvidersSvc.patch(restoredCP, mutation);
       state.originalCareProvider = deepCopy(careProvidersSvc.getCurrent());
       state.cp = careProviderToViewModel(careProvidersSvc.getCurrent());
     }

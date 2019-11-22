@@ -1,5 +1,5 @@
-import { Diff } from 'deep-diff';
-import { ICareProvider, ILokiObj } from './care-provider';
+import { Operation } from 'rfc6902';
+import { ILokiObj } from './care-provider';
 
 export interface IMutation extends ILokiObj {
   /** The one who has made the changes. */
@@ -7,5 +7,7 @@ export interface IMutation extends ILokiObj {
   /** The mutated document */
   docId: number;
   /** Differences */
-  diff?: Array<Diff<Partial<ICareProvider>>>;
+  patch?: Operation[];
+  /** Save the changes to the following DB */
+  saveChanges?: string;
 }
