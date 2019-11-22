@@ -1,7 +1,18 @@
+dependencies:
+  deep-diff: 1.0.2
 devDependencies:
+  '@types/deep-diff': 1.0.0
   typescript: 3.7.2
 lockfileVersion: 5.1
 packages:
+  /@types/deep-diff/1.0.0:
+    dev: true
+    resolution:
+      integrity: sha512-ENsJcujGbCU/oXhDfQ12mSo/mCBWodT2tpARZKmatoSrf8+cGRCPi0KVj3I0FORhYZfLXkewXu7AoIWqiBLkNw==
+  /deep-diff/1.0.2:
+    dev: false
+    resolution:
+      integrity: sha512-aWS3UIVH+NPGCD1kki+DCU9Dua032iSsO43LqQpcs4R3+dVv7tX0qBGjiVHJHjplsoUM2XRO/KB92glqc68awg==
   /typescript/3.7.2:
     dev: true
     engines:
@@ -10,4 +21,6 @@ packages:
     resolution:
       integrity: sha512-ml7V7JfiN2Xwvcer+XAf2csGO1bPBdRbFCkYBczNZggrBZ9c7G3riSUeJmqEU5uOtXNPMhE3n+R4FA/3YOAWOQ==
 specifiers:
+  '@types/deep-diff': ^1.0.0
+  deep-diff: ^1.0.2
   typescript: ^3.7.2
