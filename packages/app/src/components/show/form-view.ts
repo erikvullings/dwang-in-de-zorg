@@ -99,7 +99,7 @@ export const FormView: FactoryComponent = () => {
                 const blob = new Blob([csv], {
                   type: 'text/plain;charset=utf-8',
                 });
-                saveAs(blob, csvFilename(`${careProvider.naam}.csv`), { autoBom: true });
+                saveAs(blob, csvFilename(careProvider.naam), { autoBom: true });
               },
             }),
           ]

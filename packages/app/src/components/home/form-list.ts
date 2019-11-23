@@ -184,7 +184,7 @@ export const FormList = () => {
                     const blob = new Blob([csv], {
                       type: 'text/plain;charset=utf-8'
                     });
-                    saveAs(blob, csvFilename(searchQuery || cps[0].naam), {
+                    saveAs(blob, csvFilename(searchQuery), {
                       autoBom: true
                     });
                   }
