@@ -179,12 +179,12 @@ export const FormList = () => {
                   const cps = searchQuery
                     ? filteredCareProviders
                     : await careProvidersSvc.loadList();
-                  const csv = careProvidersToCSV(cps);
-                  if (csv) {
+                  if (cps) {
+                    const csv = careProvidersToCSV(cps) || '';
                     const blob = new Blob([csv], {
                       type: 'text/plain;charset=utf-8'
                     });
-                    saveAs(blob, csvFilename(searchQuery), {
+                    saveAs(blob, csvFilename(searchQuery || cps[0].naam), {
                       autoBom: true
                     });
                   }

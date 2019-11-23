@@ -6,7 +6,7 @@ import { careProvidersSvc } from '../../services';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
 import { DisplayForm } from '../../services/display-form';
 import { Auth } from '../../services/login-service';
-import { careProviderToCSV } from '../../utils';
+import { careProviderToCSV, csvFilename } from '../../utils';
 import { CircularSpinner } from '../ui/preloader';
 
 export const FormView: FactoryComponent = () => {
@@ -99,7 +99,7 @@ export const FormView: FactoryComponent = () => {
                 const blob = new Blob([csv], {
                   type: 'text/plain;charset=utf-8',
                 });
-                saveAs(blob, `${careProvider.naam}.csv`, { autoBom: true });
+                saveAs(blob, csvFilename(`${careProvider.naam}.csv`), { autoBom: true });
               },
             }),
           ]
