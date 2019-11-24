@@ -48,7 +48,7 @@ Klik op “bewerk zorgaanbieder” rechtsboven op de pagina van uw organisatie. 
 
 ##### Locatie op inactief zetten
 
-Klik op “bewerk zorgaanbieder” rechtsboven op de pagina van uw organisatie. Klik vervolgens in het menu links op “locaties”. Zoek de te wijzigen locatie. U kunt op twee manieren de locatie op inactief zetten: zorg dat de vinkjes van zowel de WVGGZ als de WZD uit staan óf vul een einddatum van de locatie in. Sla vervolgens de wijzigingen op.
+Klik op “bewerk zorgaanbieder” rechtsboven op de pagina van uw organisatie. Klik vervolgens in het menu links op “locaties”. Zoek de te wijzigen locatie. U kunt op twee manieren de locatie op inactief zetten: zorg dat de vinkjes van zowel de Wvggz als de Wzd uit staan óf vul een einddatum van de locatie in. Sla vervolgens de wijzigingen op.
 
 ##### Locatie verwijderen
 
