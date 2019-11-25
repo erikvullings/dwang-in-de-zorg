@@ -359,6 +359,15 @@ export const csvFilename = (name = '') => {
   )}${name ? `_${name}` : ''}_locatieregister.csv`;
 };
 
+/** Create a filename for the JSON */
+export const jsonFilename = (name = '') => {
+  const now = new Date();
+  return `${now.getFullYear()}${padLeft(now.getMonth() + 1, '0')}${padLeft(
+    now.getDate(),
+    '0'
+  )}${name ? `_${name}` : ''}_locatieregister.json`;
+};
+
 /** Convert the KVK information to a care provider or location */
 export const kvkToAddress = async (
   kvk: string,

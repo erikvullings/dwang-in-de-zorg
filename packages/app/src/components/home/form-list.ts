@@ -12,7 +12,8 @@ import {
   debounce,
   kvkToAddress,
   range,
-  slice
+  slice,
+  jsonFilename
 } from '../../utils';
 import { CircularSpinner } from '../ui/preloader';
 
@@ -187,6 +188,24 @@ export const FormList = () => {
                     saveAs(blob, csvFilename(searchQuery), {
                       autoBom: true
                     });
+                  }
+                }
+              }),
+              m(FlatButton, {
+                label: searchQuery
+                  ? 'Download selectie als JSON'
+                  : 'Download register als JSON',
+                iconName: 'cloud_download',
+                class: 'col s12',
+                onclick: async () => {
+                  const cps = searchQuery
+                    ? filteredCareProviders
+                    : await careProvidersSvc.loadList();
+                  if (cps) {
+                    const blob = new Blob([JSON.stringify(cps, null, 2)], {
+                      type: 'application/json'
+                    });
+                    saveAs(blob, jsonFilename(searchQuery), { autoBom: true });
                   }
                 }
               })

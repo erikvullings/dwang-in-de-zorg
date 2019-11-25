@@ -6,7 +6,7 @@ import { careProvidersSvc } from '../../services';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
 import { DisplayForm } from '../../services/display-form';
 import { Auth } from '../../services/login-service';
-import { careProviderToCSV, csvFilename } from '../../utils';
+import { careProviderToCSV, csvFilename, jsonFilename } from '../../utils';
 import { CircularSpinner } from '../ui/preloader';
 
 export const FormView: FactoryComponent = () => {
@@ -100,6 +100,18 @@ export const FormView: FactoryComponent = () => {
                   type: 'text/plain;charset=utf-8',
                 });
                 saveAs(blob, csvFilename(careProvider.naam), { autoBom: true });
+              },
+            }),
+            m(FlatButton, {
+              label: 'Download selectie als JSON',
+              iconName: 'cloud_download',
+              class: 'col s11',
+              style: 'margin: 0 1em;',
+              onclick: () => {
+                const blob = new Blob([JSON.stringify(careProvider, null, 2)], {
+                  type: 'application/json',
+                });
+                saveAs(blob, jsonFilename(careProvider.naam), { autoBom: true });
               },
             }),
           ]
