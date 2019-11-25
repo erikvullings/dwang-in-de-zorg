@@ -63,19 +63,19 @@ export const FormView: FactoryComponent = () => {
               className: 'col s12',
             }),
             m(InputCheckbox, {
-              label: 'Toon alleen actieve locaties',
+              label: 'Filter actieve locaties',
               checked: isActive,
               onchange: f => (state.isActive = f),
               className: 'col s12',
             }),
             m(InputCheckbox, {
-              label: 'Toon alleen Wzd locaties',
+              label: 'Filter Wzd locaties',
               checked: isWzd,
               onchange: f => (state.isWzd = f),
               className: 'col s12',
             }),
             m(InputCheckbox, {
-              label: 'Toon alleen Wvggz locaties',
+              label: 'Filter Wvggz locaties',
               checked: isWvggz,
               onchange: f => (state.isWvggz = f),
               className: 'col s12',

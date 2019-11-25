@@ -92,7 +92,7 @@ export const FormList = () => {
       const lastVisitedName = AppState.lastVisitedName();
 
       const canCreateNewCareProvider = Auth.isAdmin()
-        ? newKvK && careProvidersSvc.checkKvk(newKvK)
+        ? newKvK && !careProvidersSvc.checkKvk(newKvK)
         : Auth.isAuthenticated && !careProvidersSvc.checkKvk(Auth.username);
 
       const visitCareProvider = (id?: string | number) =>
@@ -114,11 +114,11 @@ export const FormList = () => {
               m(FlatButton, {
                 label: 'Nieuwe zorgaanbieder',
                 iconName: 'add',
-                disabled: canCreateNewCareProvider,
+                disabled: !canCreateNewCareProvider,
                 class: 'col s11 indigo darken-4 white-text',
                 style: 'margin: 1em;',
                 onclick: async () => {
-                  const kvk = Auth.isAdmin() ? newKvK : Auth.username;
+                  const kvk = Auth.isAdmin() ? state.newKvK : Auth.username;
                   const newCp = await kvkToAddress(kvk, {
                     kvk,
                     owner: [Auth.username],
