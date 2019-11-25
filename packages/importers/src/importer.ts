@@ -125,7 +125,7 @@ const rechtsvormConverter = (
     | 'stichting'
     | 'cooperatie'
 ) => {
-  switch (value) {
+  switch ((value || '').toLowerCase()) {
     case 'publiekrechtelijkerechtspersoon':
       return 'Publiekrechtelijke rechtspersoon';
     case 'beslotenvennootschap':
