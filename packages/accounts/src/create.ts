@@ -3,7 +3,7 @@ import KcAdminClient from 'keycloak-admin';
 import * as Papa from 'papaparse';
 import * as path from 'path';
 
-const filename = path.resolve(process.cwd(), process.env.USERS || './packages/accounts/users.csv');
+const filename = path.resolve(process.cwd(), process.env.USERS || './users.csv');
 
 interface IImportedData {
   naam: string;
@@ -18,7 +18,7 @@ const create = async () => {
     // Mount the pod:
     // oc login https://k8s-test.overheid.standaardplatform.rijksapps.nl:8443
     // locally kubectl -n vws-locr-tst port-forward pod/jboss-keycloak-deployment-765d77d4f6-swtsj 8080
-    baseUrl: 'http://localhost:8080/auth',
+    baseUrl: 'https://login.locatieregister.dwangindezorg.nl/auth',
     // baseUrl: 'http://localhost:8765/auth',
     realmName: 'master',
   });
@@ -57,7 +57,7 @@ const create = async () => {
         realm: 'vws',
         ...user,
       }).catch(e => {
-        console.error(e.response.data.errorMessage + `: ${user.username}!`);
+        console.error((e.response.data.errorMessage || JSON.stringify(e.response.data)) + `: ${kvk}, ${naam}!`);
       });
       await sleep(10);
     }
