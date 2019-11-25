@@ -1,21 +1,21 @@
-import m from 'mithril';
-import { FlatButton, Pagination, TextInput } from 'mithril-materialized';
-import { ICareProvider } from '../../../../common/dist';
-import { AppState } from '../../models/app-state';
-import { Roles } from '../../models/roles';
-import { careProvidersSvc } from '../../services/care-providers-service';
-import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
-import { Auth } from '../../services/login-service';
+import m from "mithril";
+import { FlatButton, Pagination, TextInput } from "mithril-materialized";
+import { ICareProvider } from "../../../../common/dist";
+import { AppState } from "../../models/app-state";
+import { Roles } from "../../models/roles";
+import { careProvidersSvc } from "../../services/care-providers-service";
+import { Dashboards, dashboardSvc } from "../../services/dashboard-service";
+import { Auth } from "../../services/login-service";
 import {
   careProvidersToCSV,
   csvFilename,
   debounce,
+  jsonFilename,
   kvkToAddress,
   range,
-  slice,
-  jsonFilename
-} from '../../utils';
-import { CircularSpinner } from '../ui/preloader';
+  slice
+} from "../../utils";
+import { CircularSpinner } from "../ui/preloader";
 
 export const FormList = () => {
   const state = {
@@ -32,19 +32,20 @@ export const FormList = () => {
       ? -1
       : 0;
 
-  const sortByUpdated:
-    | ((a: Partial<ICareProvider>, b: Partial<ICareProvider>) => number)
-    | undefined = (a, b) =>
-    typeof a.meta === 'undefined' ||
-    typeof a.meta.updated === 'undefined' ||
-    typeof b.meta === 'undefined' ||
-    typeof b.meta.updated === 'undefined'
-      ? 0
-      : (a.meta.updated || '') > (b.meta.updated || '')
-      ? 1
-      : (a.meta.updated || '') < (b.meta.updated || '')
-      ? -1
-      : 0;
+  // const sortByUpdated:
+  //   | ((a: Partial<ICareProvider>, b: Partial<ICareProvider>) => number)
+  //   | undefined = (a, b) => {
+  //   const timeA = a.meta ? a.meta.updated || a.meta.created : undefined;
+  //   const timeB = b.meta ? b.meta.updated || b.meta.created : undefined;
+
+  //   return typeof timeA === 'undefined' || typeof timeB === 'undefined'
+  //     ? 0
+  //     : timeA > timeB
+  //     ? -1
+  //     : timeA < timeB
+  //     ? 1
+  //     : 0;
+  // };
 
   const search = debounce(
     (query: string) => careProvidersSvc.search(query),
@@ -58,7 +59,7 @@ export const FormList = () => {
       const careProviders = (
         careProvidersSvc.getList() || ([] as ICareProvider[])
       )
-        .sort(sortByUpdated)
+        // .sort(sortByUpdated);
         .sort(sortByName);
       // console.log(JSON.stringify(careProviders, null, 2));
       if (AppState.isSearching) {
@@ -92,6 +93,7 @@ export const FormList = () => {
       const lastVisited = AppState.lastVisited();
       const lastVisitedName = AppState.lastVisitedName();
 
+      console.log(newKvK);
       const canCreateNewCareProvider = Auth.isAdmin()
         ? newKvK && !careProvidersSvc.checkKvk(newKvK)
         : Auth.isAuthenticated && !careProvidersSvc.checkKvk(Auth.username);
@@ -122,7 +124,7 @@ export const FormList = () => {
                   const kvk = Auth.isAdmin() ? state.newKvK : Auth.username;
                   const newCp = await kvkToAddress(kvk, {
                     kvk,
-                    owner: [Auth.username],
+                    owner: [kvk],
                     published: false
                   } as ICareProvider);
                   if (newCp) {

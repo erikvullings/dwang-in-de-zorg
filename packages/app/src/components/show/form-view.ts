@@ -18,13 +18,15 @@ export const FormView: FactoryComponent = () => {
     isWzd: false,
     isWvggz: false,
     careProvider: {} as Partial<ICareProvider>,
-    loaded: false,
+    loaded: false
   };
 
   return {
     oninit: () => {
       return new Promise(async (resolve, reject) => {
-        const cp = await careProvidersSvc.load(m.route.param('id')).catch(r => reject(r));
+        const cp = await careProvidersSvc
+          .load(m.route.param('id'))
+          .catch(r => reject(r));
         state.careProvider = cp ? deepCopy(cp) : ({} as ICareProvider);
         state.loaded = true;
         if (cp) {
@@ -35,10 +37,20 @@ export const FormView: FactoryComponent = () => {
       });
     },
     view: () => {
-      const { careProvider, loaded, filterValue, isActive, isWzd, isWvggz } = state;
+      const {
+        careProvider,
+        loaded,
+        filterValue,
+        isActive,
+        isWzd,
+        isWvggz
+      } = state;
       // console.log(JSON.stringify(careProvider, null, 2));
       if (!loaded) {
-        return m(CircularSpinner, { className: 'center-align', style: 'margin-top: 20%;' });
+        return m(CircularSpinner, {
+          className: 'center-align',
+          style: 'margin-top: 20%;'
+        });
       }
       if (!careProvider) {
         return undefined;
@@ -49,71 +61,85 @@ export const FormView: FactoryComponent = () => {
           {
             oncreate: ({ dom }) => {
               M.Sidenav.init(dom);
-            },
+            }
           },
           [
-            m('h4.primary-text', { style: 'margin-left: 0.5em;' }, 'Filter locaties'),
+            m(
+              'h4.primary-text',
+              { style: 'margin-left: 0.5em;' },
+              'Filter locaties'
+            ),
             m(TextInput, {
               label: 'Filter op adres, naam of nummer',
               id: 'filter',
               placeholder: 'Vestigings, adres',
               iconName: 'filter_list',
-              onkeyup: (_: KeyboardEvent, v?: string) => (state.filterValue = v ? stripSpaces(v) : ''),
+              onkeyup: (_: KeyboardEvent, v?: string) =>
+                (state.filterValue = v ? stripSpaces(v) : ''),
               style: 'margin-right:100px',
-              className: 'col s12',
+              className: 'col s12'
             }),
             m(InputCheckbox, {
               label: 'Filter actieve locaties',
               checked: isActive,
               onchange: f => (state.isActive = f),
-              className: 'col s12',
+              className: 'col s12'
             }),
             m(InputCheckbox, {
               label: 'Filter Wzd locaties',
               checked: isWzd,
               onchange: f => (state.isWzd = f),
-              className: 'col s12',
+              className: 'col s12'
             }),
             m(InputCheckbox, {
               label: 'Filter Wvggz locaties',
               checked: isWvggz,
               onchange: f => (state.isWvggz = f),
-              className: 'col s12',
+              className: 'col s12'
             }),
-            m(FlatButton, {
-              label: 'Wis alle filters',
-              iconName: 'clear_all',
-              class: 'col s11',
-              style: 'margin: 1em;',
-              onclick: () => {
-                state.filterValue = '';
-              },
-            }),
-            m(FlatButton, {
-              label: 'Download selectie als CSV',
-              iconName: 'cloud_download',
-              class: 'col s11',
-              style: 'margin: 0 1em;',
-              onclick: () => {
-                const csv = careProviderToCSV(careProvider);
-                const blob = new Blob([csv], {
-                  type: 'text/plain;charset=utf-8',
-                });
-                saveAs(blob, csvFilename(careProvider.naam), { autoBom: true });
-              },
-            }),
-            m(FlatButton, {
-              label: 'Download selectie als JSON',
-              iconName: 'cloud_download',
-              class: 'col s11',
-              style: 'margin: 0 1em;',
-              onclick: () => {
-                const blob = new Blob([JSON.stringify(careProvider, null, 2)], {
-                  type: 'application/json',
-                });
-                saveAs(blob, jsonFilename(careProvider.naam), { autoBom: true });
-              },
-            }),
+            m('.option-buttons', [
+              m(FlatButton, {
+                label: 'Wis alle filters',
+                iconName: 'clear_all',
+                class: 'col s11',
+                style: 'margin: 1em;',
+                onclick: () => {
+                  state.filterValue = '';
+                }
+              }),
+              m(FlatButton, {
+                label: 'Download selectie als CSV',
+                iconName: 'cloud_download',
+                class: 'col s11',
+                style: 'margin: 0 1em;',
+                onclick: () => {
+                  const csv = careProviderToCSV(careProvider);
+                  const blob = new Blob([csv], {
+                    type: 'text/plain;charset=utf-8'
+                  });
+                  saveAs(blob, csvFilename(careProvider.naam), {
+                    autoBom: true
+                  });
+                }
+              }),
+              m(FlatButton, {
+                label: 'Download selectie als JSON',
+                iconName: 'cloud_download',
+                class: 'col s11',
+                style: 'margin: 0 1em;',
+                onclick: () => {
+                  const blob = new Blob(
+                    [JSON.stringify(careProvider, null, 2)],
+                    {
+                      type: 'application/json'
+                    }
+                  );
+                  saveAs(blob, jsonFilename(careProvider.naam), {
+                    autoBom: true
+                  });
+                }
+              })
+            ])
           ]
         ),
         m('.contentarea', [
@@ -125,14 +151,23 @@ export const FormView: FactoryComponent = () => {
                     label: 'Bewerk zorgaanbieder',
                     iconName: 'edit',
                     className: 'right hide-on-small-only',
-                    onclick: () => dashboardSvc.switchTo(Dashboards.EDIT, { id: careProvider.$loki }),
+                    onclick: () =>
+                      dashboardSvc.switchTo(Dashboards.EDIT, {
+                        id: careProvider.$loki
+                      })
                   })
-                ),
+                )
               ])
             : undefined,
-          m(DisplayForm, { careProvider, filterValue, isActive, isWzd, isWvggz }),
-        ]),
+          m(DisplayForm, {
+            careProvider,
+            filterValue,
+            isActive,
+            isWzd,
+            isWvggz
+          })
+        ])
       ]);
-    },
+    }
   };
 };
