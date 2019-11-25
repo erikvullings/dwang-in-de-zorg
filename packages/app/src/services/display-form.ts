@@ -115,7 +115,7 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
                   onclick: () => (state.showDetails = uniqueLocationIdentifier(l)),
                 },
                 [
-                  m('span.col.s5', `${p(l.naam)} ${p(l.nmr, `, #${l.nmr}`)}`),
+                  m('span.col.s5', `${p(l.naam)} ${p(l.nmr, `, vestiging ${l.nmr}`)}`),
                   m('span.col.s5', `${p(l.str)} ${p(l.hn)}${p(l.toev)}, ${p(l.pc)}, ${p(l.wn)}`),
                   m('span.col.s1', `${l.isWzd && l.isWvggz ? 'Beide' : l.isWzd ? 'Wzd' : l.isWvggz ? 'Wvggz' : ''}`),
                   m('span.col.s1', `${isLocationActive(l) ? 'Ja' : 'Nee'}`),
