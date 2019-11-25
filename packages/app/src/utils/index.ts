@@ -2,7 +2,8 @@ import {
   IActivity,
   ICareProvider,
   ILocation,
-  isLocationActive
+  isLocationActive,
+  toQueryTarget
 } from '../../../common/dist';
 import { kvkService } from '../services/kvk-service';
 import { careOptions } from '../template/form';
@@ -429,6 +430,7 @@ export const kvkToAddress = async (
               if (bagid) {
                 addr.bag = bagid;
               }
+              toQueryTarget(addr);
               return true;
             }
             return false;
