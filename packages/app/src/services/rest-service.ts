@@ -169,6 +169,7 @@ export class RestService<T extends { $loki?: number }> {
 
   private addItemToList(item: T) {
     this.setList([...this.list, item]);
+    this.filteredList = [...this.filteredList, item];
   }
 
   private updateItemInList(item: T) {
