@@ -43,6 +43,7 @@ class CareProvidersService extends RestService<Partial<ICareProvider>> {
       return;
     }
     const q = { $or: [{ target: { $contains: cleaned } }, { 'locaties.target': { $contains: cleaned } }] };
+
     // http://localhost:3000/zorgaanbieders?q={"target":{"$contains":"parn"}}
     // http://localhost:3000/zorgaanbieders?q={"locaties.target":{"$contains":"car"}}
     // http://localhost:3000/zorgaanbieders?q={"$or":[{"target":{"$contains":"car"}},{"locaties.target":{"$contains":"car"}}]}
@@ -57,7 +58,9 @@ class CareProvidersService extends RestService<Partial<ICareProvider>> {
     if (!result) {
       console.warn('No result found at ' + this.baseUrl);
     }
-    const list = Auth.isAdmin() ? result || [] : (result || []).filter(cp => cp.published || Auth.canEdit(cp));
+    const list = Auth.isAdmin()
+      ? (result || [])
+      : (result || []).filter(cp => cp.published || Auth.canEdit(cp));
     this.setList(list);
     return this.list;
   }
