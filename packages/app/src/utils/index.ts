@@ -391,6 +391,7 @@ export const kvkToAddress = async (
           const cp = addr as Partial<ICareProvider>;
           cp.naam = item.tradeNames.currentStatutoryNames[0];
           cp.rechtsvorm = item.legalForm;
+          toQueryTarget(cp);
         }
         if (addresses && addresses.length > 0) {
           addresses.some(address => {

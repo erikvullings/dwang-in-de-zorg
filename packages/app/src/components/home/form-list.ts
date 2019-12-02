@@ -69,10 +69,7 @@ export const FormList = () => {
         });
       }
       const filteredCareProviders = careProviders.filter(
-        cp =>
-          cp.published ||
-          (Auth.isAuthenticated &&
-            (Auth.roles.indexOf(Roles.ADMIN) >= 0 || Auth.canEdit(cp)))
+        cp => cp.published || Auth.isAdmin() || Auth.canEdit(cp)
       );
 
       const { newKvK, searchQuery } = state;
@@ -93,7 +90,7 @@ export const FormList = () => {
       const lastVisited = AppState.lastVisited();
       const lastVisitedName = AppState.lastVisitedName();
 
-      console.log(newKvK);
+      // console.log(newKvK);
       const canCreateNewCareProvider = Auth.isAdmin()
         ? newKvK && !careProvidersSvc.checkKvk(newKvK)
         : Auth.isAuthenticated && !careProvidersSvc.checkKvk(Auth.username);
@@ -125,13 +122,11 @@ export const FormList = () => {
                   const newCp = await kvkToAddress(kvk, {
                     kvk,
                     owner: [kvk],
-                    published: false
+                    published: false,
                   } as ICareProvider);
-                  if (newCp) {
-                    const cp = await careProvidersSvc.create(newCp);
-                    if (cp) {
-                      dashboardSvc.switchTo(Dashboards.EDIT, { id: cp.$loki });
-                    }
+                  const cp = await careProvidersSvc.create(newCp);
+                  if (cp) {
+                    dashboardSvc.switchTo(Dashboards.EDIT, { id: cp.$loki });
                   }
                 }
               }),
