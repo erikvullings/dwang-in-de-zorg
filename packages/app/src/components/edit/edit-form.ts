@@ -95,7 +95,7 @@ export const EditForm = () => {
     originalCareProvider: {} as Partial<ICareProvider>,
     loaded: false,
     isValid: false,
-    form: CareProviderForm,
+    form: Auth.isAdmin() ? CareProviderForm(true) : CareProviderForm(false),
     error: '',
     /** Relevant context for the Form, can be used with show/disabling */
     context: {
@@ -197,6 +197,7 @@ export const EditForm = () => {
         }));
       const section = m.route.param('section') || sections[0].id;
       const canCrud = Auth.canCRUD(cp);
+      const canEdit = Auth.canEdit(cp);
 
       return m('.row', [
         // m(
@@ -297,7 +298,7 @@ export const EditForm = () => {
             key: section,
             form,
             obj: cp,
-            disabled: !canCrud,
+            disabled: !canEdit,
             onchange: () => formChanged(cp, section),
             context,
             section,

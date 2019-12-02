@@ -38,7 +38,7 @@ const paginationSize = 20;
 export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
   const state = {
     showDetails: undefined,
-    resolveObj: labelResolver(CareProviderForm),
+    resolveObj: labelResolver(CareProviderForm()),
   } as {
     resolveObj: <T>(obj: any, parent?: string | undefined) => T | undefined;
     showDetails?: string;
