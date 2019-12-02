@@ -79,7 +79,7 @@ export const Auth = {
   },
   /** Can edit the document, but also change the persons that have access. */
   isOwner(doc: Partial<ICareProvider>) {
-    return Auth.isAdmin() || (Auth.isAuthenticated && doc.owner && doc.owner.indexOf(Auth.email) >= 0);
+    return Auth.isAdmin() || (Auth.isAuthenticated && doc.owner && doc.owner.indexOf(Auth.username) >= 0);
   },
   /** Can edit the document, but also change the persons that have access. */
   canCRUD(doc: Partial<ICareProvider>) {
@@ -89,7 +89,7 @@ export const Auth = {
   canEdit(doc: Partial<ICareProvider>) {
     return (
       Auth.isAuthenticated &&
-      (Auth.canCRUD(doc) || Auth.isEditor() || (doc.canEdit instanceof Array && doc.canEdit.indexOf(Auth.email) >= 0))
+      (Auth.canCRUD(doc) || Auth.isEditor() || (doc.canEdit instanceof Array && doc.canEdit.indexOf(Auth.username) >= 0))
     );
   },
   setUsername(username: string) {
