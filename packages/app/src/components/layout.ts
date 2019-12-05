@@ -1,6 +1,5 @@
 import m, { Vnode } from 'mithril';
 import { Icon } from 'mithril-materialized';
-import logo from '../assets/locatieregister.svg';
 import { IDashboard } from '../models';
 import { dashboardSvc } from '../services/dashboard-service';
 
@@ -19,17 +18,16 @@ export const Layout = () => ({
         m(
           'nav',
           m('.nav-wrapper', [
-            m('a.brand-logo[href=#]', { style: 'margin-left: 20px' }, [
-              m(`img[width=48][height=48][src=${logo}]`, { style: 'margin-top: 5px; margin-left: -5px;' }),
+            m('a.brand-logo[href=#]', [
               m(
                 'div',
-                { style: 'margin-top: 0px; position: absolute; top: 16px; left: 50px; width: 400px;' },
+                { style: 'margin-top: 0px; position: absolute; top: 10px; left: 10px; width: 400px;' },
                 m(
-                  'h4.center.hide-on-med-and-down',
+                  'h4.hide-on-med-and-down',
                   { style: 'text-align: left; margin: 0; background: #01689B' },
                   'Locatieregister'
                 )
-              ),
+              )
             ]),
             m(
               // 'a.sidenav-trigger[href=#!/home][data-target=slide-out]',
@@ -39,7 +37,7 @@ export const Layout = () => ({
               m(Icon, {
                 iconName: 'menu',
                 className: '.hide-on-med-and-up',
-                style: 'margin-left: 5px;',
+                style: 'margin-left: 5px;'
               })
             ),
             m(
@@ -62,11 +60,11 @@ export const Layout = () => ({
                     )
                   )
                 )
-            ),
+            )
           ])
         )
       ),
-      m('.container', vnode.children),
+      m('.container', vnode.children)
     ]);
-  },
+  }
 });

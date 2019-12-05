@@ -3,7 +3,6 @@ import m from 'mithril';
 import { Button, Icon, Parallax } from 'mithril-materialized';
 import { SlimdownView } from 'mithril-ui-form';
 import background from '../../assets/background.jpg';
-import logo from '../../assets/locatieregister.svg';
 import vws from '../../assets/logo_minvws.svg';
 import { careProvidersSvc } from '../../services';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
@@ -12,16 +11,11 @@ import { careProvidersToCSV, csvFilename } from '../../utils';
 export const HomePage = () => ({
   view: () => [
     m('.row', [
-      m('div', { style: 'margin: 0 0 0 48%' }, m(`img.img-repsonsive[src=${vws}]`)),
+      m('div', { style: 'margin: 0 0 0 48%;' }, m(`img.img-repsonsive[src=${vws}]`)),
       m(
         'nav',
         m('.nav-wrapper', [
-          m(
-            'a.brand-logo',
-            { style: 'margin: 0 10px 0 20px; left: 20px' },
-            m(`img[width=48][height=48][src=${logo}]`, { style: 'margin-top: 5px; margin-left: -5px;' })
-          ),
-          m('h3.center.hide-on-small-only', { style: 'padding: 10px 0; margin: 0 auto;' }, 'Locatieregister'),
+          m('h3.hide-on-small-only', { style: 'padding: 8px 0; margin: 0 0 0 10px;' }, 'Locatieregister Wvggz/Wzd'),
         ]),
         m(
           '.overlay.center',
@@ -56,12 +50,10 @@ export const HomePage = () => ({
       ),
       m(Parallax, { src: background }),
       m(
-        '.section.white',
+        '.section.white', { style: 'margin-top: -200px;' },
         m('.row.container.center', [
           m(SlimdownView, {
-            md: `## Locatieregister Wvggz/Wzd
-
-            Het register bevat locaties van zorgaanbieders waarin of van waaruit gedwongen zorg wordt verleend onder de Wet verplichte ggz of de Wet zorg en dwang. Deze wetten bepalen vanaf 1 januari 2020 waar en wanneer gedwongen zorg mag worden toegepast. Het is de verantwoordelijkheid van een zorgaanbieder om locaties te registreren.`,
+            md: 'Het register bevat locaties van zorgaanbieders waarin of van waaruit gedwongen zorg wordt verleend onder de Wet verplichte ggz of de Wet zorg en dwang. Deze wetten bepalen vanaf 1 januari 2020 waar en wanneer gedwongen zorg mag worden toegepast. Het is de verantwoordelijkheid van een zorgaanbieder om locaties te registreren.',
           }),
           m('.row', [
             m(
@@ -101,7 +93,11 @@ export const HomePage = () => ({
     m(
       'footer.page-footer',
       { style: 'height: 60px; padding: 5px 0;' },
-      m('.container.center-align', m('.clearfix', m('.white-text', '©2019 VWS, 19 november 2019')))
+      m('.container.center-align', 
+        m('.clearfix', [
+          m('.white-text', 'Ministerie van Volksgezondheid, Welzijn en Sport'),
+          m('.white-text', '5 december 2019')
+        ]))
     ),
   ],
 });

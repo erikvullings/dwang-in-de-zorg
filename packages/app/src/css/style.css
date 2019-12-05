@@ -1,5 +1,47 @@
+@font-face {
+  font-family: 'RO Sans';
+  font-style: normal;
+  font-weight: normal;
+  src: url('fonts/ro-sanswebtext-regular.woff') format('opentype'),
+    url('fonts/ro-sanswebtext-regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'RO Sans';
+  font-style: italic;
+  font-weight: normal;
+  src: url('fonts/ro-sanswebtext-italic.woff') format('opentype'),
+    url('fonts/ro-sanswebtext-italic.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'ro sans';
+  font-style: normal;
+  font-weight: bold;
+  src: url('fonts/ro-sanswebtext-bold.woff') format('opentype'), url('fonts/ro-sanswebtext-bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'ro serif';
+  font-style: normal;
+  font-weight: normal;
+  src: url('fonts/ro-serifweb-regular.woff') format('opentype'), url('fonts/ro-serifweb-regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'ro serif';
+  font-style: italic;
+  font-weight: normal;
+  src: url('fonts/ro-serifweb-italic.woff') format('opentype'), url('fonts/ro-serifweb-italic.ttf') format('truetype');
+}
+
+body {
+  font-family: 'RO Sans', Calibri, sans-serif;
+  font-weight: normal;
+  font-size: 1.125rem;
+}
 .parallax-container {
-  height: 400px;
+  height: 600px;
 }
 
 /* Set theme color */
@@ -9,7 +51,7 @@
 .nav-wrapper,
 .statusbar,
 .nav-content {
-  background-color: #01689B;
+  background-color: #01689b;
 }
 .markdown,
 .input-field,
@@ -102,7 +144,7 @@ a,
   height: 85vh;
 }
 
-@media only screen and (max-width : 992px) {
+@media only screen and (max-width: 992px) {
   .contentarea {
     padding-left: 0;
   }
@@ -110,8 +152,9 @@ a,
 
 /* print styles */
 @media print {
-  html, body {
-    font-family: "RO Sans",Calibri,sans-serif;
+  html,
+  body {
+    font-family: 'RO Sans', Calibri, sans-serif;
     font-size: 14px;
   }
   body {
@@ -161,7 +204,7 @@ a,
 #dummy-search + label {
   top: 1em;
 }
-.input-field input[type=search] {
+.input-field input[type='search'] {
   height: 3.2em;
   vertical-align: bottom;
   padding-left: 4rem;
@@ -171,7 +214,7 @@ a,
   -webkit-box-shadow: none;
   box-shadow: none;
 }
-label > input[type=checkbox] + span:not(.lever) {
+label > input[type='checkbox'] + span:not(.lever) {
   display: inline-table;
 }
 ul.nowrap span {
@@ -189,6 +232,10 @@ li.clickable {
   color: #1a237e;
 }
 
+.repeat-item,
+.repeat-list {
+  padding: 0 0.75rem;
+}
 .repeat-list .pagination {
   margin: 0;
 }
@@ -216,4 +263,10 @@ li.clickable {
   margin-left: 10px;
   line-height: 32.4px;
   font-size: 13px;
+}
+.readonly {
+  margin-top: -4px;
+}
+.readonly > p {
+  margin-top: 8px;
 }
