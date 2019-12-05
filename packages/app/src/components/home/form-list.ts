@@ -20,7 +20,7 @@ import { CircularSpinner } from "../ui/preloader";
 export const FormList = () => {
   const state = {
     newKvK: '',
-    searchQuery: ''
+    // searchQuery: ''
   };
 
   const sortByName:
@@ -72,7 +72,11 @@ export const FormList = () => {
         cp => cp.published || Auth.isAdmin() || Auth.canEdit(cp)
       );
 
-      const { newKvK, searchQuery } = state;
+      const { newKvK } = state;
+      const { searchQuery } = AppState;
+      if (searchQuery && searchQuery.length > 3) {
+        search(searchQuery);
+      }
       const route = dashboardSvc.route(Dashboards.SEARCH);
       const page = m.route.param('page') ? +m.route.param('page') : 1;
       const curPage =
@@ -150,10 +154,10 @@ export const FormList = () => {
               iconName: 'search',
               initialValue: searchQuery,
               onkeyup: (_: KeyboardEvent, v?: string) => {
-                state.searchQuery = v ? v : '';
+                AppState.searchQuery = v ? v : '';
                 search(v);
               },
-              onchange: v => (state.searchQuery = v),
+              onchange: v => (AppState.searchQuery = v),
               style: 'margin-right:100px',
               className: 'col s12'
             }),

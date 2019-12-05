@@ -5,6 +5,7 @@ const apiService = process.env.SERVER || window.location.origin;
 export const AppState = {
   isSearching: false,
   apiService,
+  searchQuery: '',
   lastVisited: () => window.localStorage.getItem('last_visited'),
   lastVisitedName: () => (window.localStorage.getItem('last_visited_name') || '').replace(/undefined/i, ''),
 };
