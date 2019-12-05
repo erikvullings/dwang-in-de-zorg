@@ -89,10 +89,8 @@ const rechtsvorm = [
     label: 'Naamloze vennootschap blijkens statuten structuurvennootschap'
   },
   {
-    id:
-      'Naamloze vennootschap beleggingsmaatschappij met veranderlijk kapitaal',
-    label:
-      'Naamloze vennootschap beleggingsmaatschappij met veranderlijk kapitaal'
+    id: 'Naamloze vennootschap beleggingsmaatschappij met veranderlijk kapitaal',
+    label: 'Naamloze vennootschap beleggingsmaatschappij met veranderlijk kapitaal'
   },
   {
     id:
@@ -139,30 +137,24 @@ const rechtsvorm = [
     label: 'Onderlinge waarborgmaatschappij ua met gewone structuur'
   },
   {
-    id:
-      'Onderlinge waarborgmaatschappij ua blijkens statuten structuur-onderlinge',
-    label:
-      'Onderlinge waarborgmaatschappij ua blijkens statuten structuur-onderlinge'
+    id: 'Onderlinge waarborgmaatschappij ua blijkens statuten structuur-onderlinge',
+    label: 'Onderlinge waarborgmaatschappij ua blijkens statuten structuur-onderlinge'
   },
   {
     id: 'Onderlinge waarborgmaatschappij wa met gewone structuur',
     label: 'Onderlinge waarborgmaatschappij wa met gewone structuur'
   },
   {
-    id:
-      'Onderlinge waarborgmaatschappij wa blijkens statuten structuur-onderlinge',
-    label:
-      'Onderlinge waarborgmaatschappij wa blijkens statuten structuur-onderlinge'
+    id: 'Onderlinge waarborgmaatschappij wa blijkens statuten structuur-onderlinge',
+    label: 'Onderlinge waarborgmaatschappij wa blijkens statuten structuur-onderlinge'
   },
   {
     id: 'Onderlinge waarborgmaatschappij ba met gewone structuur',
     label: 'Onderlinge waarborgmaatschappij ba met gewone structuur'
   },
   {
-    id:
-      'Onderlinge waarborgmaatschappij ba blijkens statuten structuur-onderlinge',
-    label:
-      'Onderlinge waarborgmaatschappij ba blijkens statuten structuur-onderlinge'
+    id: 'Onderlinge waarborgmaatschappij ba blijkens statuten structuur-onderlinge',
+    label: 'Onderlinge waarborgmaatschappij ba blijkens statuten structuur-onderlinge'
   },
   {
     id: 'Buitenlandse rechtsvorm met hoofdvestiging in Nederland',
@@ -185,16 +177,12 @@ const rechtsvorm = [
     label: 'Buitenlandse EG-vennootschap met hoofdnederzetting in Nederland'
   },
   {
-    id:
-      'Buitenlandse op EG-vennootschap lijkende vennootschap met onderneming in Nederland',
-    label:
-      'Buitenlandse op EG-vennootschap lijkende vennootschap met onderneming in Nederland'
+    id: 'Buitenlandse op EG-vennootschap lijkende vennootschap met onderneming in Nederland',
+    label: 'Buitenlandse op EG-vennootschap lijkende vennootschap met onderneming in Nederland'
   },
   {
-    id:
-      'Buitenlandse op EG-vennootschap lijkende vennootschap met hoofdnederzetting in Nederland',
-    label:
-      'Buitenlandse op EG-vennootschap lijkende vennootschap met hoofdnederzetting in Nederland'
+    id: 'Buitenlandse op EG-vennootschap lijkende vennootschap met hoofdnederzetting in Nederland',
+    label: 'Buitenlandse op EG-vennootschap lijkende vennootschap met hoofdnederzetting in Nederland'
   }
 ];
 
@@ -205,7 +193,6 @@ const ActivityForm: Form = [
     label: 'Ingangsdatum',
     type: 'date',
     min: Date.now(),
-    required: true,
     className: 'col s6'
   },
   {
@@ -242,8 +229,7 @@ export const careOptions = [
   },
   {
     id: 'isOnderzoekWoonruimte',
-    label:
-      'Onderzoek van de woon- of verblijfsruimte op gedrag-beïnvloedende middelen en gevaarlijke voorwerpen',
+    label: 'Onderzoek van de woon- of verblijfsruimte op gedrag-beïnvloedende middelen en gevaarlijke voorwerpen',
     show: ['isWvggz = true']
   },
   {
@@ -295,8 +281,7 @@ export const CareForm: Form = [
     id: 'nonactive',
     type: 'md',
     show: '!isActief',
-    value:
-      'Deze locatie is momenteel niet actief. Specificeer een ingangsdatum om hem te activeren:'
+    value: 'Deze locatie is momenteel niet actief. Specificeer een ingangsdatum om hem te activeren:'
   },
   // { id: 'isActief', disabled: true, type: 'checkbox', className: 'col s12 m4', label: 'Is actief?' },
   {
@@ -318,85 +303,87 @@ export const CareForm: Form = [
   {
     id: 'aant',
     disabled: true,
-    label: 'Laatste activiteit/aantekening',
+    label: 'Activiteiten/aantekeningen',
     type: ActivityForm,
     max: 1,
-    repeat: true
+    repeat: true,
+    pageSize: 1,
   }
 ];
 
-const AddressForm = (isAdmin = false): Form => { return [
-  {
-    type: 'md',
-    value: `&nbsp;
+const AddressForm = (isAdmin = false): Form => {
+  return [
+    {
+      type: 'md',
+      value: `&nbsp;
 ###### Bezoekadres gegevens`
-  },
-  {
-    type: 'md',
-    show: ['kvk'],
-    value:
-      '_Adresgegevens uit KvK. Indien incorrect, aub wijzigen bij KvK of KvK nummer verwijderen._'
-  },
-  {
-    id: 'str',
-    disabled: isAdmin ? undefined : 'kvk',
-    label: 'Straat',
-    type: 'text',
-    className: 'col s12 m6'
-  },
-  {
-    id: 'hn',
-    disabled: isAdmin ? undefined : 'kvk',
-    label: 'Huisnummer',
-    type: 'number',
-    className: 'col s6 m2'
-  },
-  {
-    id: 'toev',
-    disabled: isAdmin ? undefined : 'kvk',
-    label: 'Huisletter/toevoeging',
-    type: 'text',
-    className: 'col s6 m4'
-  },
-  {
-    id: 'pc',
-    disabled: isAdmin ? undefined : 'kvk',
-    label: 'Postcode',
-    type: 'text',
-    className: 'col s6 m4'
-  },
-  {
-    id: 'wn',
-    disabled: isAdmin ? undefined : 'kvk',
-    label: 'Woonplaats',
-    type: 'text',
-    className: 'col s12 m4'
-  },
-  {
-    id: 'land',
-    disabled: isAdmin ? undefined : 'kvk',
-    label: 'Land',
-    value: 'Nederland',
-    type: 'select',
-    options: countries,
-    className: 'col s12 m4'
-  },
-  {
-    id: 'fland',
-    disabled: isAdmin ? undefined : 'kvk',
-    label: 'Land buiten Europa',
-    type: 'text',
-    show: ['land=other'],
-    className: 'col s12 m6'
-  },
-  { id: 'aanv', label: 'Aanvullende adresinformatie', type: 'textarea' },
-  {
-    show: 'noMail = true',
-    disabled: true,
-    label: 'Adresgegevens mogen niet gebruikt worden voor mail/contact',
-    type: 'md'
-  }
-]};
+    },
+    {
+      type: 'md',
+      show: ['kvk'],
+      value: '_Adresgegevens uit KvK. Indien incorrect, aub wijzigen bij KvK of KvK nummer verwijderen._'
+    },
+    {
+      id: 'str',
+      disabled: isAdmin ? undefined : 'kvk',
+      label: 'Straat',
+      type: 'text',
+      className: 'col s12 m6'
+    },
+    {
+      id: 'hn',
+      disabled: isAdmin ? undefined : 'kvk',
+      label: 'Huisnummer',
+      type: 'number',
+      className: 'col s6 m2'
+    },
+    {
+      id: 'toev',
+      disabled: isAdmin ? undefined : 'kvk',
+      label: 'Huisletter/toevoeging',
+      type: 'text',
+      className: 'col s6 m4'
+    },
+    {
+      id: 'pc',
+      disabled: isAdmin ? undefined : 'kvk',
+      label: 'Postcode',
+      type: 'text',
+      className: 'col s6 m4'
+    },
+    {
+      id: 'wn',
+      disabled: isAdmin ? undefined : 'kvk',
+      label: 'Woonplaats',
+      type: 'text',
+      className: 'col s12 m4'
+    },
+    {
+      id: 'land',
+      disabled: isAdmin ? undefined : 'kvk',
+      label: 'Land',
+      value: 'Nederland',
+      type: 'select',
+      options: countries,
+      className: 'col s12 m4'
+    },
+    {
+      id: 'fland',
+      disabled: isAdmin ? undefined : 'kvk',
+      label: 'Land buiten Europa',
+      type: 'text',
+      show: ['land=other'],
+      className: 'col s12 m6'
+    },
+    { id: 'aanv', label: 'Aanvullende adresinformatie', type: 'textarea' },
+    {
+      show: 'noMail = true',
+      disabled: true,
+      label: 'Adresgegevens mogen niet gebruikt worden voor mail/contact',
+      type: 'md'
+    }
+  ];
+};
 
 const LocationAddressForm: Form = [
   {
@@ -407,22 +394,21 @@ const LocationAddressForm: Form = [
   {
     type: 'md',
     show: ['nmr'],
-    value:
-      '_Adresgegevens uit KvK. Indien incorrect, aub wijzigen bij KvK of vestigingsnummer verwijderen._'
+    value: '_Adresgegevens uit KvK. Indien incorrect, aub wijzigen bij KvK of vestigingsnummer verwijderen._'
   },
   {
-    id: 'str',
+    id: 'pc',
     disabled: 'nmr',
-    label: 'Straat',
+    label: 'Postcode',
     type: 'text',
-    className: 'col s12 m6'
+    className: 'col s6 m5'
   },
   {
     id: 'hn',
     disabled: 'nmr',
     label: 'Huisnummer',
     type: 'number',
-    className: 'col s6 m2'
+    className: 'col s6 m3'
   },
   {
     id: 'toev',
@@ -432,15 +418,15 @@ const LocationAddressForm: Form = [
     className: 'col s6 m4'
   },
   {
-    id: 'pc',
-    disabled: 'nmr',
-    label: 'Postcode',
+    id: 'str',
+    disabled: true,
+    label: 'Straat',
     type: 'text',
-    className: 'col s6 m4'
+    className: 'col s12 m5'
   },
   {
     id: 'wn',
-    disabled: 'nmr',
+    disabled: true,
     label: 'Woonplaats',
     type: 'text',
     className: 'col s12 m4'
@@ -452,7 +438,7 @@ const LocationAddressForm: Form = [
     value: 'Nederland',
     type: 'select',
     options: countries,
-    className: 'col s12 m4'
+    className: 'col s12 m3'
   },
   {
     id: 'fland',
@@ -481,8 +467,7 @@ NB: De locatie is nooit het adres van de patiënt. In dat geval, gebruik het adr
   {
     type: 'md',
     show: 'mutated',
-    value:
-      'De laatste wijziging van de locatiegegevens vond plaats op {{mutated:date}}.'
+    value: 'De laatste wijziging van de locatiegegevens vond plaats op {{mutated:date}}.'
   },
   {
     id: 'nmr',
@@ -496,8 +481,7 @@ NB: De locatie is nooit het adres van de patiënt. In dat geval, gebruik het adr
 
   {
     type: 'md',
-    value:
-      'Selecteer onder welke wet(ten) gedwongen zorg wordt aangeboden in of vanuit deze locatie:'
+    value: 'Selecteer onder welke wet(ten) gedwongen zorg wordt aangeboden in of vanuit deze locatie:'
   },
   {
     id: 'isWzd',
@@ -520,8 +504,7 @@ NB: De locatie is nooit het adres van de patiënt. In dat geval, gebruik het adr
   {
     id: 'isWzdAmbu',
     show: 'isWzdAcco = ja',
-    label:
-      'Wordt in of vanuit deze accommodatie ook ambulante gedwongen zorg verleend? ',
+    label: 'Wordt in of vanuit deze accommodatie ook ambulante gedwongen zorg verleend? ',
     value: 'nee',
     type: 'radio',
     options: [
@@ -551,8 +534,7 @@ NB: De locatie is nooit het adres van de patiënt. In dat geval, gebruik het adr
   {
     id: 'isWvggzAmbu',
     show: 'isWvggzAcco = ja',
-    label:
-      'Wordt in of vanuit deze accommodatie ook ambulante gedwongen zorg verleend? ',
+    label: 'Wordt in of vanuit deze accommodatie ook ambulante gedwongen zorg verleend? ',
     value: 'nee',
     type: 'radio',
     options: [
