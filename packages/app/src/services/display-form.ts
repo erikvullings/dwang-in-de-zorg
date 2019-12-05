@@ -66,8 +66,6 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
             .filter(l => !isWvggz || l.isWvggz)
             .filter(l => !isActive || isLocationActive(l))
         : locaties;
-      // const activeLocations =
-      //   queryResults && queryResults.length > 0 ? queryResults.reduce((acc, cur) => acc + (isLocationActive(cur) ? 1 : 0), 0) : 0;
 
       const { activeLocations, cpOffersWzd, cpOffersWvggz } =
         queryResults && queryResults.length > 0
@@ -107,7 +105,6 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
         m('.row', [
           m('span.col.s12', 'KvK nummer: ' + kvk),
           m('span.col.s12', 'Rechtsvorm: ' + p(rechtsvorm)),
-          // m('span.col.s12', actieveZorgvorm),
           m(AddressView, { address: cp }),
           aanv && m('span.col.s12', `Aanvullende adresinformatie: ${aanv}`)
         ]),
