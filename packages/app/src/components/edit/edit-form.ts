@@ -14,6 +14,7 @@ import {
 import { careProvidersSvc } from '../../services';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
 import { Auth } from '../../services/login-service';
+import { pdokLocationSvc } from '../../services/pdok-service';
 import { CareProviderForm } from '../../template/form';
 import { capitalizeFirstLetter, kvkToAddress } from '../../utils';
 import { CircularSpinner } from '../ui/preloader';
@@ -140,8 +141,10 @@ export const EditForm = () => {
       if (cp && cp.locaties && cp.locaties.length > i) {
         const loc = cp.locaties[i];
         // console.log(JSON.stringify(loc, null, 2));
-        if (cp.kvk && loc.nmr && (!loc.pc || !loc.wn)) {
+        if (cp.kvk && loc.nmr) {
           kvkToAddress(cp.kvk, loc, loc.nmr);
+        } else if (loc.pc && loc.hn) {
+          pdokLocationSvc(loc);
         }
         if (loc.isWzd === false) {
           loc.isWzdAcco = 'nee';
@@ -299,7 +302,7 @@ export const EditForm = () => {
             form,
             obj: cp,
             disabled: !canEdit,
-            onchange: () => formChanged(cp, section),
+            onchange: () => formChanged(state.cp, section),
             context,
             section,
           }),

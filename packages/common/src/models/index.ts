@@ -5,3 +5,4 @@ export * from './care-type';
 export * from './kvk-search-result';
 export * from './location';
 export * from './mutation';
+export * from './pdok';
