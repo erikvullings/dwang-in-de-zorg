@@ -1,10 +1,4 @@
-import {
-  IActivity,
-  ICareProvider,
-  ILocation,
-  isLocationActive,
-  toQueryTarget
-} from '../../../common/dist';
+import { IActivity, ICareProvider, ILocation, isLocationActive, toQueryTarget } from '../../../common/dist';
 import { kvkService } from '../services/kvk-service';
 import { careOptions } from '../template/form';
 
@@ -40,8 +34,7 @@ export const uniqueId = () => {
   });
 };
 
-export const capitalizeFirstLetter = (s?: string) =>
-  s ? s.charAt(0).toUpperCase() + s.slice(1) : '';
+export const capitalizeFirstLetter = (s?: string) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : '');
 
 export const toLetters = (num: number): string => {
   const mod = num % 26;
@@ -60,25 +53,20 @@ export const targetFilter = (filterValue?: string) => {
     return () => true;
   }
   const fv = filterValue.toLowerCase().trim() as string;
-  return (content: { target?: string }) =>
-    content.target && content.target.indexOf(fv) >= 0;
+  return (content: { target?: string }) => content.target && content.target.indexOf(fv) >= 0;
 };
 
 /** Limit the length of a list using a filter */
 export const limitLength = (limit: number) => (_: any, i: number) => i < limit;
 
 /** Slice an array */
-export const slice = (from: number, to: number) => (_: any, i: number) =>
-  from <= i && i < to;
+export const slice = (from: number, to: number) => (_: any, i: number) => from <= i && i < to;
 
 /**
  * Function to filter on a named type.
  * @param filterValue Filter text
  */
-export const typeFilter = (
-  propName: keyof ICareProvider,
-  filterValue?: Array<string | number>
-) => {
+export const typeFilter = (propName: keyof ICareProvider, filterValue?: Array<string | number>) => {
   if (!filterValue || filterValue.length === 0) {
     return () => true;
   }
@@ -86,11 +74,7 @@ export const typeFilter = (
     ? (c: Partial<ICareProvider>) =>
         c.hasOwnProperty(propName) &&
         (c[propName] instanceof Array
-          ? filterValue.reduce(
-              (acc, fv) =>
-                acc || (c[propName] as Array<string | number>).indexOf(fv) >= 0,
-              false
-            )
+          ? filterValue.reduce((acc, fv) => acc || (c[propName] as Array<string | number>).indexOf(fv) >= 0, false)
           : filterValue.indexOf(c[propName] as string) >= 0)
     : (c: Partial<ICareProvider>) =>
         c.hasOwnProperty(propName) &&
@@ -111,23 +95,18 @@ export const unCamelCase = (str?: string) =>
         .replace(/^./, char => char.toUpperCase()) // uppercase the first character
     : '';
 
-export const deepEqual = <T extends { [key: string]: any }>(
-  x?: T,
-  y?: T
-): boolean => {
+export const deepEqual = <T extends { [key: string]: any }>(x?: T, y?: T): boolean => {
   const tx = typeof x;
   const ty = typeof y;
   return x && y && tx === 'object' && tx === ty
-    ? Object.keys(x).length === Object.keys(y).length &&
-        Object.keys(x).every(key => deepEqual(x[key], y[key]))
+    ? Object.keys(x).length === Object.keys(y).length && Object.keys(x).every(key => deepEqual(x[key], y[key]))
     : x === y;
 };
 
 /** Remove paragraphs <p> and </p> and the beginning and end of a string. */
 export const removeParagraphs = (s: string) => s.replace(/<\/?p>/g, '');
 
-export const removeHtml = (s: string) =>
-  s.replace(/<\/?[0-9a-zA-Z=\[\]_ \-"]+>/gm, '').replace(/&quot;/gi, '"');
+export const removeHtml = (s: string) => s.replace(/<\/?[0-9a-zA-Z=\[\]_ \-"]+>/gm, '').replace(/&quot;/gi, '"');
 
 /**
  * Join a list of items with a comma.
@@ -147,18 +126,12 @@ export const formatOptional = (
 };
 
 /** Print optional */
-export const p = (
-  val: string | number | Date | boolean | undefined,
-  output?: string
-) => (val ? output || val : '');
+export const p = (val: string | number | Date | boolean | undefined, output?: string) => (val ? output || val : '');
 
-const escapeQuotes = (s: string) => /"/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+const escapeQuotes = (s: string) => (/"/.test(s) ? `"${s.replace(/"/g, '""')}"` : s);
 
 /** Print optional, escape double quotes */
-export const pe = (
-  val: string | number | Date | boolean | undefined,
-  output?: string
-) => {
+export const pe = (val: string | number | Date | boolean | undefined, output?: string) => {
   const res = p(val, output);
   return typeof res === 'string' ? escapeQuotes(res) : res;
 };
@@ -174,9 +147,7 @@ export const debounce = (func: (...args: any) => void, timeout: number) => {
 };
 
 export const padLeft = (str: string | number, ch = ' ', len = 2): string =>
-  str.toString().length >= len
-    ? str.toString()
-    : padLeft(ch + str.toString(), ch, len);
+  str.toString().length >= len ? str.toString() : padLeft(ch + str.toString(), ch, len);
 
 /**
  * Generate a sequence of numbers between from and to with step size: [from, to].
@@ -195,13 +166,12 @@ export const range = (from: number, to: number, step: number = 1) => {
   return arr;
 };
 
-export const activityToCSV = (locationData: string) => ({
-  di: datumIngang,
-  de: datumEinde
-}: IActivity) =>
-  `${locationData}${
-    datumIngang ? new Date(datumIngang).toLocaleDateString() : ''
-  };${datumEinde ? new Date(datumEinde).toLocaleDateString() : ''};`;
+export const activityToCSV = (locationData: string) => (activity?: IActivity) => {
+  const { di: datumIngang, de: datumEinde } = activity || {};
+  return `${locationData}${datumIngang ? new Date(datumIngang).toLocaleDateString() : ''};${
+    datumEinde ? new Date(datumEinde).toLocaleDateString() : ''
+  };`;
+};
 
 export const locationToCSV = (careProviderData: string) => ({
   naam: locatienaam,
@@ -224,11 +194,7 @@ export const locationToCSV = (careProviderData: string) => ({
   zv: zorgvorm = [],
   aant: aantekeningen = []
 }: ILocation) => {
-  const land = landnaam
-    ? landnaam === 'Nederland'
-      ? 'NL'
-      : landnaam
-    : landnaamBuitenEuropa;
+  const land = landnaam ? (landnaam === 'Nederland' ? 'NL' : landnaam) : landnaamBuitenEuropa;
   const locationData =
     careProviderData +
     [
@@ -323,11 +289,7 @@ export const careProviderToCSV = (
       'aantekeningingang',
       'aantekeningeinde'
     ].join(';') + ';';
-  const land = landnaam
-    ? landnaam === 'Netherlands'
-      ? 'NL'
-      : landnaam
-    : landnaamBuitenEuropa;
+  const land = landnaam ? (landnaam === 'Netherlands' ? 'NL' : landnaam) : landnaamBuitenEuropa;
   const careProviderData =
     [
       pe(naam),
@@ -343,9 +305,7 @@ export const careProviderToCSV = (
     ].join(';') + ';';
   const locToCSV = locationToCSV(careProviderData);
   const locations = locaties.map(locToCSV);
-  return includeHeader
-    ? [headers, ...locations].join('\r\n')
-    : locations.join('\r\n');
+  return includeHeader ? [headers, ...locations].join('\r\n') : locations.join('\r\n');
 };
 
 export const careProvidersToCSV = (cps?: Array<Partial<ICareProvider>>) =>
@@ -354,30 +314,22 @@ export const careProvidersToCSV = (cps?: Array<Partial<ICareProvider>>) =>
 /** Create a filename for the CSV */
 export const csvFilename = (name = '') => {
   const now = new Date();
-  return `${now.getFullYear()}${padLeft(now.getMonth() + 1, '0')}${padLeft(
-    now.getDate(),
-    '0'
-  )}${name ? `_${name}` : ''}_locatieregister.csv`;
+  return `${now.getFullYear()}${padLeft(now.getMonth() + 1, '0')}${padLeft(now.getDate(), '0')}${
+    name ? `_${name}` : ''
+  }_locatieregister.csv`;
 };
 
 /** Create a filename for the JSON */
 export const jsonFilename = (name = '') => {
   const now = new Date();
-  return `${now.getFullYear()}${padLeft(now.getMonth() + 1, '0')}${padLeft(
-    now.getDate(),
-    '0'
-  )}${name ? `_${name}` : ''}_locatieregister.json`;
+  return `${now.getFullYear()}${padLeft(now.getMonth() + 1, '0')}${padLeft(now.getDate(), '0')}${
+    name ? `_${name}` : ''
+  }_locatieregister.json`;
 };
 
 /** Convert the KVK information to a care provider or location */
-export const kvkToAddress = async (
-  kvk: string,
-  addr: Partial<ICareProvider> | Partial<ILocation>,
-  branch?: string
-) => {
-  const result = branch
-    ? await kvkService.searchBranch(kvk, branch)
-    : await kvkService.searchKvK(kvk);
+export const kvkToAddress = async (kvk: string, addr: Partial<ICareProvider> | Partial<ILocation>, branch?: string) => {
+  const result = branch ? await kvkService.searchBranch(kvk, branch) : await kvkService.searchKvK(kvk);
   // console.log(JSON.stringify(result, null, 2));
   if (result) {
     const {
@@ -479,49 +431,31 @@ export const generateLocationReport = (loc: ILocation) => {
   const last = aant && aant.length > 0 && aant[aant.length - 1];
   const actief =
     isLocationActive(loc) && last && last.di
-      ? `Deze locatie is actief sinds ${new Date(
-          last.di
-        ).toLocaleDateString()}` +
-        (last.de
-          ? ` tot en met ${new Date(last.de).toLocaleDateString()}.`
-          : '.')
+      ? `Deze locatie is actief sinds ${new Date(last.di).toLocaleDateString()}` +
+        (last.de ? ` tot en met ${new Date(last.de).toLocaleDateString()}.` : '.')
       : 'Deze locatie is momenteel niet actief.';
   return `
 #### Locatie ${p(naam, `"${naam}"`)}
 
 ${p(actief)}
 
-${p(
-  mutated,
-  `Laatste wijziging aan de registratie vond plaats op ${new Date(
-    mutated
-  ).toLocaleDateString()}.`
-)}
+${p(mutated, `Laatste wijziging aan de registratie vond plaats op ${new Date(mutated).toLocaleDateString()}.`)}
 
 ${p(omschr)}
 
 ##### Bezoekadres
 
-${str} ${hn} ${p(toev)}<br>${pc} ${wn}, ${p(country)}<br>${p(
-    aanv,
-    `Aanvullende adresinformatie: ${aanv}`
-  )}
+${str} ${hn} ${p(toev)}<br>${pc} ${wn}, ${p(country)}<br>${p(aanv, `Aanvullende adresinformatie: ${aanv}`)}
 
 ##### Wetten die van toepassing zijn op deze locatie
 
 ${p(
   isWzd,
-  `- Wzd ${isWzdAcco ? 'accommodatie' : 'locatie'}${p(
-    isWzdAmbu,
-    ', waar ook ambulante zorg geleverd wordt'
-  )}.`
+  `- Wzd ${isWzdAcco ? 'accommodatie' : 'locatie'}${p(isWzdAmbu, ', waar ook ambulante zorg geleverd wordt')}.`
 )}
 ${p(
   isWvggz,
-  `- Wvggz ${isWvggzAcco ? 'accommodatie' : 'locatie'}${p(
-    isWvggzAmbu,
-    ', waar ook ambulante zorg geleverd wordt'
-  )}.`
+  `- Wvggz ${isWvggzAcco ? 'accommodatie' : 'locatie'}${p(isWvggzAmbu, ', waar ook ambulante zorg geleverd wordt')}.`
 )}
 
 ${p(zorgvorm, '##### Vormen van verplichte zorg die worden verleend')}
