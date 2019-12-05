@@ -387,7 +387,9 @@ export const kvkToAddress = async (
       items.forEach(item => {
         const { addresses } = item;
         addr.noMail = item.hasNonMailingIndication;
-        if (!branch) {
+        if (branch) {
+          addr.naam = item.tradeNames.businessName;
+        } else {
           const cp = addr as Partial<ICareProvider>;
           cp.naam = item.tradeNames.currentStatutoryNames[0];
           cp.rechtsvorm = item.legalForm;
