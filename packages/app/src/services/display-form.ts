@@ -19,14 +19,14 @@ const AddressView: FactoryComponent<{ address: Partial<IAddress> }> = () => {
   return {
     view: ({
       attrs: {
-        address: { str: straat, hn: huisnummer, toev: huisnummerToevoeging, pc: postcode, wn: woonplaatsnaam },
-      },
+        address: { str: straat, hn: huisnummer, toev: huisnummerToevoeging, pc: postcode, wn: woonplaatsnaam }
+      }
     }) => {
       return m(
         'span.col.s12',
         `${p(straat)} ${p(huisnummer)}${p(huisnummerToevoeging)}, ${p(postcode)}, ${p(woonplaatsnaam)}`
       );
-    },
+    }
   };
 };
 
@@ -38,7 +38,7 @@ const paginationSize = 20;
 export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
   const state = {
     showDetails: undefined,
-    resolveObj: labelResolver(CareProviderForm()),
+    resolveObj: labelResolver(CareProviderForm())
   } as {
     resolveObj: <T>(obj: any, parent?: string | undefined) => T | undefined;
     showDetails?: string;
@@ -58,10 +58,6 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
       const { rechtsvorm } = careProvider;
       const query = targetFilter(filterValue);
       const route = dashboardSvc.route(Dashboards.READ).replace(':id', `${$loki}`);
-
-      const activeLocations =
-        locaties && locaties.length > 0 ? locaties.reduce((acc, cur) => acc + (isLocationActive(cur) ? 1 : 0), 0) : 0;
-
       const queryResults = query
         ? locaties &&
           locaties
@@ -70,6 +66,35 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
             .filter(l => !isWvggz || l.isWvggz)
             .filter(l => !isActive || isLocationActive(l))
         : locaties;
+      // const activeLocations =
+      //   queryResults && queryResults.length > 0 ? queryResults.reduce((acc, cur) => acc + (isLocationActive(cur) ? 1 : 0), 0) : 0;
+
+      const { activeLocations, cpOffersWzd, cpOffersWvggz } =
+        queryResults && queryResults.length > 0
+          ? queryResults.reduce(
+              (acc, loc) => {
+                if (!isLocationActive(loc)) {
+                  return acc;
+                }
+                const { isWzd: offersWzd = false, isWvggz: offersWvggz = false } = loc;
+                return {
+                  activeLocations: acc.activeLocations + 1,
+                  cpOffersWzd: acc.cpOffersWzd || offersWzd,
+                  cpOffersWvggz: acc.cpOffersWvggz || offersWvggz
+                };
+              },
+              { activeLocations: 0, cpOffersWzd: false, cpOffersWvggz: false }
+            )
+          : { activeLocations: 0, cpOffersWzd: false, cpOffersWvggz: false };
+
+      const actieveZorgvorm =
+        cpOffersWvggz && cpOffersWzd
+          ? 'Op dit moment wordt er zorg geleverd binnen beide wetten.'
+          : cpOffersWvggz
+          ? 'Op dit moment wordt er alleen zorg geleverd binnen de Wvggz.'
+          : cpOffersWzd
+          ? 'Op dit moment wordt er alleen zorg geleverd binnen de Wzd.'
+          : '';
       const page = m.route.param('page') ? +m.route.param('page') : 1;
       const curPage = queryResults && (page - 1) * paginationSize < queryResults.length ? page : 1;
       const filteredLocations =
@@ -82,21 +107,26 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
         m('.row', [
           m('span.col.s12', 'KvK nummer: ' + kvk),
           m('span.col.s12', 'Rechtsvorm: ' + p(rechtsvorm)),
+          // m('span.col.s12', actieveZorgvorm),
           m(AddressView, { address: cp }),
-          aanv && m('span.col.s12', `Aanvullende adresinformatie: ${aanv}`),
+          aanv && m('span.col.s12', `Aanvullende adresinformatie: ${aanv}`)
         ]),
         m(
           '.row',
           m('.col.s12', [
             m('h5', 'Locaties'),
-            locaties &&
-              locaties.length > 0 &&
+            queryResults &&
+              queryResults.length > 0 &&
               m(
                 'p',
-                `${naam} heeft in totaal ${locaties.length} locatie${locaties.length === 1 ? '' : 's'}, waarvan ${
+                `${
+                  queryResults.length !== locaties.length
+                    ? `Binnen de huidige selectie ${queryResults.length > 1 ? 'zijn' : 'is'} er`
+                    : `${naam} heeft in totaal`
+                } ${queryResults.length} locatie${queryResults.length === 1 ? '' : 's'}, waarvan ${
                   activeLocations === 0 ? 'geen enkele actief' : `${activeLocations} actief`
-                }.`
-              ),
+                }. ${actieveZorgvorm}`
+              )
           ])
         ),
         m(
@@ -106,13 +136,13 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
               m('span.col.s5', m('b', 'Locatie')),
               m('span.col.s5', m('b', 'Adres')),
               m('span.col.s1', { style: 'padding-right: 0;' }, m('b', 'Wet')),
-              m('span.col.s1', { style: 'padding-right: 0;' }, m('b', 'Actief')),
+              m('span.col.s1', { style: 'padding-right: 0;' }, m('b', 'Actief'))
             ]),
             ...filteredLocations.map(l =>
               m(
                 'li.clickable',
                 {
-                  onclick: () => (state.showDetails = uniqueLocationIdentifier(l)),
+                  onclick: () => (state.showDetails = uniqueLocationIdentifier(l))
                 },
                 [
                   m('span.col.s5', `${p(l.naam)} ${p(l.nmr, `, vestiging ${l.nmr}`)}`),
@@ -127,14 +157,14 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
                           onclick: (e: UIEvent) => {
                             state.showDetails = undefined;
                             e.stopPropagation();
-                          },
+                          }
                         }),
-                        m(SlimdownView, { className: 'col s12 location', md: generateLocationReport(l) }),
+                        m(SlimdownView, { className: 'col s12 location', md: generateLocationReport(l) })
                       ])
-                    : undefined,
+                    : undefined
                 ]
               )
-            ),
+            )
           ])
         ),
         maxPages > 1 &&
@@ -145,12 +175,12 @@ export const DisplayForm: FactoryComponent<IFormattedEvent> = () => {
               m(Pagination, {
                 curPage,
                 items: range(1, maxPages).map(i => ({
-                  href: `${route}?page=${i}`,
-                })),
+                  href: `${route}?page=${i}`
+                }))
               })
             )
-          ),
+          )
       ]);
-    },
+    }
   };
 };
