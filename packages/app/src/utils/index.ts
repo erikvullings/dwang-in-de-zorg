@@ -226,9 +226,11 @@ export const locationToCSV = (careProviderData: string) => ({
       p(zorgvorm.indexOf('isTijdelijkVerblijf') >= 0, 'ja')
     ].join(';') +
     ';';
+  if (aantekeningen.length === 0) {
+    return locationData;
+  }
   const actToCsv = activityToCSV(locationData);
   return actToCsv(aantekeningen[aantekeningen.length - 1]);
-  // return aantekeningen.map(actToCsv);
 };
 
 export const careProviderToCSV = (
@@ -303,6 +305,9 @@ export const careProviderToCSV = (
       p(land),
       pe(aanvullendeAdresinformatie)
     ].join(';') + ';';
+  if (locaties && locaties.length === 0) {
+    return includeHeader ? [headers, careProviderData].join('\r\n') : careProviderData;
+  }
   const locToCSV = locationToCSV(careProviderData);
   const locations = locaties.map(locToCSV);
   return includeHeader ? [headers, ...locations].join('\r\n') : locations.join('\r\n');
