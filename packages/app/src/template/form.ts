@@ -64,7 +64,7 @@ const rechtsvorm = [
     label: 'Commanditaire vennootschap met één beherende vennoot'
   },
   {
-    id: 'Commanditaire vennootschap met meer dan een beherende vennoot',
+    id: 'Commanditaire vennootschap',
     label: 'Commanditaire vennootschap met meer dan een beherende vennoot'
   },
   {

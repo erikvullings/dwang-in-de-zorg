@@ -270,3 +270,44 @@ li.clickable {
 .readonly > p {
   margin-top: 8px;
 }
+/** FOOTER layout from dwangindezorg.nl */
+ul.list-inline {
+  padding-left: 0;
+  margin-left: -5px;
+  list-style: none;
+}
+ul.list-inline.toright {
+  text-align: right;
+  margin-right: 50px;
+}
+ul.list-inline > li {
+  text-align: left;
+  vertical-align: top;
+  display: inline-block;
+  padding-right: 100px;
+  /* You can also add some margins here to make it look prettier */
+  zoom: 1;
+  *display: inline;
+  /* this fix is needed for IE7- */
+}
+footer {
+  overflow: hidden;
+  color: white;
+  display: block;
+  background-color: #01689b;
+  border: 0;
+  padding-bottom: 0;
+  /* margin-left: -15px; */
+  /* margin-right: -15px; */
+}
+footer ul.list-inline {
+  padding-top: 0px;
+  padding-bottom: 10px;
+}
+footer a {
+  color: white;
+}
+footer h2 {
+  font-size: 1.5em;
+  margin-bottom: 5px;
+}

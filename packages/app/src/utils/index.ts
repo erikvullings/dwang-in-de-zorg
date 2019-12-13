@@ -348,8 +348,15 @@ export const kvkToAddress = async (kvk: string, addr: Partial<ICareProvider> | P
           addr.naam = item.tradeNames.businessName;
         } else {
           const cp = addr as Partial<ICareProvider>;
-          cp.naam = item.tradeNames.currentStatutoryNames[0];
-          cp.rechtsvorm = item.legalForm;
+          const { tradeNames, legalForm } = item;
+          cp.naam = tradeNames.hasOwnProperty('currentStatutoryNames') && tradeNames.currentStatutoryNames.length > 0
+            ? tradeNames.currentStatutoryNames[0]
+            : tradeNames.hasOwnProperty('businessName')
+            ? tradeNames.businessName
+            : tradeNames.hasOwnProperty('currentTradeNames') && tradeNames.currentTradeNames.length > 0
+            ? tradeNames.currentTradeNames[0]
+            : tradeNames.shortBusinessName;
+          cp.rechtsvorm = legalForm;
           toQueryTarget(cp);
         }
         if (addresses && addresses.length > 0) {
