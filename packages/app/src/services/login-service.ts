@@ -33,9 +33,9 @@ export const Auth = {
   roles: [] as string[],
 
   async init() {
-    if (Auth.keycloak.login) {
-      return;
-    }
+    // if (Auth.keycloak.login) {
+    //   return;
+    // }
     const env = await envSvc.getEnv();
     Auth.keycloak = Keycloak({
       realm: env.LOKI_REALM,
