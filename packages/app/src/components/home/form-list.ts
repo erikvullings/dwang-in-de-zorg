@@ -1,76 +1,35 @@
-import m from "mithril";
-import { FlatButton, Pagination, TextInput } from "mithril-materialized";
-import { ICareProvider } from "../../../../common/dist";
-import { AppState } from "../../models/app-state";
-import { Roles } from "../../models/roles";
-import { careProvidersSvc } from "../../services/care-providers-service";
-import { Dashboards, dashboardSvc } from "../../services/dashboard-service";
-import { Auth } from "../../services/login-service";
-import {
-  careProvidersToCSV,
-  csvFilename,
-  debounce,
-  jsonFilename,
-  kvkToAddress,
-  range,
-  slice
-} from "../../utils";
-import { CircularSpinner } from "../ui/preloader";
+import m from 'mithril';
+import { FlatButton, Pagination, TextInput } from 'mithril-materialized';
+import { ICareProvider } from '../../../../common/dist';
+import { AppState } from '../../models/app-state';
+import { careProvidersSvc } from '../../services/care-providers-service';
+import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
+import { Auth } from '../../services/login-service';
+import { careProvidersToCSV, csvFilename, debounce, jsonFilename, kvkToAddress, range, slice } from '../../utils';
+import { CircularSpinner } from '../ui/preloader';
 
 export const FormList = () => {
   const state = {
-    newKvK: '',
+    newKvK: ''
     // searchQuery: ''
   };
 
-  const sortByName:
-    | ((a: Partial<ICareProvider>, b: Partial<ICareProvider>) => number)
-    | undefined = (a, b) =>
-    (a.naam || '') > (b.naam || '')
-      ? 1
-      : (a.naam || '') < (b.naam || '')
-      ? -1
-      : 0;
-
-  // const sortByUpdated:
-  //   | ((a: Partial<ICareProvider>, b: Partial<ICareProvider>) => number)
-  //   | undefined = (a, b) => {
-  //   const timeA = a.meta ? a.meta.updated || a.meta.created : undefined;
-  //   const timeB = b.meta ? b.meta.updated || b.meta.created : undefined;
-
-  //   return typeof timeA === 'undefined' || typeof timeB === 'undefined'
-  //     ? 0
-  //     : timeA > timeB
-  //     ? -1
-  //     : timeA < timeB
-  //     ? 1
-  //     : 0;
-  // };
-
-  const search = debounce(
-    (query: string) => careProvidersSvc.search(query),
-    400
-  );
+  const sortByName: ((a: Partial<ICareProvider>, b: Partial<ICareProvider>) => number) | undefined = (a, b) =>
+    (a.naam || '') > (b.naam || '') ? 1 : (a.naam || '') < (b.naam || '') ? -1 : 0;
+  const search = debounce((query: string) => careProvidersSvc.search(query), 400);
   const paginationSize = 20;
 
   return {
     oninit: () => careProvidersSvc.loadFilteredList(),
     view: () => {
-      const careProviders = (
-        careProvidersSvc.getList() || ([] as ICareProvider[])
-      )
-        // .sort(sortByUpdated);
-        .sort(sortByName);
-      // console.log(JSON.stringify(careProviders, null, 2));
+      const careProviders = (careProvidersSvc.getList() || ([] as ICareProvider[])).sort(sortByName);
       if (AppState.isSearching) {
         return m(CircularSpinner, {
           className: 'center-align',
           style: 'margin-top: 40%;'
         });
       }
-      const filteredCareProviders = careProviders.filter(
-        cp => cp.published || Auth.isAdmin() || Auth.canEdit(cp)
-      );
+      const filteredCareProviders = careProviders.filter(cp => cp.published || Auth.isAdmin() || Auth.canEdit(cp));
 
       const { newKvK } = state;
       const { searchQuery } = AppState;
@@ -79,16 +38,10 @@ export const FormList = () => {
       }
       const route = dashboardSvc.route(Dashboards.SEARCH);
       const page = m.route.param('page') ? +m.route.param('page') : 1;
-      const curPage =
-        filteredCareProviders &&
-        (page - 1) * paginationSize < filteredCareProviders.length
-          ? page
-          : 1;
+      const curPage = filteredCareProviders && (page - 1) * paginationSize < filteredCareProviders.length ? page : 1;
       const pagedCareProviders =
         filteredCareProviders &&
-        filteredCareProviders.filter(
-          slice((curPage - 1) * paginationSize, curPage * paginationSize)
-        );
+        filteredCareProviders.filter(slice((curPage - 1) * paginationSize, curPage * paginationSize));
 
       const maxPages = Math.ceil(filteredCareProviders.length / paginationSize);
       const lastVisited = AppState.lastVisited();
@@ -100,10 +53,7 @@ export const FormList = () => {
         : Auth.isAuthenticated && !careProvidersSvc.checkKvk(Auth.username);
 
       const visitCareProvider = (id?: string | number) =>
-        id &&
-        m.route.set(
-          dashboardSvc.route(Dashboards.READ).replace(':id', `${id}`)
-        );
+        id && m.route.set(dashboardSvc.route(Dashboards.READ).replace(':id', `${id}`));
 
       return m('.row', { style: 'margin-top: 1em;' }, [
         m(
@@ -126,7 +76,7 @@ export const FormList = () => {
                   const newCp = await kvkToAddress(kvk, {
                     kvk,
                     owner: [kvk],
-                    published: false,
+                    published: false
                   } as ICareProvider);
                   const cp = await careProvidersSvc.create(newCp);
                   if (cp) {
@@ -143,11 +93,7 @@ export const FormList = () => {
                 initialValue: newKvK,
                 onchange: v => (state.newKvK = v)
               }),
-            m(
-              'h5',
-              { style: 'margin: 1.2em 0em 0 0.5em' },
-              'Zoek zorgaanbieders'
-            ),
+            m('h5', { style: 'margin: 1.2em 0em 0 0.5em' }, 'Zoek zorgaanbieders'),
             m(TextInput, {
               placeholder: 'Naam, kvk, adres...',
               id: 'search',
@@ -172,15 +118,11 @@ export const FormList = () => {
                   onclick: () => visitCareProvider(lastVisited)
                 }),
               m(FlatButton, {
-                label: searchQuery
-                  ? 'Download selectie als CSV'
-                  : 'Download register als CSV',
+                label: searchQuery ? 'Download selectie als CSV' : 'Download register als CSV',
                 iconName: 'cloud_download',
                 class: 'col s12',
                 onclick: async () => {
-                  const cps = searchQuery
-                    ? filteredCareProviders
-                    : await careProvidersSvc.loadList();
+                  const cps = searchQuery ? filteredCareProviders : await careProvidersSvc.loadList();
                   if (cps) {
                     const csv = careProvidersToCSV(cps) || '';
                     const blob = new Blob([csv], {
@@ -193,15 +135,11 @@ export const FormList = () => {
                 }
               }),
               m(FlatButton, {
-                label: searchQuery
-                  ? 'Download selectie als JSON'
-                  : 'Download register als JSON',
+                label: searchQuery ? 'Download selectie als JSON' : 'Download register als JSON',
                 iconName: 'cloud_download',
                 class: 'col s12',
                 onclick: async () => {
-                  const cps = searchQuery
-                    ? filteredCareProviders
-                    : await careProvidersSvc.loadList();
+                  const cps = searchQuery ? filteredCareProviders : await careProvidersSvc.loadList();
                   if (cps) {
                     const blob = new Blob([JSON.stringify(cps, null, 2)], {
                       type: 'application/json'
@@ -232,11 +170,7 @@ export const FormList = () => {
                     {
                       onclick: () => cp && visitCareProvider(cp.$loki)
                     },
-                    [
-                      m('span.col.s7', cp.naam),
-                      m('span.col.s3', cp.wn),
-                      m('span.col.s2', cp.kvk)
-                    ]
+                    [m('span.col.s7', cp.naam), m('span.col.s3', cp.wn), m('span.col.s2', cp.kvk)]
                   )
                 )
               ]),
