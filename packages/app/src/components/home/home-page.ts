@@ -11,7 +11,7 @@ import { careProvidersToCSV, csvFilename } from '../../utils';
 export const HomePage = () => ({
   view: () => [
     m('.row', [
-      m('div', { style: 'margin: 0 0 0 48%;' }, m(`img.img-repsonsive[src=${vws}]`)),
+      m('div', { style: 'margin: 0 0 20px 48%;' }, m(`img.img-repsonsive[src=${vws}][height=90]`)),
       m(
         'nav',
         m('.nav-wrapper', [

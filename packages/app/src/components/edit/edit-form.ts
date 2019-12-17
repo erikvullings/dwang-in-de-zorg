@@ -1,6 +1,6 @@
 import M from 'materialize-css';
 import m from 'mithril';
-import { Button, Chips, ModalPanel } from 'mithril-materialized';
+import { Button, Chips, FileInput, ModalPanel } from 'mithril-materialized';
 import { deepCopy, LayoutForm } from 'mithril-ui-form';
 import { createPatch } from 'rfc6902';
 import {
@@ -9,14 +9,14 @@ import {
   ILocation,
   IMutation,
   isLocationActive,
-  toQueryTarget,
+  toQueryTarget
 } from '../../../../common/dist';
 import { careProvidersSvc } from '../../services';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
 import { Auth } from '../../services/login-service';
 import { pdokLocationSvc } from '../../services/pdok-service';
 import { CareProviderForm } from '../../template/form';
-import { capitalizeFirstLetter, kvkToAddress } from '../../utils';
+import { capitalizeFirstLetter, importCsv, kvkToAddress } from '../../utils';
 import { CircularSpinner } from '../ui/preloader';
 
 interface ILocationVM extends ILocation, IActivity {
@@ -100,9 +100,9 @@ export const EditForm = () => {
     error: '',
     /** Relevant context for the Form, can be used with show/disabling */
     context: {
-      admin: true,
+      admin: true
     },
-    canSave: false,
+    canSave: false
   };
 
   /** Remove empty/non-informative fields from mutating the locations.aant array */
@@ -122,7 +122,7 @@ export const EditForm = () => {
         editor: Auth.email,
         docId: cp.$loki!,
         saveChanges: 'mutaties',
-        patch: createPatch(originalCareProvider, restoredCP),
+        patch: createPatch(originalCareProvider, restoredCP)
       } as IMutation;
       await careProvidersSvc.patch(restoredCP, mutation);
       state.originalCareProvider = deepCopy(careProvidersSvc.getCurrent());
@@ -168,7 +168,8 @@ export const EditForm = () => {
     if (!state.canSave) {
       return undefined;
     }
-    const confirmationMessage = 'It looks like you have been editing something. ' + 'If you leave before saving, your changes will be lost.';
+    const confirmationMessage =
+      'It looks like you have been editing something. ' + 'If you leave before saving, your changes will be lost.';
     (e || window.event).returnValue = confirmationMessage; // Gecko + IE
     return confirmationMessage; // Gecko + Webkit, Safari, Chrome etc.
   };
@@ -196,7 +197,7 @@ export const EditForm = () => {
         .map(c => ({
           style: 'cursor: pointer;',
           id: c.id,
-          title: c.label || capitalizeFirstLetter(c.id),
+          title: c.label || capitalizeFirstLetter(c.id)
         }));
       const section = m.route.param('section') || sections[0].id;
       const canCrud = Auth.canCRUD(cp);
@@ -210,7 +211,7 @@ export const EditForm = () => {
           {
             oncreate: ({ dom }) => {
               M.Sidenav.init(dom);
-            },
+            }
           },
           [
             m('h5.primary-text', { style: 'margin-left: 20px;' }, 'Registratieformulier'),
@@ -237,7 +238,7 @@ export const EditForm = () => {
                     state.cp = careProviderToViewModel(newCp);
                     state.canSave = false;
                   }
-                },
+                }
               }),
               m(Button, {
                 label: 'Bewaar wijzigingen',
@@ -245,54 +246,68 @@ export const EditForm = () => {
                 class: `green col s12 ${canSave ? '' : 'disabled'}`,
                 onclick: async () => {
                   await onsubmit();
-                },
+                }
               }),
               Auth.isAdmin() &&
                 m(Button, {
                   modalId: 'delete-cp',
                   label: 'Verwijder registratie',
                   iconName: 'delete',
-                  class: 'red col s12',
-                }),
+                  class: 'red col s12'
+                })
             ]),
-            Auth.isOwner(cp)
-              ? m(
-                  'li',
-                  m(
-                    '.col.s12',
-                    m(Chips, {
-                      label: 'Eigenaar(s)',
-                      placeholder: '+gebruikersnaam',
-                      onchange: async chips => {
-                        cp.owner = chips.map(({ tag }) => tag);
-                        if (cp.owner.length === 0) {
-                          M.toast({ html: 'Er moet minimaal één eigenaar zijn.', classes: 'red' });
-                          cp.owner.push(Auth.username);
-                        }
-                        await onsubmit();
-                      },
-                      data: (cp.owner || []).map(owner => ({ tag: owner })),
-                    })
-                  )
+            Auth.isOwner(cp) &&
+              m(
+                'li',
+                m(
+                  '.col.s12',
+                  m(Chips, {
+                    label: 'Eigenaar(s)',
+                    placeholder: '+gebruikersnaam',
+                    onchange: async chips => {
+                      cp.owner = chips.map(({ tag }) => tag);
+                      if (cp.owner.length === 0) {
+                        M.toast({ html: 'Er moet minimaal één eigenaar zijn.', classes: 'red' });
+                        cp.owner.push(Auth.username);
+                      }
+                      await onsubmit();
+                    },
+                    data: (cp.owner || []).map(owner => ({ tag: owner }))
+                  })
                 )
-              : undefined,
-            canCrud
-              ? m(
-                  'li',
-                  m(
-                    '.col.s12',
-                    m(Chips, {
-                      label: 'Wijzigingen toegestaan van',
-                      placeholder: '+gebruikersnaam',
-                      onchange: async chips => {
-                        cp.canEdit = chips.map(({ tag }) => tag);
-                        await onsubmit();
-                      },
-                      data: (cp.canEdit || []).map(editor => ({ tag: editor })),
-                    })
-                  )
+              ),
+            canCrud &&
+              m(
+                'li',
+                m(
+                  '.col.s12',
+                  m(Chips, {
+                    label: 'Wijzigingen toegestaan van',
+                    placeholder: '+gebruikersnaam',
+                    onchange: async chips => {
+                      cp.canEdit = chips.map(({ tag }) => tag);
+                      await onsubmit();
+                    },
+                    data: (cp.canEdit || []).map(editor => ({ tag: editor }))
+                  })
                 )
-              : undefined,
+              ),
+            canEdit &&
+              m(FileInput, {
+                placeholder: 'Importeer en vervang locaties',
+                multiple: false,
+                accept: ['.csv', 'text/csv', 'application/vnd.ms-excel'],
+                onchange: async (files: FileList) =>
+                  importCsv(state.cp, files)
+                    .then(_ => {
+                      state.canSave = true;
+                      state.cp = careProviderToViewModel(state.cp);
+                      m.redraw();
+                    })
+                    .catch(e =>
+                      M.toast({ html: `Bij het verwerken van de CSV is iets misgegaan: ${e}`, classes: 'red' })
+                    )
+              })
           ]
         ),
         // ),
@@ -304,8 +319,8 @@ export const EditForm = () => {
             disabled: !canEdit,
             onchange: () => formChanged(state.cp, section),
             context,
-            section,
-          }),
+            section
+          })
         ]),
         m(ModalPanel, {
           id: 'delete-cp',
@@ -318,14 +333,14 @@ export const EditForm = () => {
               onclick: async () => {
                 careProvidersSvc.delete(cp.$loki);
                 close();
-              },
+              }
             },
             {
-              label: 'Afbreken',
-            },
-          ],
-        }),
+              label: 'Afbreken'
+            }
+          ]
+        })
       ]);
-    },
+    }
   };
 };

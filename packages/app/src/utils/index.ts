@@ -1,5 +1,8 @@
-import { IActivity, ICareProvider, ILocation, isLocationActive, toQueryTarget } from '../../../common/dist';
+import { parse, ParseResult } from 'papaparse';
+import { IActivity, IAddress, ICareProvider, ILocation, isLocationActive, toQueryTarget } from '../../../common/dist';
+import { ICsvModel, locationToQueryTarget } from '../../../common/dist';
 import { kvkService } from '../services/kvk-service';
+import { pdokLocationSvc } from '../services/pdok-service';
 import { careOptions } from '../template/form';
 
 /**
@@ -257,7 +260,7 @@ export const careProviderToCSV = (
       'rechtsvorm',
       'straat',
       'huisnummer',
-      'huisnummerToevoeging',
+      'huisnummertoevoeging',
       'postcode',
       'woonplaatsnaam',
       'landnaam',
@@ -267,17 +270,17 @@ export const careProviderToCSV = (
       'vestigingsnummer',
       'lstraat',
       'lhuisnummer',
-      'lhuisnummerToevoeging',
+      'lhuisnummertoevoeging',
       'lpostcode',
       'lwoonplaatsnaam',
       'llandnaam',
       'laanvadresinfo',
-      'isWzd',
-      'isWzdAccommodatie',
-      'isWzdAmbulant',
-      'isWvggz',
-      'isWvggzAccommodatie',
-      'isWvggzAmbulant',
+      'iswzd',
+      'iswzdacco',
+      'iswzdamb',
+      'iswvggz',
+      'iswvggzacco',
+      'isawvggzmb',
       'zvvochtvoedingmedicatie',
       'zvbeperkenbewegingsvrijheid',
       'zvinsluiten',
@@ -349,13 +352,14 @@ export const kvkToAddress = async (kvk: string, addr: Partial<ICareProvider> | P
         } else {
           const cp = addr as Partial<ICareProvider>;
           const { tradeNames, legalForm } = item;
-          cp.naam = tradeNames.hasOwnProperty('currentStatutoryNames') && tradeNames.currentStatutoryNames.length > 0
-            ? tradeNames.currentStatutoryNames[0]
-            : tradeNames.hasOwnProperty('businessName')
-            ? tradeNames.businessName
-            : tradeNames.hasOwnProperty('currentTradeNames') && tradeNames.currentTradeNames.length > 0
-            ? tradeNames.currentTradeNames[0]
-            : tradeNames.shortBusinessName;
+          cp.naam =
+            tradeNames.hasOwnProperty('currentStatutoryNames') && tradeNames.currentStatutoryNames.length > 0
+              ? tradeNames.currentStatutoryNames[0]
+              : tradeNames.hasOwnProperty('businessName')
+              ? tradeNames.businessName
+              : tradeNames.hasOwnProperty('currentTradeNames') && tradeNames.currentTradeNames.length > 0
+              ? tradeNames.currentTradeNames[0]
+              : tradeNames.shortBusinessName;
           cp.rechtsvorm = legalForm;
           toQueryTarget(cp);
         }
@@ -474,4 +478,114 @@ ${p(zorgvorm, '##### Vormen van verplichte zorg die worden verleend')}
 
 ${p(zorgvorm)}
 `;
+};
+
+const ja = (value?: string) => (value ? value.toLowerCase() === 'ja' : undefined);
+
+const jaNee = (value?: string) => (value && value.toLowerCase() === 'ja' ? 'ja' : 'nee');
+
+const convertCsvToLocation = (data: ICsvModel[]) => {
+  const now = Date.now();
+  return data.reduce((acc, cur) => {
+    const {
+      aantekeningingang,
+      aantekeningeinde,
+      locatienaam,
+      lomschrijving,
+      vestigingsnummer,
+      lstraat,
+      lhuisnummer,
+      lhuisnummertoevoeging,
+      lpostcode,
+      lwoonplaatsnaam,
+      llandnaam,
+      laanvadresinfo,
+      iswzdacco,
+      iswvggzacco,
+      zvvochtvoedingmedicatie,
+      zvbeperkenbewegingsvrijheid,
+      zvinsluiten,
+      zvtoezicht,
+      zvonderzoekkledinglichaam,
+      zvonderzoekwoonruimte,
+      zvcontrolerenmiddelen,
+      zvbeperkeneigenleven,
+      zvbeperkenbezoek,
+      zvtijdelijkverblijf
+    } = cur;
+    const zorgvormen = {
+      isVochtVoedingMedicatie: ja(zvvochtvoedingmedicatie),
+      isBeperkenBewegingsvrijheid: ja(zvbeperkenbewegingsvrijheid),
+      isInsluiten: ja(zvinsluiten),
+      isToezicht: ja(zvtoezicht),
+      isOnderzoekKledingLichaam: ja(zvonderzoekkledinglichaam),
+      isOnderzoekWoonruimte: ja(zvonderzoekwoonruimte),
+      isControlerenMiddelen: ja(zvcontrolerenmiddelen),
+      isBeperkenEigenLeven: ja(zvbeperkeneigenleven),
+      isBeperkenBezoek: ja(zvbeperkenbezoek),
+      isTijdelijkVerblijf: ja(zvtijdelijkverblijf)
+    } as { [key: string]: boolean | undefined };
+    const location = {
+      mutated: now,
+      naam: capitalizeFirstLetter(locatienaam),
+      omschr: lomschrijving,
+      nmr: vestigingsnummer,
+      str: lstraat,
+      pc: lpostcode,
+      hn: lhuisnummer,
+      toev: lhuisnummertoevoeging,
+      wn: lwoonplaatsnaam,
+      land: llandnaam ? llandnaam.toUpperCase() === 'NL' ? 'Nederland' : llandnaam : 'Nederland',
+      aanv: laanvadresinfo,
+      isWzd: ja(iswzdacco),
+      isWzdAcco: jaNee(iswzdacco),
+      isWvggz: ja(iswvggzacco),
+      isWvggzAcco: jaNee(iswvggzacco),
+      isBopz: true,
+      zv: Object.keys(zorgvormen).filter(key => zorgvormen[key]),
+      aant: [
+        {
+          dc: now,
+          di: aantekeningingang ? new Date(aantekeningingang).valueOf() : now,
+          de: aantekeningeinde ? new Date(aantekeningeinde).valueOf() : undefined
+        }
+      ]
+    } as Partial<ILocation>;
+    location.target = locationToQueryTarget(location);
+    acc.push(location);
+    return acc;
+  }, [] as Array<Partial<ILocation>>);
+};
+
+/** Async wrapper to resolve all locations via PDOK */
+const pdokSvc = async (locs: Array<Partial<ILocation>>) => Promise.all(locs.map(l => pdokLocationSvc(l as IAddress)));
+
+export const importCsv = async (cp: Partial<ICareProvider>, files: FileList) => {
+  return new Promise<void>((resolve, reject) => {
+    if (!files || files.length === 0) {
+      reject('No files were selected.');
+      return;
+    }
+    const file = files[0];
+    M.toast({ html: 'CSV importeren...' });
+    parse(file, {
+      header: true,
+      transform: v => v.trim(),
+      error: err => reject(err),
+      complete: async (r: ParseResult) => {
+        if (r && r.data && r.data.length > 0) {
+          const data = r.data as ICsvModel[];
+          console.log(JSON.stringify(data, null, 2));
+          const locs = convertCsvToLocation(data);
+          M.toast({ html: 'Verificatie van de locaties via PDOK...', displayLength: Math.max(4000, data.length * 500) });
+          await pdokSvc(locs);
+          M.toast({ html: 'Bijwerken locaties...' });
+          console.log(JSON.stringify(locs, null, 2));
+          cp.locaties = locs as ILocation[];
+          M.toast({ html: 'Indien correct: "BEWAAR WIJZIGINGEN"' });
+          resolve();
+        }
+      }
+    });
+  });
 };
