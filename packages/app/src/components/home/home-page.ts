@@ -11,11 +11,11 @@ import { careProvidersToCSV, csvFilename } from '../../utils';
 export const HomePage = () => ({
   view: () => [
     m('.row', [
-      m('div', { style: 'margin: 0 0 0 48%;' }, m(`img.img-repsonsive[src=${vws}]`)),
+      m('.logo', m('.wrapper', m(`img.img-repsonsive[src=${vws}][alt=Logo ministerie VWS]`))),
       m(
         'nav',
-        m('.nav-wrapper', [
-          m('h3.hide-on-small-only', { style: 'padding: 8px 0; margin: 0 0 0 10px;' }, 'Locatieregister Wvggz/Wzd')
+        m('.nav-wrapper', { style: 'height: 70px;' }, [
+          m('span.hide-on-small-only', { style: 'font-size: 22px; padding-top: 10px; margin: 0 0 0 10px;' }, 'Locatieregister Wvggz/Wzd')
         ]),
         m(
           '.overlay.center',

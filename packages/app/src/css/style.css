@@ -44,6 +44,31 @@ body {
   height: 600px;
 }
 
+.logo {
+  margin-right: auto;
+  margin-left: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+  max-width: 1200px;
+  overflow: hidden;
+  height: 77px;
+}
+.logo .wrapper {
+  margin: 0 0 0 50%;
+}
+.logo .wrapper img {
+  display: inline-block;
+  margin-left: -25px;
+}
+.logo::before,
+.logo::after {
+  content: ' ';
+  display: table;
+}
+.logo::after {
+  clear: both;
+}
+
 /* Set theme color */
 .btn,
 .btn-floating,
