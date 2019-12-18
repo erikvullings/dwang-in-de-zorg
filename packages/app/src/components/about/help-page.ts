@@ -1,23 +1,35 @@
 import m from 'mithril';
 import { SlimdownView } from 'mithril-ui-form';
 
-// const md = `<h4 class="primary-text">Handleiding Locatieregister</h4>
-// <h5 class="primary-text">Zoeken</h5>`;
-
 const md = `
 ##### Informatie locatieregister Wet verplichte ggz (Wvggz) en Wet zorg en dwang (Wzd)
 
 ###### Locatieregister
 
-Verplichte of onvrijwillige zorg mag alleen worden verleend in of vanuit een locatie die is opgenomen in een openbaar register. Dat is geregeld in de Wet verplichte ggz (Wvggz) en de Wet zorg en dwang (Wzd) die per 1 januari 2020 in werking treden.
+Zorgaanbieders die verplichte of onvrijwillige zorg verlenen moeten zich registreren in het locatieregister. Zij registreren hun vestigingen voor zover dat accommodaties of locaties zijn.  Dat is geregeld in de Wet verplichte ggz (Wvggz) en de Wet zorg en dwang (Wzd) die per 1 januari 2020 in werking treden.
+
+In de Wet verplichte ggz wordt de term verplichte zorg gehanteerd. In de Wet zorg en dwang wordt gesproken over onvrijwillige zorg. In deze handleiding wordt de verzamelterm ‘gedwongen zorg’ gebruikt wanneer verplichte en onvrijwillige zorg wordt bedoeld.
 
 ###### Voor wie is het register?
 
-Het register is openbaar en kan door iedereen worden geraadpleegd, bijvoorbeeld door mensen die gedwongen zorg krijgen of door partijen die besluiten nemen of voorbereiden over gedwongen zorg. De Inspectie Gezondheidszorg en Jeugd (IGJ) gebruikt het register voor hun toezicht. Zorgaanbieders moeten ervoor zorgen dat hun locaties correct in het register staan. Daarbij wordt ook vermeld of een locatie een accommodatie is. Hierover verderop meer.
+Het register is openbaar en kan door iedereen worden geraadpleegd, bijvoorbeeld door mensen die gedwongen zorg krijgen of door partijen die besluiten nemen of voorbereiden over gedwongen zorg. De Inspectie Gezondheidszorg en Jeugd (IGJ) gebruikt het register voor haar toezicht. Zorgaanbieders moeten ervoor zorgen dat hun locaties correct in het register staan. Daarbij wordt ook vermeld of een locatie een accommodatie is. Hierover verderop meer.
+
+###### Wat moet worden geregistreerd in het locatieregister?
+
+Zorgaanbieders moeten de vestigingen, die in het Handelsregister zijn geregistreerd, in het locatieregister registreren als mensen daar gedwongen worden opgenomen of als daar (of daarvanuit) onvrijwillige of verplichte zorg wordt verleend. Een vestiging wordt één keer geregistreerd. Een vestiging die geregistreerd is als accommodatie, wordt dus niet tevens als locatie geregistreerd. De volgende opties zijn mogelijk.
+
+1. Worden betrokkenen gedwongen opgenomen in een vestiging, dan registreert u die vestiging als accommodatie. Wordt vanuit deze vestiging ook gedwongen zorg verleend aan betrokkenen buiten de accommodatie, dan moet u dit vermelden in het register.
+  - Van een gedwongen opname is sprake als de opname plaatsvindt op basis van een (voortgezette) crisismaatregel, zorgmachtiging, inbewaringstelling, rechterlijke machtiging een besluit tot opname en verblijf van het CIZ (de opvolger van de huidige artikel 60-toetsing). 
+2. Worden in een vestiging geen betrokkenen gedwongen opgenomen, maar wordt in een vestiging wel gedwongen zorg verleend, dan registreert u de vestiging als locatie. Dat geldt ook als u gedwongen zorg verleent aan betrokkenen buiten de locatie. 
+3. Worden in een vestiging geen betrokkenen gedwongen opgenomen of gedwongen zorg verleend, maar wel vanuit de vestiging gedwongen verleend aan betrokkenen buiten de locatie, dan moet u deze vestiging ook als locatie registreren.
+
+Bij gedwongen zorgverlening in een locatie kan het zowel gaan om betrokkenen die daar duurzaam verblijven als om betrokkenen die in de locatie bijvoorbeeld gebruik maken van dagopvang, dagbesteding of poliklinische behandeling.
+
+Bij gedwongen zorgverlening <i>vanuit</i> een accommodatie of locatie gaat het om betrokkenen aan wie buiten de accommodatie of locatie onvrijwillige of verplichte zorg verleend wordt, denk bijvoorbeeld aan een accommodatie / locatie waar een wijkteam of FACT-team is gevestigd dat onvrijwillige of verplichte zorg verleent aan cliënten die thuis wonen.
 
 ###### Wat is een locatie?
 
-Voor het locatieregister is aansluiting gezocht bij het handelsregister: onder “locatie” wordt hetzelfde verstaan als “vestiging” in de Handelsregisterwet<sup>1</sup>. Op basis van de Handelsregisterwet moet elke zorgaanbieder zijn vestigingen (gebouwen of complexen van gebouwen waar duurzame uitoefening van activiteiten plaatsvindt) inschrijven in het handelsregister als hoofd- of nevenvestiging. Deze vestigingen geeft de zorgaanbieder dus ook op voor het locatieregister, als hij daar of van daaruit verplichte of onvrijwillige zorg verleent.
+Voor het locatieregister is aansluiting gezocht bij het begrip “vestiging” in de Handelsregisterwet<sup>1</sup>. Op basis van de Handelsregisterwet moet elke zorgaanbieder zijn vestigingen (gebouwen of complexen van gebouwen waar duurzame uitoefening van activiteiten plaatsvindt) inschrijven in het handelsregister als hoofd- of nevenvestiging. Deze vestigingen geeft de zorgaanbieder dus ook op voor het locatieregister, als hij daar of van daaruit verplichte of onvrijwillige zorg verleent.
 
 Indien er op een terrein (los van elkaar) meerdere gebouwen staan, kunnen die volgens het Handelsregister aparte vestigingen zijn. Dat is het geval wanneer een gebouw een eigen BAG-adres<sup>2</sup> heeft. Wordt in of vanuit die gebouwen verplichte of onvrijwillige zorg verleend, dan moeten die gebouwen dan ook elk afzonderlijk als locatie worden opgegeven in het locatieregister, ook al staan ze op één terrein. In de praktijk kan het dus voorkomen dat er voor één terrein van een ggz-instelling of een instelling voor (verstandelijke) gehandicaptenzorg meerdere locaties geregistreerd worden. Andersom kan het ook: als een groot complex van gebouwen als één vestiging is geregistreerd in het handelsregister, zoals een ziekenhuis, wordt het voor het locatieregister ook als één locatie gezien.
 
