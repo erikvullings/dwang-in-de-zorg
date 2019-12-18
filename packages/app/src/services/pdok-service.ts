@@ -1,15 +1,21 @@
 import m from 'mithril';
 import { IAddress, IPdokSearchResult, pointRegex } from '../../../common/dist';
 
+const pcFormatter = /(\d{4})\s*(\w{2})/gm;
+
 export const pdokLocationSvc = async (loc: IAddress) => {
   const { pc, hn, toev } = loc;
+  if (!pc || !hn) {
+    M.toast({ html: `Onvoldoende gegevens: ${pc}, ${hn}${toev ? `, ${toev}` : ''} !`, classes: 'red'});
+    return;
+  }
   const pdokUrl = `https://geodata.nationaalgeoregister.nl/locatieserver/v3/free?q=${pc.replace(
     / /g,
     ''
   )} ${hn} ${toev}`;
-  console.log(`PDOK resolving ${pc}, ${hn}${toev ? `, ${toev}` : ''}`);
+  // console.log(`PDOK resolving ${pc}, ${hn}${toev ? `, ${toev}` : ''}`);
   const searchResult = await m.request<IPdokSearchResult>(pdokUrl).catch(_ => {
-    console.error(`Error resolving ${pc}, ${hn}${toev ? `, ${toev}` : ''} !`);
+    M.toast({ html: `Onbekend adres: ${pc}, ${hn}${toev ? `, ${toev}` : ''} !`, classes: 'red'});
     return;
   });
   if (searchResult && searchResult.response && searchResult.response.docs) {
@@ -26,6 +32,7 @@ export const pdokLocationSvc = async (loc: IAddress) => {
       if (ll && rd) {
         loc.str = straatnaam;
         loc.wn = woonplaatsnaam;
+        loc.pc = pc && pcFormatter.test(pc) ? pc.replace(pcFormatter, '$1 $2').toUpperCase() : pc,
         loc.lat = +ll[1];
         loc.lon = +ll[2];
         loc.x = +rd[1];
@@ -35,5 +42,5 @@ export const pdokLocationSvc = async (loc: IAddress) => {
       }
     }
   }
-  console.error(`Error resolving ${pc}, ${hn}${toev ? `, ${toev}` : ''}!`);
+  // console.error(`Error resolving ${pc}, ${hn}${toev ? `, ${toev}` : ''}!`);
 };
