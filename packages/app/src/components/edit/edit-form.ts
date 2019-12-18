@@ -103,7 +103,8 @@ export const EditForm = () => {
       admin: true
     },
     canSave: false,
-    csvImport: false
+    csvImport: false,
+    isBusy: false
   };
 
   /** Remove empty/non-informative fields from mutating the locations.aant array */
@@ -303,7 +304,8 @@ export const EditForm = () => {
                 placeholder: 'Importeer en vervang locaties',
                 multiple: false,
                 accept: ['.csv', 'text/csv', 'application/vnd.ms-excel'],
-                onchange: async (files: FileList) =>
+                onchange: async (files: FileList) => {
+                  state.isBusy = true;
                   importCsv(state.cp, files)
                     .then(_ => {
                       state.canSave = state.csvImport = true;
@@ -313,21 +315,27 @@ export const EditForm = () => {
                     .catch(e =>
                       M.toast({ html: `Bij het verwerken van de CSV is iets misgegaan: ${e}`, classes: 'red' })
                     )
+                    .finally(() => (state.isBusy = false));
+                }
               })
           ]
         ),
-        // ),
-        m('.contentarea', [
-          m(LayoutForm, {
-            key: section,
-            form,
-            obj: cp,
-            disabled: !canEdit,
-            onchange: () => formChanged(state.cp, section),
-            context,
-            section
-          })
-        ]),
+        state.isBusy
+          ? m(CircularSpinner, {
+              className: 'center-align',
+              style: 'margin-top: 40%;'
+            })
+          : m('.contentarea', [
+              m(LayoutForm, {
+                key: section,
+                form,
+                obj: cp,
+                disabled: !canEdit,
+                onchange: () => formChanged(state.cp, section),
+                context,
+                section
+              })
+            ]),
         m(ModalPanel, {
           id: 'delete-cp',
           title: 'Verwijder registratie',
