@@ -486,75 +486,77 @@ const jaNee = (value?: string) => (value && value.toLowerCase() === 'ja' ? 'ja' 
 
 const convertCsvToLocation = (data: ICsvModel[]) => {
   const now = Date.now();
-  return data.reduce((acc, cur) => {
-    const {
-      aantekeningingang,
-      aantekeningeinde,
-      locatienaam,
-      lomschrijving,
-      vestigingsnummer,
-      lstraat,
-      lhuisnummer,
-      lhuisnummertoevoeging,
-      lpostcode,
-      lwoonplaatsnaam,
-      llandnaam,
-      laanvadresinfo,
-      iswzdacco,
-      iswvggzacco,
-      zvvochtvoedingmedicatie,
-      zvbeperkenbewegingsvrijheid,
-      zvinsluiten,
-      zvtoezicht,
-      zvonderzoekkledinglichaam,
-      zvonderzoekwoonruimte,
-      zvcontrolerenmiddelen,
-      zvbeperkeneigenleven,
-      zvbeperkenbezoek,
-      zvtijdelijkverblijf
-    } = cur;
-    const zorgvormen = {
-      isVochtVoedingMedicatie: ja(zvvochtvoedingmedicatie),
-      isBeperkenBewegingsvrijheid: ja(zvbeperkenbewegingsvrijheid),
-      isInsluiten: ja(zvinsluiten),
-      isToezicht: ja(zvtoezicht),
-      isOnderzoekKledingLichaam: ja(zvonderzoekkledinglichaam),
-      isOnderzoekWoonruimte: ja(zvonderzoekwoonruimte),
-      isControlerenMiddelen: ja(zvcontrolerenmiddelen),
-      isBeperkenEigenLeven: ja(zvbeperkeneigenleven),
-      isBeperkenBezoek: ja(zvbeperkenbezoek),
-      isTijdelijkVerblijf: ja(zvtijdelijkverblijf)
-    } as { [key: string]: boolean | undefined };
-    const location = {
-      mutated: now,
-      naam: capitalizeFirstLetter(locatienaam),
-      omschr: lomschrijving,
-      nmr: vestigingsnummer,
-      str: lstraat,
-      pc: lpostcode,
-      hn: lhuisnummer,
-      toev: lhuisnummertoevoeging,
-      wn: lwoonplaatsnaam,
-      land: llandnaam ? llandnaam.toUpperCase() === 'NL' ? 'Nederland' : llandnaam : 'Nederland',
-      aanv: laanvadresinfo,
-      isWzd: ja(iswzdacco),
-      isWzdAcco: jaNee(iswzdacco),
-      isWvggz: ja(iswvggzacco),
-      isWvggzAcco: jaNee(iswvggzacco),
-      isBopz: true,
-      zv: Object.keys(zorgvormen).filter(key => zorgvormen[key]),
-      aant: [
-        {
-          dc: now,
-          di: aantekeningingang ? new Date(aantekeningingang).valueOf() : now,
-          de: aantekeningeinde ? new Date(aantekeningeinde).valueOf() : undefined
-        }
-      ]
-    } as Partial<ILocation>;
-    location.target = locationToQueryTarget(location);
-    acc.push(location);
-    return acc;
-  }, [] as Array<Partial<ILocation>>);
+  return data
+    .filter(l => l.locatienaam && l.lpostcode && l.lhuisnummer)
+    .reduce((acc, cur) => {
+      const {
+        aantekeningingang,
+        aantekeningeinde,
+        locatienaam,
+        lomschrijving,
+        vestigingsnummer,
+        lstraat,
+        lhuisnummer,
+        lhuisnummertoevoeging,
+        lpostcode,
+        lwoonplaatsnaam,
+        llandnaam,
+        laanvadresinfo,
+        iswzdacco,
+        iswvggzacco,
+        zvvochtvoedingmedicatie,
+        zvbeperkenbewegingsvrijheid,
+        zvinsluiten,
+        zvtoezicht,
+        zvonderzoekkledinglichaam,
+        zvonderzoekwoonruimte,
+        zvcontrolerenmiddelen,
+        zvbeperkeneigenleven,
+        zvbeperkenbezoek,
+        zvtijdelijkverblijf
+      } = cur;
+      const zorgvormen = {
+        isVochtVoedingMedicatie: ja(zvvochtvoedingmedicatie),
+        isBeperkenBewegingsvrijheid: ja(zvbeperkenbewegingsvrijheid),
+        isInsluiten: ja(zvinsluiten),
+        isToezicht: ja(zvtoezicht),
+        isOnderzoekKledingLichaam: ja(zvonderzoekkledinglichaam),
+        isOnderzoekWoonruimte: ja(zvonderzoekwoonruimte),
+        isControlerenMiddelen: ja(zvcontrolerenmiddelen),
+        isBeperkenEigenLeven: ja(zvbeperkeneigenleven),
+        isBeperkenBezoek: ja(zvbeperkenbezoek),
+        isTijdelijkVerblijf: ja(zvtijdelijkverblijf)
+      } as { [key: string]: boolean | undefined };
+      const location = {
+        mutated: now,
+        naam: capitalizeFirstLetter(locatienaam),
+        omschr: lomschrijving,
+        nmr: vestigingsnummer,
+        str: lstraat,
+        pc: lpostcode,
+        hn: lhuisnummer,
+        toev: lhuisnummertoevoeging,
+        wn: lwoonplaatsnaam,
+        land: llandnaam ? (llandnaam.toUpperCase() === 'NL' ? 'Nederland' : llandnaam) : 'Nederland',
+        aanv: laanvadresinfo,
+        isWzd: ja(iswzdacco),
+        isWzdAcco: jaNee(iswzdacco),
+        isWvggz: ja(iswvggzacco),
+        isWvggzAcco: jaNee(iswvggzacco),
+        isBopz: true,
+        zv: Object.keys(zorgvormen).filter(key => zorgvormen[key]),
+        aant: [
+          {
+            dc: now,
+            di: aantekeningingang ? new Date(aantekeningingang).valueOf() : now,
+            de: aantekeningeinde ? new Date(aantekeningeinde).valueOf() : undefined
+          }
+        ]
+      } as Partial<ILocation>;
+      location.target = locationToQueryTarget(location);
+      acc.push(location);
+      return acc;
+    }, [] as Array<Partial<ILocation>>);
 };
 
 /** Async wrapper to resolve all locations via PDOK */
@@ -575,12 +577,12 @@ export const importCsv = async (cp: Partial<ICareProvider>, files: FileList) => 
       complete: async (r: ParseResult) => {
         if (r && r.data && r.data.length > 0) {
           const data = r.data as ICsvModel[];
-          console.log(JSON.stringify(data, null, 2));
+          // console.log(JSON.stringify(data, null, 2));
           const locs = convertCsvToLocation(data);
-          M.toast({ html: 'Verificatie van de locaties via PDOK...', displayLength: Math.max(4000, data.length * 500) });
+          M.toast({ html: `Verificatie van ${locs.length} locatie(s) via PDOK...` });
           await pdokSvc(locs);
           M.toast({ html: 'Bijwerken locaties...' });
-          console.log(JSON.stringify(locs, null, 2));
+          // console.log(JSON.stringify(locs, null, 2));
           cp.locaties = locs as ILocation[];
           M.toast({ html: 'Indien correct: "BEWAAR WIJZIGINGEN"' });
           resolve();

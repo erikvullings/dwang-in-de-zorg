@@ -102,7 +102,8 @@ export const EditForm = () => {
     context: {
       admin: true
     },
-    canSave: false
+    canSave: false,
+    csvImport: false
   };
 
   /** Remove empty/non-informative fields from mutating the locations.aant array */
@@ -114,17 +115,22 @@ export const EditForm = () => {
   const onsubmit = async () => {
     // log('submitting...');
     state.canSave = false;
-    const { cp, originalCareProvider } = state;
+    const { cp, originalCareProvider, csvImport } = state;
     if (cp) {
       // console.log(JSON.stringify(cp, null, 2));
-      const restoredCP = toQueryTarget(careProviderFromViewModel(cp));
-      const mutation = {
-        editor: Auth.email,
-        docId: cp.$loki!,
-        saveChanges: 'mutaties',
-        patch: createPatch(originalCareProvider, restoredCP)
-      } as IMutation;
-      await careProvidersSvc.patch(restoredCP, mutation);
+      if (csvImport) {
+        state.csvImport = false;
+        await careProvidersSvc.save(cp);
+      } else {
+        const restoredCP = toQueryTarget(careProviderFromViewModel(cp));
+        const mutation = {
+          editor: Auth.email,
+          docId: cp.$loki!,
+          saveChanges: 'mutaties',
+          patch: createPatch(originalCareProvider, restoredCP)
+        } as IMutation;
+        await careProvidersSvc.patch(restoredCP, mutation);
+      }
       state.originalCareProvider = deepCopy(careProvidersSvc.getCurrent());
       state.cp = careProviderToViewModel(careProvidersSvc.getCurrent());
     }
@@ -300,8 +306,8 @@ export const EditForm = () => {
                 onchange: async (files: FileList) =>
                   importCsv(state.cp, files)
                     .then(_ => {
-                      state.canSave = true;
-                      state.cp = careProviderToViewModel(state.cp);
+                      state.canSave = state.csvImport = true;
+                      // state.cp = careProviderToViewModel(state.cp);
                       m.redraw();
                     })
                     .catch(e =>
