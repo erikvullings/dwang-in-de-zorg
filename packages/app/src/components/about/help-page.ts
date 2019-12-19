@@ -2,32 +2,34 @@ import m from 'mithril';
 import { SlimdownView } from 'mithril-ui-form';
 
 const md = `
-##### Informatie locatieregister Wet verplichte ggz (Wvggz) en Wet zorg en dwang (Wzd)
+#### Informatie locatieregister Wet verplichte ggz (Wvggz) en Wet zorg en dwang (Wzd)
 
-###### Locatieregister
+##### Locatieregister
 
 Zorgaanbieders die verplichte of onvrijwillige zorg verlenen moeten zich registreren in het locatieregister. Zij registreren hun vestigingen voor zover dat accommodaties of locaties zijn.  Dat is geregeld in de Wet verplichte ggz (Wvggz) en de Wet zorg en dwang (Wzd) die per 1 januari 2020 in werking treden.
 
 In de Wet verplichte ggz wordt de term verplichte zorg gehanteerd. In de Wet zorg en dwang wordt gesproken over onvrijwillige zorg. In deze handleiding wordt de verzamelterm ‘gedwongen zorg’ gebruikt wanneer verplichte en onvrijwillige zorg wordt bedoeld.
 
-###### Voor wie is het register?
+##### Voor wie is het register?
 
 Het register is openbaar en kan door iedereen worden geraadpleegd, bijvoorbeeld door mensen die gedwongen zorg krijgen of door partijen die besluiten nemen of voorbereiden over gedwongen zorg. De Inspectie Gezondheidszorg en Jeugd (IGJ) gebruikt het register voor haar toezicht. Zorgaanbieders moeten ervoor zorgen dat hun locaties correct in het register staan. Daarbij wordt ook vermeld of een locatie een accommodatie is. Hierover verderop meer.
 
-###### Wat moet worden geregistreerd in het locatieregister?
+##### Wat moet worden geregistreerd in het locatieregister?
 
 Zorgaanbieders moeten de vestigingen, die in het Handelsregister zijn geregistreerd, in het locatieregister registreren als mensen daar gedwongen worden opgenomen of als daar (of daarvanuit) onvrijwillige of verplichte zorg wordt verleend. Een vestiging wordt één keer geregistreerd. Een vestiging die geregistreerd is als accommodatie, wordt dus niet tevens als locatie geregistreerd. De volgende opties zijn mogelijk.
 
-1. Worden betrokkenen gedwongen opgenomen in een vestiging, dan registreert u die vestiging als accommodatie. Wordt vanuit deze vestiging ook gedwongen zorg verleend aan betrokkenen buiten de accommodatie, dan moet u dit vermelden in het register.
-  - Van een gedwongen opname is sprake als de opname plaatsvindt op basis van een (voortgezette) crisismaatregel, zorgmachtiging, inbewaringstelling, rechterlijke machtiging een besluit tot opname en verblijf van het CIZ (de opvolger van de huidige artikel 60-toetsing). 
-2. Worden in een vestiging geen betrokkenen gedwongen opgenomen, maar wordt in een vestiging wel gedwongen zorg verleend, dan registreert u de vestiging als locatie. Dat geldt ook als u gedwongen zorg verleent aan betrokkenen buiten de locatie. 
-3. Worden in een vestiging geen betrokkenen gedwongen opgenomen of gedwongen zorg verleend, maar wel vanuit de vestiging gedwongen verleend aan betrokkenen buiten de locatie, dan moet u deze vestiging ook als locatie registreren.
+<ol>
+<li>Worden betrokkenen gedwongen opgenomen in een vestiging, dan registreert u die vestiging als accommodatie. Wordt vanuit deze vestiging ook gedwongen zorg verleend aan betrokkenen buiten de accommodatie, dan moet u dit vermelden in het register:
+<ul><li>Van een gedwongen opname is sprake als de opname plaatsvindt op basis van een (voortgezette) crisismaatregel, zorgmachtiging, inbewaringstelling, rechterlijke machtiging een besluit tot opname en verblijf van het CIZ (de opvolger van de huidige artikel 60-toetsing).</li></ul></li>
+<li>Worden in een vestiging geen betrokkenen gedwongen opgenomen, maar wordt in een vestiging wel gedwongen zorg verleend, dan registreert u de vestiging als locatie. Dat geldt ook als u gedwongen zorg verleent aan betrokkenen buiten de locatie.</li>
+<li>Worden in een vestiging geen betrokkenen gedwongen opgenomen of gedwongen zorg verleend, maar wel vanuit de vestiging gedwongen verleend aan betrokkenen buiten de locatie, dan moet u deze vestiging ook als locatie registreren.</li>
+</ol>
 
 Bij gedwongen zorgverlening in een locatie kan het zowel gaan om betrokkenen die daar duurzaam verblijven als om betrokkenen die in de locatie bijvoorbeeld gebruik maken van dagopvang, dagbesteding of poliklinische behandeling.
 
 Bij gedwongen zorgverlening <i>vanuit</i> een accommodatie of locatie gaat het om betrokkenen aan wie buiten de accommodatie of locatie onvrijwillige of verplichte zorg verleend wordt, denk bijvoorbeeld aan een accommodatie / locatie waar een wijkteam of FACT-team is gevestigd dat onvrijwillige of verplichte zorg verleent aan cliënten die thuis wonen.
 
-###### Wat is een locatie?
+##### Wat is een locatie?
 
 Voor het locatieregister is aansluiting gezocht bij het begrip “vestiging” in de Handelsregisterwet<sup>1</sup>. Op basis van de Handelsregisterwet moet elke zorgaanbieder zijn vestigingen (gebouwen of complexen van gebouwen waar duurzame uitoefening van activiteiten plaatsvindt) inschrijven in het handelsregister als hoofd- of nevenvestiging. Deze vestigingen geeft de zorgaanbieder dus ook op voor het locatieregister, als hij daar of van daaruit verplichte of onvrijwillige zorg verleent.
 
@@ -35,7 +37,7 @@ Indien er op een terrein (los van elkaar) meerdere gebouwen staan, kunnen die vo
 
 Meer informatie over het inschrijven van locaties is te vinden op de [website](https://www.kvk.nl/inschrijven-en-wijzigen/inschrijven-vestiging-onderneming/) van de Kamer van Koophandel of in een [document met veelgestelde vragen](https://www.kvk.nl/download/Veelgestelde vragen inschrijven zorginstellingen_versie 110214_tcm109-386522.pdf) bij de registratie van vestigingen in de zorgsector.
 
-###### Welke locatie is een accommodatie?
+##### Welke locatie is een accommodatie?
 
 Alle vestigingen van een zorgaanbieder zijn locaties. Sommige locaties zijn een accommodatie. Als mensen er gedwongen opgenomen worden, of verblijven op grond van artikel 21 van de Wzd (besluit tot opname en verblijf van het CIZ bij “geen bereidheid, geen bezwaar”-cliënten) is dat een accommodatie. Dat moet ook in het locatieregister vermeld worden.
 
@@ -45,7 +47,7 @@ Is er op of vanuit één locatie sprake van zowel gedwongen opname als ambulante
 
 Een uitgebreidere notitie over het accommodatie- en locatiebegrip is te vinden op: https://www.dwangindezorg.nl/wzd/documenten/publicaties/implementatie/wzd/diversen/notitie-vws---de-betekenis-van-locatie-en-accommodatie-binnen-de-wzd-en-wvggz.
 
-###### Extra regels voor locaties en zorg vanuit accommodaties
+##### Extra regels voor locaties en zorg vanuit accommodaties
 
 Alle locaties en accommodaties moeten voldoen aan de regels in de Wvggz en/of de Wzd.
 
@@ -55,7 +57,7 @@ Deze aanvullende regels bestaan omdat bepaalde randvoorwaarden buiten een accomm
 
 In de praktijk kan het dus voorkomen dat op één terrein van een zorgaanbieder een aantal locaties en een aantal accommodaties staan. Voor de locaties gelden de aanvullende regels uit de besluiten. Voor accommodaties gelden de besluiten alleen als óók sprake is van ambulante gedwongen zorg vanuit de accommodatie, dus buiten het gebouw van de accommodatie. Bijvoorbeeld als vanuit een accommodatie verplichte zorg wordt geleverd door een FACT-team in een RIBW of bij mensen thuis. Of als vanuit een accommodatie ook thuiszorg wordt gecoördineerd.
 
-###### Ambulante zorg
+##### Ambulante zorg
 
 In de Wzd en de Wvggz is geregeld dat gedwongen zorg ook ambulant kan worden verleend, bijvoorbeeld bij een betrokkene thuis of in een polikliniek. De locatie die dan moet worden opgenomen is de locatie waarin of van waaruit de zorg wordt verleend door een hulpverlener. Het thuisadres van een betrokkene zelf is nooit een locatie en hoeft dus niet geregistreerd te worden.
 
@@ -63,15 +65,15 @@ Als bijvoorbeeld een FACT-team verplichte zorg verleent bij mensen thuis of in e
 
 Het kan ook zijn dat voor een cliënt die verblijft in een Wzd-accommodatie, verplichte zorg onder de Wvggz nodig is. Het kan zijn dat hulpverleners van een GGZ-instelling dan naar de cliënt toe gaan om de Wvggz-zorg te verlenen. In dit geval moet de plek van waaruit de GGZ-hulpverleners ambulant werken in het locatieregister zijn opgenomen als locatie. Net als wanneer de cliënt thuis woont, hoeft de ambulante Wvggz-zorgaanbieder niet de Wzd-accommodatie waar de cliënt verblijft te registreren. Daar gaat de Wzd-zorgaanbieder over.
 
-###### Overgang van de Wet bopz
+##### Overgang van de Wet bopz
 
 Alle instellingen waar gedwongen opname op grond van de Wet bijzondere opname psychiatrische ziekenhuizen (bopz) mogelijk was, hebben een bopz-aanmerking. Alle instellingen met een bopz-aanmerking zijn automatisch in het nieuwe locatieregister opgenomen als Wvggz-accommodatie of Wzd-accommodatie. De besturen van deze instellingen hebben daarover een brief ontvangen met het verzoek de gegevens in het locatieregister te controleren en aan te vullen.
 
-###### Gedwongen zorg op grond van Wzd en Wvggz
+##### Gedwongen zorg op grond van Wzd en Wvggz
 
 Als op één locatie gedwongen zorg op grond van zowel de Wzd als de Wvggz wordt verleend, dan moet dit in het register worden opgenomen. Dat kan door bij het aanmelden of wijzigen van een locatie te selecteren onder welke wet(ten) de zorg wordt verleend. Een locatie kan tegelijkertijd Wvggz-accommodatie en Wzd-locatie zijn, zoals bijvoorbeeld een algemeen ziekenhuis of een Borg-instelling.
 
-###### Verplichte vormen van zorg (Wvggz)
+##### Verplichte vormen van zorg (Wvggz)
 
 Op grond van de Wvggz moet een zorgaanbieder in het locatieregister opnemen welke vormen van verplichte zorg op een locatie worden verleend. De Wzd kent deze verplichting niet.
 
