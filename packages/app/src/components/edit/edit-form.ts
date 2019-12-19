@@ -121,7 +121,7 @@ export const EditForm = () => {
       // console.log(JSON.stringify(cp, null, 2));
       if (csvImport) {
         state.csvImport = false;
-        await careProvidersSvc.save(cp);
+        await careProvidersSvc.save(careProviderFromViewModel(cp));
       } else {
         const restoredCP = toQueryTarget(careProviderFromViewModel(cp));
         const mutation = {
@@ -309,7 +309,7 @@ export const EditForm = () => {
                   importCsv(state.cp, files)
                     .then(_ => {
                       state.canSave = state.csvImport = true;
-                      // state.cp = careProviderToViewModel(state.cp);
+                      state.cp = careProviderToViewModel(state.cp);
                       m.redraw();
                     })
                     .catch(e =>
