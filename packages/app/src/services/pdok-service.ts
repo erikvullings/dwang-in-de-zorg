@@ -1,7 +1,6 @@
 import m from 'mithril';
 import { IAddress, IPdokSearchResult, pointRegex } from '../../../common/dist';
-
-const pcFormatter = /(\d{4})\s*(\w{2})/gm;
+import { formatPC } from '../utils';
 
 export const pdokLocationSvc = async (loc: IAddress) => {
   const { pc, hn, toev } = loc;
@@ -32,7 +31,7 @@ export const pdokLocationSvc = async (loc: IAddress) => {
       if (ll && rd) {
         loc.str = straatnaam;
         loc.wn = woonplaatsnaam;
-        loc.pc = pc && pcFormatter.test(pc) ? pc.replace(pcFormatter, '$1 $2').toUpperCase() : pc,
+        loc.pc = formatPC(pc) as string,
         loc.lat = +ll[1];
         loc.lon = +ll[2];
         loc.x = +rd[1];

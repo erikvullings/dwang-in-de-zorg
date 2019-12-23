@@ -47,6 +47,10 @@ export const toLetters = (num: number): string => {
   return pow ? toLetters(pow) + out : out;
 };
 
+const pcFormatter = /(\d{4})\s*(\w{2})/gm;
+
+export const formatPC = (pc?: string) => pc && pcFormatter.test(pc) ? pc.replace(pcFormatter, '$1 $2').toUpperCase() : pc;
+
 /**
  * Function to filter case-insensitive name and description.
  * @param filterValue Filter text
@@ -131,12 +135,12 @@ export const formatOptional = (
 /** Print optional */
 export const p = (val: string | number | Date | boolean | undefined, output?: string) => (val ? output || val : '');
 
-const escapeQuotes = (s: string) => (/"/.test(s) ? `"${s.replace(/"/g, '""')}"` : s);
+const escapeQuotesAndNewlines = (s: string) => (/"|\n/.test(s) ? `"${s.replace(/"/g, '""')}"` : s);
 
 /** Print optional, escape double quotes */
 export const pe = (val: string | number | Date | boolean | undefined, output?: string) => {
   const res = p(val, output);
-  return typeof res === 'string' ? escapeQuotes(res) : res;
+  return typeof res === 'string' ? escapeQuotesAndNewlines(res) : res;
 };
 
 export const debounce = (func: (...args: any) => void, timeout: number) => {
@@ -207,7 +211,7 @@ export const locationToCSV = (careProviderData: string) => ({
       p(straat),
       p(huisnummer),
       p(huisnummerToevoeging),
-      p(postcode),
+      p(formatPC(postcode)),
       p(woonplaatsnaam),
       p(land),
       pe(aanvullendeAdresinformatie),
@@ -303,7 +307,7 @@ export const careProviderToCSV = (
       p(straat),
       p(huisnummer),
       p(huisnummerToevoeging),
-      p(postcode),
+      p(formatPC(postcode)),
       p(woonplaatsnaam),
       p(land),
       pe(aanvullendeAdresinformatie)
@@ -381,7 +385,7 @@ export const kvkToAddress = async (kvk: string, addr: Partial<ICareProvider> | P
                 bagid
               } = address;
               addr.str = street;
-              addr.pc = postalCode;
+              addr.pc = formatPC(postalCode);
               addr.wn = city;
               addr.hn = houseNumber;
               addr.toev = houseNumberAddition;
