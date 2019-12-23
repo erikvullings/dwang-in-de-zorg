@@ -64,3 +64,4 @@ Useful links if you have setup a VPN connection with the cloud provider.
 
 - [Access pipelines](https://git.overheid.standaardplatform.rijksapps.nl/vws/locr/hackaton/locatieregister/pipelines)
 - [Replacing the database](https://git.overheid.standaardplatform.rijksapps.nl/vws/locr/hackaton/locatieregister/blob/extra-params/db/locatieregister.db) and starting the deployment pipeline
+- [Download DB from production](https://git.overheid.standaardplatform.rijksapps.nl/vws/locr/backup-db-prod/pipelines)
