@@ -148,21 +148,26 @@ export const EditForm = () => {
       if (cp && cp.locaties && cp.locaties.length > i) {
         const loc = cp.locaties[i];
         // console.log(JSON.stringify(loc, null, 2));
-        if (cp.kvk && loc.nmr) {
-          kvkToAddress(cp.kvk, loc, loc.nmr);
-        } else if (loc.pc && loc.hn) {
-          pdokLocationSvc(loc);
+        if (!loc.str) {
+          if (cp.kvk && loc.nmr) {
+            kvkToAddress(cp.kvk, loc, loc.nmr);
+          } else if (loc.pc && loc.hn) {
+            pdokLocationSvc(loc);
+          }
         }
-        if (loc.isWzd === false) {
+        if (!loc.isWzd) {
           loc.isWzdAcco = 'nee';
           loc.isWzdAmbu = 'nee';
-        } else if (loc.isWzdAcco === 'nee') {
-          loc.isWvggzAmbu = 'nee';
         }
-        if (loc.isWvggz === false) {
+        if (loc.isWzdAcco === 'nee') {
+          loc.isWzdAmbu = 'nee';
+        }
+        if (!loc.isWvggz) {
           loc.isWvggzAcco = 'nee';
           loc.isWvggzAmbu = 'nee';
-        } else if (loc.isWvggzAcco === 'nee') {
+          loc.zv = undefined;
+        }
+        if (loc.isWvggzAcco === 'nee') {
           loc.isWvggzAmbu = 'nee';
         }
         loc.mutated = Date.now();
@@ -299,7 +304,7 @@ export const EditForm = () => {
                   })
                 )
               ),
-            canEdit &&
+            Auth.isAdmin() &&
               m(FileInput, {
                 placeholder: 'Importeer en vervang locaties',
                 multiple: false,
