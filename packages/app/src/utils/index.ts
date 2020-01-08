@@ -134,6 +134,8 @@ export const formatOptional = (
 
 /** Print optional */
 export const p = (val: string | number | Date | boolean | undefined, output?: string) => (val ? output || val : '');
+/** Optionally, prints alternative */
+export const a = (val: string | number | Date | boolean | undefined, alternative?: string) => (val ? val : alternative);
 
 const escapeQuotesAndNewlines = (s: string) => (/"|\n/.test(s) ? `"${s.replace(/"/g, '""')}"` : s);
 
@@ -215,22 +217,22 @@ export const locationToCSV = (careProviderData: string) => ({
       p(woonplaatsnaam),
       p(land),
       pe(aanvullendeAdresinformatie),
-      p(isWzd, 'ja'),
-      p(isWzdAcco),
-      p(isWzdAmbu),
-      p(isWvggz, 'ja'),
-      p(isWvggzAcco),
-      p(isWvggzAmbu),
-      p(zorgvorm.indexOf('isVochtVoedingMedicatie') >= 0, 'ja'),
-      p(zorgvorm.indexOf('isBeperkenBewegingsvrijheid') >= 0, 'ja'),
-      p(zorgvorm.indexOf('isInsluiten') >= 0, 'ja'),
-      p(zorgvorm.indexOf('isToezicht') >= 0, 'ja'),
-      p(zorgvorm.indexOf('isOnderzoekKledingLichaam') >= 0, 'ja'),
-      p(zorgvorm.indexOf('isOnderzoekWoonruimte') >= 0, 'ja'),
-      p(zorgvorm.indexOf('isControlerenMiddelen') >= 0, 'ja'),
-      p(zorgvorm.indexOf('isBeperkenEigenLeven') >= 0, 'ja'),
-      p(zorgvorm.indexOf('isBeperkenBezoek') >= 0, 'ja'),
-      p(zorgvorm.indexOf('isTijdelijkVerblijf') >= 0, 'ja')
+      isWzd ? 'ja' : 'nee',
+      a(isWzdAcco, 'nee'),
+      a(isWzdAmbu, 'nee'),
+      isWvggz ? 'ja' : 'nee',
+      a(isWvggzAcco, 'nee'),
+      a(isWvggzAmbu, 'nee'),
+      isWvggz && zorgvorm.indexOf('isVochtVoedingMedicatie') >= 0 ? 'ja' : 'nee',
+      isWvggz && zorgvorm.indexOf('isBeperkenBewegingsvrijheid') >= 0 ? 'ja' : 'nee',
+      isWvggz && zorgvorm.indexOf('isInsluiten') >= 0 ? 'ja' : 'nee',
+      isWvggz && zorgvorm.indexOf('isToezicht') >= 0 ? 'ja' : 'nee',
+      isWvggz && zorgvorm.indexOf('isOnderzoekKledingLichaam') >= 0 ? 'ja' : 'nee',
+      isWvggz && zorgvorm.indexOf('isOnderzoekWoonruimte') >= 0 ? 'ja' : 'nee',
+      isWvggz && zorgvorm.indexOf('isControlerenMiddelen') >= 0 ? 'ja' : 'nee',
+      isWvggz && zorgvorm.indexOf('isBeperkenEigenLeven') >= 0 ? 'ja' : 'nee',
+      isWvggz && zorgvorm.indexOf('isBeperkenBezoek') >= 0 ? 'ja' : 'nee',
+      isWvggz && zorgvorm.indexOf('isTijdelijkVerblijf') >= 0 ? 'ja' : 'nee',
     ].join(';') +
     ';';
   if (aantekeningen.length === 0) {
@@ -471,11 +473,11 @@ ${str} ${hn} ${p(toev)}<br>${pc} ${wn}, ${p(country)}<br>${p(aanv, `Aanvullende 
 
 ${p(
   isWzd,
-  `- Wzd ${isWzdAcco ? 'accommodatie' : 'locatie'}${p(isWzdAmbu, ', waar ook ambulante zorg geleverd wordt')}.`
+  `- Wzd ${isWzdAcco === 'ja' ? 'accommodatie' : 'locatie'}${p(isWzdAcco === 'ja' && isWzdAmbu === 'ja', ', waar ook ambulante zorg geleverd wordt')}.`
 )}
 ${p(
   isWvggz,
-  `- Wvggz ${isWvggzAcco ? 'accommodatie' : 'locatie'}${p(isWvggzAmbu, ', waar ook ambulante zorg geleverd wordt')}.`
+  `- Wvggz ${isWvggzAcco === 'ja' ? 'accommodatie' : 'locatie'}${p(isWvggzAcco === 'ja' && isWvggzAmbu === 'ja', ', waar ook ambulante zorg geleverd wordt')}.`
 )}
 
 ${p(zorgvorm, '##### Vormen van verplichte zorg die worden verleend')}
@@ -506,7 +508,9 @@ const convertCsvToLocation = (data: ICsvModel[]) => {
         lwoonplaatsnaam,
         llandnaam,
         laanvadresinfo,
+        iswzd,
         iswzdacco,
+        iswvggz,
         iswvggzacco,
         zvvochtvoedingmedicatie,
         zvbeperkenbewegingsvrijheid,
@@ -543,9 +547,9 @@ const convertCsvToLocation = (data: ICsvModel[]) => {
         wn: lwoonplaatsnaam,
         land: llandnaam ? (llandnaam.toUpperCase() === 'NL' ? 'Nederland' : llandnaam) : 'Nederland',
         aanv: laanvadresinfo,
-        isWzd: ja(iswzdacco),
+        isWzd: ja(iswzd),
         isWzdAcco: jaNee(iswzdacco),
-        isWvggz: ja(iswvggzacco),
+        isWvggz: ja(iswvggz),
         isWvggzAcco: jaNee(iswvggzacco),
         isBopz: true,
         zv: Object.keys(zorgvormen).filter(key => zorgvormen[key]),
