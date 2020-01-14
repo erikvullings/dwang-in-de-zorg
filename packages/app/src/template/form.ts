@@ -5,6 +5,9 @@ import { Form } from 'mithril-ui-form';
 //   b
 // ) => (a.label > b.label ? 1 : a.label < b.label ? -1 : 0);
 
+const day = 24 * 3600000;
+const minChangeDate = Date.now() - 3 * day;
+
 export const countries = [
   { id: 'Nederland', label: 'Nederland' },
   { id: 'Oostenrijk', label: 'Oostenrijk' },
@@ -43,14 +46,14 @@ const ActivityForm: Form = [
     disabled: true,
     label: 'Ingangsdatum',
     type: 'date',
-    min: Date.now(),
+    min: minChangeDate,
     className: 'col s6'
   },
   {
     id: 'de',
     label: 'Einddatum',
     type: 'date',
-    min: Date.now(),
+    min: minChangeDate,
     className: 'col s6'
   }
 ];
@@ -107,9 +110,6 @@ export const careOptions = [
   }
 ];
 
-const day = 24 * 3600000;
-const now = Date.now() - 30 * day;
-
 /** Zorgvorm formulier */
 export const CareForm: Form = [
   {
@@ -139,7 +139,7 @@ export const CareForm: Form = [
     id: 'di',
     label: 'Ingangsdatum',
     type: 'date',
-    min: now,
+    min: minChangeDate,
     required: true,
     className: 'col s6'
   },
@@ -148,7 +148,7 @@ export const CareForm: Form = [
     show: 'di',
     label: 'Einddatum',
     type: 'date',
-    min: now,
+    min: minChangeDate,
     className: 'col s6'
   },
   {
