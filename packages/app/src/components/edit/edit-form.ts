@@ -143,36 +143,45 @@ export const EditForm = () => {
     if (!cp) {
       return;
     }
-    if (section && section.toLowerCase() === locaties) {
-      const i = m.route.param(locaties) ? +m.route.param(locaties) - 1 : 0;
-      if (cp && cp.locaties && cp.locaties.length > i) {
-        const loc = cp.locaties[i];
-        // console.log(JSON.stringify(loc, null, 2));
-        if (!loc.str) {
-          if (cp.kvk && loc.nmr) {
-            kvkToAddress(cp.kvk, loc, loc.nmr);
-          } else if (loc.pc && loc.hn) {
-            pdokLocationSvc(loc);
-          }
-        }
-        if (!loc.isWzd) {
-          loc.isWzdAcco = 'nee';
-          loc.isWzdAmbu = 'nee';
-        }
-        if (loc.isWzdAcco === 'nee') {
-          loc.isWzdAmbu = 'nee';
-        }
-        if (!loc.isWvggz) {
-          loc.isWvggzAcco = 'nee';
-          loc.isWvggzAmbu = 'nee';
-          loc.zv = undefined;
-        }
-        if (loc.isWvggzAcco === 'nee') {
-          loc.isWvggzAmbu = 'nee';
-        }
-        loc.mutated = Date.now();
-        // console.log('Mutated on ' + new Date());
+    if (!section || section.toLowerCase() !== locaties) {
+      return;
+    }
+    const i = m.route.param(locaties) ? +m.route.param(locaties) - 1 : 0;
+    if (cp && cp.locaties && cp.locaties.length > i) {
+      const loc = cp.locaties[i];
+      // console.log(JSON.stringify(loc, null, 2));
+      const { originalCareProvider: ocp } = state;
+      const orgKvk = ocp ? ocp.kvk : 0;
+      const orgLoc = ocp && ocp.locaties && ocp.locaties[i] ? ocp.locaties[i] : undefined;
+      const orgLocNmr = orgLoc ? orgLoc.nmr : undefined;
+      const orgLocPc = orgLoc ? orgLoc.pc : undefined;
+      const orgLocHn = orgLoc ? orgLoc.hn : undefined;
+      // console.table({
+      //   kvk: cp.kvk, orgKvk, nmr: loc.nmr, orgLocNmr, pc: loc.pc, orgLocPc, hn: loc.hn, orgLocHn
+      // });
+      if (cp.kvk && (orgKvk !== cp.kvk || orgLocNmr !== loc.nmr)) {
+        kvkToAddress(cp.kvk, loc, loc.nmr);
+      } else if (loc.pc && loc.hn && (loc.pc !== orgLocPc || loc.hn !== orgLocHn)) {
+        pdokLocationSvc(loc);
       }
+      if (!loc.isWzd) {
+        loc.isWzdAcco = 'nee';
+        loc.isWzdAmbu = 'nee';
+      }
+      if (loc.isWzdAcco === 'nee') {
+        loc.isWzdAmbu = 'nee';
+      }
+      if (!loc.isWvggz) {
+        loc.isWvggzAcco = 'nee';
+        loc.isWvggzAmbu = 'nee';
+        loc.zv = undefined;
+      }
+      if (loc.isWvggzAcco === 'nee') {
+        loc.isWvggzAmbu = 'nee';
+      }
+      loc.mutated = Date.now();
+      // console.log('Mutated on ' + new Date());
+      m.redraw();
     }
   };
 
