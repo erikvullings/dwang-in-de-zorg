@@ -556,8 +556,8 @@ const convertCsvToLocation = (data: ICsvModel[]) => {
         aant: [
           {
             dc: now,
-            di: aantekeningingang ? Math.max(now, new Date(aantekeningingang).valueOf()) : now,
-            de: aantekeningeinde ? Math.max(now, new Date(aantekeningeinde).valueOf()) : undefined
+            di: aantekeningingang ? new Date(aantekeningingang).valueOf() : now,
+            de: aantekeningeinde ? new Date(aantekeningeinde).valueOf() : undefined
           }
         ]
       } as Partial<ILocation>;
