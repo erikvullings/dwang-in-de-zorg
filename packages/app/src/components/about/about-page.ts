@@ -34,7 +34,7 @@ Als uw zorgaanbieder in het locatieregister geregistreerd is, maar u weet niet w
 
 ##### Iemand anders machtigen
 
-Om iemand anders in uw organisatie te machtigen om wijzigingen aan te brengen gaat u eerst naar uw locatie. Vervolgens klikt u rechtsboven op “bewerk zorgaanbieder”. Nu kunt u in het linker menu onder “Wijzigingen toestaan van” de gebruikersnaam van de te gemachtigde toevoegen. 
+Om iemand anders in uw organisatie te machtigen om wijzigingen aan te brengen gaat u eerst naar uw locatie. Vervolgens klikt u rechtsboven op “bewerk zorgaanbieder”. Nu kunt u in het linker menu onder “Wijzigingen toestaan van” de gebruikersnaam van de te gemachtigde toevoegen.
 
 **Let op:** het is belangrijk dat deze persoon al een account heeft aangemaakt. Verder is het belangrijk de gebruikersnaam in te vullen, dus niet het emailadres. De gebruikersnaam vindt u na inloggen op uw persoonlijke pagina. De gemachtigde wordt overigens niet automatisch genotificeerd via email.
 
