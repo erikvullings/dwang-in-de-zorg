@@ -10,7 +10,7 @@ dependencies:
   mithril: 2.0.4
   mithril-leaflet: 0.1.7_540248bce08b6daa8f39770dcc779455
   mithril-materialized: 0.16.0_f3d9df6f4766fd28b6cfb8072ccbc3ca
-  mithril-ui-form: 0.4.7_41e7f33714a8db2eab8931e703bc99bd
+  mithril-ui-form: 0.4.8_41e7f33714a8db2eab8931e703bc99bd
   papaparse: 5.1.1
   regenerator-runtime: 0.13.3
   rfc6902: 3.0.4
@@ -3870,7 +3870,7 @@ packages:
       mithril: ^2.0.4
     resolution:
       integrity: sha512-exWUe1qMNNUu2sc0VDg06vtnYtcscFtenuzUAIAPPM7t69G7d4lvmvJpV57vNZKRpmfs16TQLBirWDSh9pNn8A==
-  /mithril-ui-form/0.4.7_41e7f33714a8db2eab8931e703bc99bd:
+  /mithril-ui-form/0.4.8_41e7f33714a8db2eab8931e703bc99bd:
     dependencies:
       leaflet: 1.6.0
       leaflet-draw: 1.0.4
@@ -3886,7 +3886,7 @@ packages:
       mithril: ^2.0.4
       mithril-materialized: ^0.15.4
     resolution:
-      integrity: sha512-fshtNiH8nokXXe2pjiZFBqjRvgsctPTrnnW7kV0SkvuiVcz4jH3nDfWsMTTgFEzzIvpzMnIDYJRE8gZ9ElTsVQ==
+      integrity: sha512-SB/sAEl2MoRPXXbfDIdVCR/tV72E8AE2aEoReLQvAhkokYZ4+O0zm6bDvczzLNTzkoqiEdqFBFZ97Y4jv6dtRg==
   /mithril/2.0.4:
     dev: false
     hasBin: true
@@ -6032,7 +6032,7 @@ specifiers:
   mithril: ^2.0.4
   mithril-leaflet: ^0.1.7
   mithril-materialized: ^0.16.0
-  mithril-ui-form: ^0.4.7
+  mithril-ui-form: ^0.4.8
   papaparse: ^5.1.1
   parcel-bundler: ^1.12.4
   regenerator-runtime: ^0.13.3
