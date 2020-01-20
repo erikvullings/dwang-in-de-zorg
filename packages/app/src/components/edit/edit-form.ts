@@ -9,7 +9,7 @@ import {
   ILocation,
   IMutation,
   isLocationActive,
-  toQueryTarget
+  toQueryTarget,
 } from '../../../../common/dist';
 import { careProvidersSvc } from '../../services';
 import { Dashboards, dashboardSvc } from '../../services/dashboard-service';
@@ -100,11 +100,12 @@ export const EditForm = () => {
     error: '',
     /** Relevant context for the Form, can be used with show/disabling */
     context: {
-      admin: true
+      admin: true,
     },
     canSave: false,
     csvImport: false,
-    isBusy: false
+    isBusy: false,
+    forceRefresh: 0,
   };
 
   /** Remove empty/non-informative fields from mutating the locations.aant array */
@@ -128,7 +129,7 @@ export const EditForm = () => {
           editor: Auth.email,
           docId: cp.$loki!,
           saveChanges: 'mutaties',
-          patch: createPatch(originalCareProvider, restoredCP)
+          patch: createPatch(originalCareProvider, restoredCP),
         } as IMutation;
         await careProvidersSvc.patch(restoredCP, mutation);
       }
@@ -139,29 +140,33 @@ export const EditForm = () => {
 
   const formChanged = (cp?: Partial<ICareProvider>, section?: string) => {
     const locaties = 'locaties';
-    state.canSave = true;
     if (!cp) {
       return;
     }
+    state.canSave = true;
+    const { originalCareProvider: ocp } = state;
     if (!section || section.toLowerCase() !== locaties) {
+      if (cp.pc && cp.hn && (cp.pc !== ocp.pc || cp.hn !== ocp.hn || cp.str !== ocp.str)) {
+        pdokLocationSvc(cp);
+      }
       return;
     }
     const i = m.route.param(locaties) ? +m.route.param(locaties) - 1 : 0;
     if (cp && cp.locaties && cp.locaties.length > i) {
       const loc = cp.locaties[i];
       // console.log(JSON.stringify(loc, null, 2));
-      const { originalCareProvider: ocp } = state;
       const orgKvk = ocp ? ocp.kvk : 0;
       const orgLoc = ocp && ocp.locaties && ocp.locaties[i] ? ocp.locaties[i] : undefined;
       const orgLocNmr = orgLoc ? orgLoc.nmr : undefined;
       const orgLocPc = orgLoc ? orgLoc.pc : undefined;
       const orgLocHn = orgLoc ? orgLoc.hn : undefined;
+      const orgLocStr = orgLoc ? orgLoc.str : undefined;
       // console.table({
       //   kvk: cp.kvk, orgKvk, nmr: loc.nmr, orgLocNmr, pc: loc.pc, orgLocPc, hn: loc.hn, orgLocHn
       // });
       if (cp.kvk && (orgKvk !== cp.kvk || orgLocNmr !== loc.nmr)) {
         kvkToAddress(cp.kvk, loc, loc.nmr);
-      } else if (loc.pc && loc.hn && (loc.pc !== orgLocPc || loc.hn !== orgLocHn)) {
+      } else if (loc.pc && loc.hn && (loc.pc !== orgLocPc || loc.hn !== orgLocHn || loc.str !== orgLocStr)) {
         pdokLocationSvc(loc);
       }
       if (!loc.isWzd) {
@@ -209,7 +214,7 @@ export const EditForm = () => {
     },
     onremove: () => window.removeEventListener('beforeunload', onUnload),
     view: () => {
-      const { cp, form, context, loaded, canSave } = state;
+      const { cp, form, context, loaded, canSave, forceRefresh } = state;
       if (!loaded) {
         return m(CircularSpinner, { className: 'center-align', style: 'margin-top: 20%;' });
       }
@@ -218,7 +223,7 @@ export const EditForm = () => {
         .map(c => ({
           style: 'cursor: pointer;',
           id: c.id,
-          title: c.label || capitalizeFirstLetter(c.id)
+          title: c.label || capitalizeFirstLetter(c.id),
         }));
       const section = m.route.param('section') || sections[0].id;
       const canCrud = Auth.canCRUD(cp);
@@ -232,7 +237,7 @@ export const EditForm = () => {
           {
             oncreate: ({ dom }) => {
               M.Sidenav.init(dom);
-            }
+            },
           },
           [
             m('h5.primary-text', { style: 'margin-left: 20px;' }, 'Registratieformulier'),
@@ -258,8 +263,9 @@ export const EditForm = () => {
                     state.originalCareProvider = deepCopy(newCp);
                     state.cp = careProviderToViewModel(newCp);
                     state.canSave = false;
+                    state.forceRefresh++;
                   }
-                }
+                },
               }),
               m(Button, {
                 label: 'Bewaar wijzigingen',
@@ -267,15 +273,15 @@ export const EditForm = () => {
                 class: `green col s12 ${canSave ? '' : 'disabled'}`,
                 onclick: async () => {
                   await onsubmit();
-                }
+                },
               }),
               Auth.isAdmin() &&
                 m(Button, {
                   modalId: 'delete-cp',
                   label: 'Verwijder registratie',
                   iconName: 'delete',
-                  class: 'red col s12'
-                })
+                  class: 'red col s12',
+                }),
             ]),
             Auth.isOwner(cp) &&
               m(
@@ -293,7 +299,7 @@ export const EditForm = () => {
                       }
                       await onsubmit();
                     },
-                    data: (cp.owner || []).map(owner => ({ tag: owner }))
+                    data: (cp.owner || []).map(owner => ({ tag: owner })),
                   })
                 )
               ),
@@ -309,7 +315,7 @@ export const EditForm = () => {
                       cp.canEdit = chips.map(({ tag }) => tag);
                       await onsubmit();
                     },
-                    data: (cp.canEdit || []).map(editor => ({ tag: editor }))
+                    data: (cp.canEdit || []).map(editor => ({ tag: editor })),
                   })
                 )
               ),
@@ -330,25 +336,25 @@ export const EditForm = () => {
                       M.toast({ html: `Bij het verwerken van de CSV is iets misgegaan: ${e}`, classes: 'red' })
                     )
                     .finally(() => (state.isBusy = false));
-                }
-              })
+                },
+              }),
           ]
         ),
         state.isBusy
           ? m(CircularSpinner, {
               className: 'center-align',
-              style: 'margin-top: 40%;'
+              style: 'margin-top: 40%;',
             })
           : m('.contentarea', [
               m(LayoutForm, {
-                key: section,
+                key: section + forceRefresh.toString(),
                 form,
                 obj: cp,
                 disabled: !canEdit,
                 onchange: () => formChanged(state.cp, section),
                 context,
-                section
-              })
+                section,
+              }),
             ]),
         m(ModalPanel, {
           id: 'delete-cp',
@@ -361,14 +367,14 @@ export const EditForm = () => {
               onclick: async () => {
                 careProvidersSvc.delete(cp.$loki);
                 close();
-              }
+              },
             },
             {
-              label: 'Afbreken'
-            }
-          ]
-        })
+              label: 'Afbreken',
+            },
+          ],
+        }),
       ]);
-    }
+    },
   };
 };

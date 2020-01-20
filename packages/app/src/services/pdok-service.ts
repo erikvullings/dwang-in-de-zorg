@@ -2,7 +2,7 @@ import m from 'mithril';
 import { IAddress, IPdokSearchResult, pointRegex } from '../../../common/dist';
 import { formatPC } from '../utils';
 
-export const pdokLocationSvc = async (loc: IAddress) => {
+export const pdokLocationSvc = async (loc: Partial<IAddress>) => {
   const { pc, hn, toev } = loc;
   if (!pc || !hn) {
     M.toast({ html: `Onvoldoende gegevens: ${pc}, ${hn}${toev ? `, ${toev}` : ''} !`, classes: 'red'});
