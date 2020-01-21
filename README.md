@@ -1,6 +1,6 @@
-# LOCATION REGISTER, part of [dwangindezorg.nl](dwangindezorg.nl)
+# [LOCATION REGISTER](https://locatieregister.dwangindezorg.nl)
 
-A web application for storing and searching locations, using:
+A web application for storing and searching care provider locations, using:
 
 - A backend service, consisting of:
   - [node.js](https://nodejs.org) and [koa](https://www.npmjs.com/package/koa) as the backend service.
