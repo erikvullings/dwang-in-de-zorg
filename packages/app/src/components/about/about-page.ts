@@ -1,12 +1,11 @@
 import m from 'mithril';
 import { SlimdownView } from 'mithril-ui-form';
 
-const md = `
-##### Release notes
+const email = '[locatieregister@minvws.nl](mailto:locatieregister@minvws.nl)';
+const md = `##### Release notes
 
-**25 november 2019**<br>
-Dit is de eerste versie van het locatieregister ten behoeve van de Wvggz en Wzd.
-In de komende weken zullen er nog aanpassingen aan dit register worden doorgevoerd. Op deze plek zullen we u hierover informeren.
+**21 januari 2020**<br>
+Dit is de nieuwste versie van het locatieregister ten behoeve van de Wvggz en Wzd. In de komende weken zullen er nog aanpassingen aan dit register worden doorgevoerd. Op deze plek zullen we u hierover informeren. Deze versie bestaat vooral uit bug fixes, verbeteringen aan de instructies en de functionaliteit voor beheerders.
 
 #### INFORMATIE VOOR ZORGAANBIEDERS
 
@@ -14,11 +13,11 @@ In de komende weken zullen er nog aanpassingen aan dit register worden doorgevoe
 
 Zorgaanbieders met locaties met een bopz-aanmerking zijn automatisch in het locatieregister opgenomen. Besturen van deze instellingen hebben hierover een brief ontvangen. In deze brief staat uitgelegd hoe u een emailadres kunt koppelen aan het account van uw instelling en vervolgens kunt inloggen op het locatieregister.
 
-Stuur hiervoor een email met de naam van uw zorginstelling, het KvK nummer en het emailadres dat u wilt gebruiken voor het beheer naar [locatieregister@minvws.nl](mailto:locatieregister@minvws.nl). Binnen twee werkdagen wordt dit emailadres aan uw account gekoppeld.
+Stuur hiervoor een email met de naam van uw zorginstelling, het KvK nummer en het emailadres dat u wilt gebruiken voor het beheer naar ${email}. Binnen twee werkdagen wordt dit emailadres aan uw account gekoppeld.
 
 ##### Nieuwe zorgaanbieders – account aanmaken
 
-Zorgaanbieders die op dit moment niet in het bopz-register staan en een locatie op willen nemen in het register, moeten eerst een account voor hun instelling aanmaken.  Stuur hiervoor een email met de naam van uw zorginstelling, het KvK nummer en het emailadres dat u wilt gebruiken voor het beheer naar [locatieregister@minvws.nl](mailto:locatieregister@minvws.nl). Binnen twee werkdagen wordt uw account aangemaakt.
+Zorgaanbieders die op dit moment niet in het bopz-register staan en een locatie op willen nemen in het register, moeten eerst een account voor hun instelling aanmaken.  Stuur hiervoor een email met de naam van uw zorginstelling, het KvK nummer en het emailadres dat u wilt gebruiken voor het beheer naar ${email}. Binnen twee werkdagen wordt uw account aangemaakt.
 
 ##### Inloggen op uw account
 
@@ -30,7 +29,7 @@ Bent u uw wachtwoord vergeten? Klik in het inlogscherm op “forgot password” 
 
 ##### Hoe kom ik erachter wie de beheerder van het account van de zorgaanbieder is?
 
-Als uw zorgaanbieder in het locatieregister geregistreerd is, maar u weet niet wie er in uw organisatie beheerder is van het account van uw organisatie, dan kunt u contact opnemen met [locatieregister@minvws.nl](mailto:locatieregister@minvws.nl).
+Als uw zorgaanbieder in het locatieregister geregistreerd is, maar u weet niet wie er in uw organisatie beheerder is van het account van uw organisatie, dan kunt u contact opnemen met ${email}.
 
 ##### Iemand anders machtigen
 
@@ -58,7 +57,7 @@ U kunt in het linker menu filteren op adres, naam of nummer.
 
 ##### Toevoegen of wijzigen van meerdere locaties
 
-Op dit moment is het niet mogelijk om in het register gegevens van meerdere locaties tegelijkertijd te wijzigen of toe te voegen. Veranderingen kunt per locatie in het register doorvoeren. Mocht u de gegevens van grote hoeveelheden locaties willen toevoegen of wijzigen, dan kunt u een bericht sturen aan [locatieregister@minvws.nl](mailto:locatieregister@minvws.nl) om te bespreken of een andere oplossing mogelijk is.
+Mocht u de gegevens van grote aantallen locaties willen toevoegen of wijzigen, dan kunt u een bericht sturen aan het [locatieregister](mailto:locatieregister@minvws.nl). U ontvangt dan instructies over de wijze waarop u de gegevens moet aanleveren, zodat ze voor u kunnen worden gewijzigd.
 
 ##### Koppeling handelsregister KvK
 
