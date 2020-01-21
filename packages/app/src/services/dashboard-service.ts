@@ -9,6 +9,8 @@ import { FormView } from '../components/show/form-view';
 import { IDashboard } from '../models/dashboard';
 import { Auth, Login } from './login-service';
 
+declare var _paq: any[];
+
 export const enum Dashboards {
   HOME = 'HOME',
   ABOUT = 'ABOUT',
@@ -47,6 +49,7 @@ class DashboardService {
   public switchTo(dashboardId: Dashboards, params?: { [key: string]: string | number | undefined }) {
     const dashboard = this.dashboards.filter(d => d.id === dashboardId).shift();
     if (dashboard) {
+      _paq.push(['trackEvent', 'Menu', dashboard.title]);
       m.route.set(dashboard.route, params ? params : undefined);
     }
   }
