@@ -18,7 +18,7 @@ export const Layout = () => ({
         m(
           'nav',
           m('.nav-wrapper', [
-            m('a.brand-logo[href=#]', [
+            m('a.brand-logo[href=""]', [
               m(
                 'div',
                 { style: 'margin-top: 0px; position: absolute; top: 10px; left: 10px; width: 400px;' },
