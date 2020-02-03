@@ -68,7 +68,7 @@ Useful links if you have setup a VPN connection with the cloud provider.
 
 ## API Query examples
 
-If you run these queries in FireFox, you get a nicely formatted JSON output.
+If you run these queries in FireFox, you get a nicely formatted JSON output. To see additional commands you can use, go [here](https://github.com/techfort/LokiJS/wiki/Query-Examples).
 
 ### Only get a subset of all properties
 
