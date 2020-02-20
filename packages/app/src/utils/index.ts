@@ -137,7 +137,7 @@ export const p = (val: string | number | Date | boolean | undefined, output?: st
 /** Optionally, prints alternative */
 export const a = (val: string | number | Date | boolean | undefined, alternative?: string) => (val ? val : alternative);
 
-const escapeQuotesAndNewlines = (s: string) => (/"|\n/.test(s) ? `"${s.replace(/"/g, '""')}"` : s);
+const escapeQuotesAndNewlines = (s: string) => (/"|\n|;/.test(s) ? `"${s.replace(/"/g, '""')}"` : s);
 
 /** Print optional, escape double quotes */
 export const pe = (val: string | number | Date | boolean | undefined, output?: string) => {
