@@ -65,3 +65,20 @@ Useful links if you have setup a VPN connection with the cloud provider.
 - [Access pipelines](https://git.overheid.standaardplatform.rijksapps.nl/vws/locr/hackaton/locatieregister/pipelines)
 - [Replacing the database](https://git.overheid.standaardplatform.rijksapps.nl/vws/locr/hackaton/locatieregister/blob/extra-params/db/locatieregister.db) and starting the deployment pipeline
 - [Download DB from production](https://git.overheid.standaardplatform.rijksapps.nl/vws/locr/backup-db-prod/pipelines)
+
+## API Query examples
+
+If you run these queries in FireFox, you get a nicely formatted JSON output. To see additional commands you can use, go [here](https://github.com/techfort/LokiJS/wiki/Query-Examples).
+
+### Only get a subset of all properties
+
+To reduce the query size, you can use the `view` path, e.g. to only return the ID and name, use:
+[/api/zorgaanbieders/view?props=$loki,naam](https://locatieregister.dwangindezorg.nl/api/zorgaanbieders/view?props=$loki,naam)
+
+### Query all care providers without locations
+
+Use the query `q = {"locaties": { "$size": 0 } }`, e.g.
+[/api/zorgaanbieders?q={%22locaties%22:{%22$size%22:0}}](https://locatieregister.dwangindezorg.nl/api/zorgaanbieders?q={%22locaties%22:{%22$size%22:0}})
+
+You can combine this with a `view` filter, e.g. 
+[/api/zorgaanbieders/view?props=$loki,naam&q={%22locaties%22:{%22$size%22:0}}](https://locatieregister.dwangindezorg.nl/api/zorgaanbieders/view?props=$loki,naam&q={%22locaties%22:{%22$size%22:0}})
