@@ -48,8 +48,9 @@ class DashboardService {
 
   public switchTo(dashboardId: Dashboards, params?: { [key: string]: string | number | undefined }) {
     const dashboard = this.dashboards.filter(d => d.id === dashboardId).shift();
+    const paq = (window as any)._paq || [];
     if (dashboard) {
-      (window as any)._paq.push(['trackEvent', 'Menu', dashboard.title]);
+      paq.push(['trackEvent', 'Menu', dashboard.title]);
       m.route.set(dashboard.route, params ? params : undefined);
     }
   }
